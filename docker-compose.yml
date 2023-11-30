@@ -1,0 +1,89 @@
+version: "3.3"
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+    logging:
+      driver: none
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.8:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./data/kafka:/var/run/docker.sock
+    logging:
+      driver: none
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    networks:
+      - tripswift-network
+    logging:
+      driver: none
+  payment:
+    container_name: "tripswift-payment"
+    build:
+      context: .
+      dockerfile: ./server/payment/Dockerfile
+    restart: always
+    ports:
+      - 8010:8010
+    environment:
+      - PORT=8010
+      - MONGO_URI=mongodb://mongo:27017/paymentDB
+      - NODE_ENV=development
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_AUTH_TOPIC=auth
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/payment:/app/
+      - /app/node_modules
+  authentication:
+    container_name: "tripswift-auth"
+    build:
+      context: .
+      dockerfile: ./server/authentication/Dockerfile
+    restart: always
+    ports:
+      - 8020:8020
+    environment:
+      - PORT=8020
+      - MONGO_URI=mongodb://mongo:27017/authDB
+      - NODE_ENV=development
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_AUTH_TOPIC=auth
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/authentication:/app/
+      - /app/node_modules
+
+networks:
+  tripswift-network:
