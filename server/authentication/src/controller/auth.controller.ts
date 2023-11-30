@@ -1,7 +1,14 @@
 import { NextFunction, Response } from "express";
-import { produceEvent } from "../..";
-import { AppError, Request, Role, assignToken, catchAsync, compareHash } from "../../utils";
-import Auth from "../../model/auth.model";
+import {
+  AppError,
+  Request,
+  Role,
+  assignToken,
+  catchAsync,
+  compareHash,
+} from "../utils";
+import Auth from "../model/auth.model";
+import { produceEvent } from "../utils/kafkaHandler";
 
 const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -27,11 +34,7 @@ const register = catchAsync(
       role: role,
     });
 
-    await produceEvent(
-      process.env.KAFKA_TOPIC as string,
-      "new-registration",
-      newUser
-    );
+    await produceEvent("auth", "new-registration", newUser);
 
     res.status(201).json({
       status: "success",

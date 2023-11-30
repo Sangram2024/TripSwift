@@ -7,6 +7,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 2181:2181
+    networks:
+      - tripswift-network
     logging:
       driver: none
   kafka:
@@ -16,12 +18,13 @@ services:
       - zookeeper
     ports:
       - 9092:9092
+    networks:
+      - tripswift-network
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.8:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     volumes:
       - ./data/kafka:/var/run/docker.sock
     logging:
@@ -29,13 +32,11 @@ services:
   mongo:
     image: mongo
     container_name: mongo
+    restart: always
     ports:
       - 27017:27017
     volumes:
       - ./data/mongo:/data/db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
     networks:
       - tripswift-network
     logging:
@@ -49,11 +50,13 @@ services:
     ports:
       - 8010:8010
     environment:
-      - PORT=8010
-      - MONGO_URI=mongodb://mongo:27017/paymentDB
-      - NODE_ENV=development
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - KAFKA_AUTH_TOPIC=auth
+      PORT: 8010
+      MONGO_URI: mongodb://mongo:27017/paymentDB
+      NODE_ENV: development
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_AUTH_TOPIC: auth
+      RAZORPAY_KEY_ID: rzp_test_mBBfOCZrMx5wNc
+      RAZORPAY_KEY_SECRET: VUMKbAtOs9T2fy8WHlQmXj5l
     depends_on:
       - kafka
       - mongo
@@ -73,6 +76,8 @@ services:
     environment:
       - PORT=8020
       - MONGO_URI=mongodb://mongo:27017/authDB
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
       - NODE_ENV=development
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - KAFKA_AUTH_TOPIC=auth

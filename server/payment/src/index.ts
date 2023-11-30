@@ -2,36 +2,24 @@ import { connect } from "mongoose";
 import { DB, PORT, app } from "./app";
 import { Kafka, Producer } from "kafkajs";
 import { config } from "dotenv";
+import Razorpay from "razorpay";
+import { consumeEvent } from "./utils/kafkaEventHandler";
 config();
 
-const kafkaClient = new Kafka({
+export const kafkaClient = new Kafka({
   clientId: "tripswift-auth",
   brokers: [process.env.KAFKA_BOOTSTRAP_SERVERS as string],
 });
 
-export async function produceEvent(
-  topic: string,
-  key: string,
-  message: Object | Array<any>
-) {
-  const producer = kafkaClient.producer();
+export const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID!,
+  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+});
 
-  console.log(`Connecting producer ...`);
-  await producer.connect();
-
-  console.log(`Producer connected successfully ...`);
-
-  await producer.send({
-    topic,
-    messages: [{ key, value: JSON.stringify(message) }],
-  });
-
-  await producer.disconnect();
-}
-
-connect(DB)
+connect(DB as string)
   .then((connection: typeof import("mongoose")) => {
     console.log(`Payment database successfully connected`);
+    consumeEvent();
     app.listen(PORT, () => {
       console.log(`Payment Server listening on port ${PORT}`);
     });
