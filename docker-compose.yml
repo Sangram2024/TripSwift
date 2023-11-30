@@ -89,7 +89,6 @@ services:
     volumes:
       - ./server/authentication:/app/
       - /app/node_modules
-  
   search:
     container_name: "tripswift-search-engine"
     build:
@@ -114,6 +113,25 @@ services:
       - tripswift-network
     volumes:
       - ./server/search-engine:/app/
+      - /app/node_modules
+  pms_client:
+    container_name: "tripswift-pms_client"
+    build:
+      context: .
+      dockerfile: ./client/pms-client/Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - kafka
+      - mongo
+      - search
+      - authentication
+      - payment
+    networks:
+      - tripswift-network
+    volumes:
+      - ./client/pms_client:/app/
       - /app/node_modules
 
 networks:
