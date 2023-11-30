@@ -19,9 +19,14 @@
       }
     ],
     "paths": {
-      "@/src/*": ["./src/*"]
+      "@/src/*": ["../../pms-client/src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "../../pms-client/next-env.d.ts",
+    "../../pms-client/**/*.ts",
+    "../../pms-client/**/*.tsx",
+    "../../pms-client/.next/types/**/*.ts"
+  ],
+  "exclude": ["../../pms-client/node_modules"]
 }
