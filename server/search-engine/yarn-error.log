@@ -1,5 +1,5 @@
 Arguments: 
-  /home/dwitidibyajyoti/.nvm/versions/node/v18.17.0/bin/node /home/dwitidibyajyoti/.nvm/versions/node/v18.17.0/bin/yarn add express
+  /home/dwitidibyajyoti/.nvm/versions/node/v18.17.0/bin/node /home/dwitidibyajyoti/.nvm/versions/node/v18.17.0/bin/yarn
 
 PATH: 
   /home/dwitidibyajyoti/.nvm/versions/node/v18.17.0/bin:/home/dwitidibyajyoti/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
@@ -24,8 +24,8 @@ npm manifest:
     "main": "index.js",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node server.ts",
-      "dev": "nodemon -L server.ts"
+      "start": "node ./scr/server.ts",
+      "dev": "nodemon -L ./src/server.ts"
     },
     "keywords": [],
     "author": "",
