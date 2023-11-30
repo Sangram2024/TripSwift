@@ -100,8 +100,11 @@ services:
       - 8030:8030
     environment:
       - PORT=8030
-      - MONGO_URI=mongodb://mongo:27017/paymentDB
+      - MONGO_URI=mongodb+srv://techquotus:techquotus@cluster0.yjw0a6g.mongodb.net/?retryWrites=true&w=majority
+      - ELASTICSEARCH_ID=98793fd777f24ad18b7ccefefe21796c:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyRiZTkyOGFjOGI1ZTc0ZDk3YTY3MzM2OTFmMjkzNzMyZSQ4ZmM3M2E1N2VkNjM0N2U3YjAwMjY4YzcyOTNlNzA3Ng==
       - NODE_ENV=development
+      - ELASTICSEARCH_USER=dwitidibyajyoti
+      - ELASTICSEARCH_PASS=FJkggVbSMH8SFWG
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - KAFKA_AUTH_TOPIC=auth
     depends_on:
