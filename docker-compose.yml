@@ -89,6 +89,29 @@ services:
     volumes:
       - ./server/authentication:/app/
       - /app/node_modules
+  
+  search:
+    container_name: "tripswift-search-engine"
+    build:
+      context: ./server/search-engine
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 8030:8030
+    environment:
+      - PORT=8030
+      - MONGO_URI=mongodb://mongo:27017/paymentDB
+      - NODE_ENV=development
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_AUTH_TOPIC=auth
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/search-engine:/app/
+      - /app/node_modules
 
 networks:
   tripswift-network:
