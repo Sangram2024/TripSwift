@@ -131,7 +131,7 @@ services:
     networks:
       - tripswift-network
     volumes:
-      - ./client/pms_client:/app/
+      - ./client/pms-client:/app/
       - /app/node_modules
 
   pms_api:
