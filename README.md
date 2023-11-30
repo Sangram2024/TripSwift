@@ -123,8 +123,8 @@ The Low-Level Design provides a more detailed view of the system's components, t
 
 ### Technologies Used
 
-- Programming Languages: Javascript
-- Frameworks: Node.js,express.js,react.js,next.js
+- Programming Languages: Javascript, Typescript
+- Frameworks: Node.js, express.js, react.js, next.js, 
 - Database: MongoDB
 - ...
 
