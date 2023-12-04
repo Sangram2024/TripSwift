@@ -26,3 +26,4 @@ app.all("*", (req: Request, _res: Response, next: NextFunction) => {
 app.use(errorHandler);
 
 export { app, PORT, DB };
+
