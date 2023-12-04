@@ -45,7 +45,6 @@ interface IFileWithPreview extends File {
 }
 
 export default function CreatePropertyForm({}: Props) {
-  const [state, formAction] = useFormState(createPropertyDetails, null);
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
@@ -53,66 +52,58 @@ export default function CreatePropertyForm({}: Props) {
       <Card className="w-[500px]">
         <CardHeader>
           <CardTitle>Property Details</CardTitle>
-          <CardDescription>
-            Property data to be used for frontend of website.
-          </CardDescription>
         </CardHeader>
-        <form action={formAction}>
+        <form>
           <CardContent className="space-y-2">
             <div>
               <Label htmlFor="property_name">Property Name</Label>
               <Input
                 id="property_name"
                 name="property_name"
+                size={"md"}
                 type="text"
-                placeholder="Property name"
               />
             </div>
             <div>
               <Label htmlFor="property_email">Property Email</Label>
               <Input
                 id="property_email"
+                size={"md"}
                 name="property_email"
                 type="email"
-                placeholder="Property email"
               />
             </div>
             <div>
               <Label htmlFor="property_contact">Property Contact</Label>
               <Input
                 id="property_contact"
+                size={"md"}
                 name="property_contact"
                 type="text"
-                placeholder="Property contact"
               />
             </div>
             <div className="flex items-center justify-between gap-2">
               <div className="w-1/2">
-                <Label htmlFor="property_ratings">Ratings</Label>
+                <Label htmlFor="property_star_rating">Star Rating</Label>
                 <Select
-                  name="property_ratings"
+                  name="property_star_rating"
                   onValueChange={(value) => value}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Rating" />
+                  <SelectTrigger size="md">
+                    <SelectValue placeholder="Star Rating" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">1 or above</SelectItem>
-                    <SelectItem value="2">2 or above</SelectItem>
-                    <SelectItem value="3">3 or above</SelectItem>
-                    <SelectItem value="4">4 or above</SelectItem>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="4">4</SelectItem>
                     <SelectItem value="5">5</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="w-1/2">
                 <Label htmlFor="property_code">Property Code</Label>
-                <Input
-                  id="property_code"
-                  name="property_code"
-                  type="text"
-                  placeholder="Property code"
-                />
+                <Input id="property_code" name="property_code" type="text" />
               </div>
             </div>
             <UploadPropertyImages open={openDialog} setOpen={setOpenDialog} />

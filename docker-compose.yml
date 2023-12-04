@@ -78,6 +78,8 @@ services:
       - MONGO_URI=mongodb://mongo:27017/authDB
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
+      - JWT_SECRET_KEY_DEV=712fe68a80519cd3812dca082ec4ff2fd0dd2fe80d1f1c0d00871b387109767c39bb595df2a20a5dd6f54f60fbf096f5b23599f4584c8cdc85d9918ca9228504
+      - JWT_EXPIRES_IN_DEV=15d
       - NODE_ENV=development
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - KAFKA_AUTH_TOPIC=auth
@@ -114,25 +116,25 @@ services:
     volumes:
       - ./server/search-engine:/app/
       - /app/node_modules
-  pms_client:
-    container_name: "tripswift-pms_client"
-    build:
-      context: .
-      dockerfile: ./client/pms-client/Dockerfile
-    restart: always
-    ports:
-      - 3000:3000
-    depends_on:
-      - kafka
-      - mongo
-      - search
-      - authentication
-      - payment
-    networks:
-      - tripswift-network
-    volumes:
-      - ./client/pms_client:/app/
-      - /app/node_modules
+  # pms_client:
+  #   container_name: "tripswift-pms_client"
+  #   build:
+  #     context: .
+  #     dockerfile: ./client/pms-client/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - kafka
+  #     - mongo
+  #     - search
+  #     - authentication
+  #     - payment
+  #   networks:
+  #     - tripswift-network
+  #   volumes:
+  #     - ./client/pms-client:/app/
+  #     - /app/node_modules
 
 networks:
   tripswift-network:
