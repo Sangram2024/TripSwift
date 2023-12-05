@@ -96,11 +96,23 @@ export default function LoginForm({}: Props) {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8020/api/v1/auth/login", {
+      const res = await axios.post("http://localhost:8040/api/v1/auth/login", {
         ...data,
       });
+      const {
+        data: {
+          data: { properties, draftProperties },
+        },
+      } = await axios.get("http://localhost:8040/api/v1/property/me", {
+        headers: {
+          Authorization: "Bearer " + res.data.data.accessToken,
+        },
+      });
+
+      if (!properties.length && !draftProperties.length) {
+        router.push(`/property/create?auth=${res.data.data.accessToken}`);
+      }
       setLoading(false);
-      router.push(`/?auth=${res.data.data.accessToken}`);
     } catch (err) {
       setLoading(false);
       if (axios.isAxiosError(err)) {
