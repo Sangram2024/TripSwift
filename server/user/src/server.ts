@@ -5,7 +5,6 @@ import morgan from "morgan";
 import { AppError } from "./utils/appError";
 import { errorHandler } from "./utils/errorHandler";
 import userRouter from './routes/user.route';
-import authRouter from './routes/auth.route';
 
 config();
 
@@ -20,7 +19,6 @@ app.use(morgan("dev"));
 const PORT = process.env.PORT;
 const DB = process.env.MONGO_URI;
 
-app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 
 

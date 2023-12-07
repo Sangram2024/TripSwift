@@ -1,7 +1,4 @@
 import express, { NextFunction, Request, Response } from "express";
-import authRouter from "./routes/auth.route";
-import userRouter from "./routes/user.ruote";
-import queryRouter from "./routes/query.route";
 import hotelRouter from "./routes/hotel.route";
 import propertyRouter from "./routes/property.route";
 import uploadRouter from "./routes/upload.route";
@@ -21,11 +18,9 @@ app.use(morgan("dev"));
 const PORT = process.env.PORT;
 const DB = process.env.MONGO_URI;
 
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/user", userRouter);
+
 app.use("/api/v1/property", propertyRouter);
 app.use("/api/v1/upload", uploadRouter);
-app.use("/api/v1", queryRouter);
 app.use("/api/v1", hotelRouter);
 app.use("/api/v1", roomRouter);
 

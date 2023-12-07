@@ -1,7 +1,10 @@
 import { connect } from "mongoose";
 import { DB, PORT, app } from "./server";
 import { config } from "dotenv";
+
 config();
+
+
 
 connect(DB as string)
   .then((connection) =>
