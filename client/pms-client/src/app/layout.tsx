@@ -3,7 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "../lib/utils";
 import { ThemeProvider } from "../components/theme-provider";
-import { Toaster } from "react-hot-toast/dist";
+import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
 
 const dmSans = DM_Sans({

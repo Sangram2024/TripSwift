@@ -66,8 +66,8 @@ const login = catchAsync(
         email: users[0]?.email,
         role: users[0]?.role as Role,
       },
-      process.env.JWT_SECRET_KEY!,
-      process.env.JWT_EXPIRES_IN!
+      process.env.JWT_SECRET_KEY_DEV!,
+      process.env.JWT_EXPIRES_IN_DEV!
     );
 
     return res.status(200).json({

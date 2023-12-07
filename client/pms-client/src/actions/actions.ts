@@ -1,4 +1,4 @@
-"use server";
+// "use server";
 
 import axios, { AxiosError } from "axios";
 import { revalidatePath } from "next/cache";
@@ -31,7 +31,7 @@ export async function register(prevState: any, formData: FormData) {
       password: formData.get("password"),
     });
 
-    const res = await axios.post("http://localhost:4000/api/v1/auth/register", {
+    const res = await axios.post("http://localhost:8020/api/v1/auth/register", {
       ...data,
     });
     return { ...res.data };

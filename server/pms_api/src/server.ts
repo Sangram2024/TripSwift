@@ -1,11 +1,11 @@
-
 import express, { NextFunction, Request, Response } from "express";
 import authRouter from "./routes/auth.route";
-import userRouter from "./routes/user.ruote"
-import queryRouter from "./routes/query.route"
+import userRouter from "./routes/user.ruote";
+import queryRouter from "./routes/query.route";
 import hotelRouter from "./routes/hotel.route";
-import propertyRouter from './routes/property.route'
-import roomRouter from './routes/room.route';
+import propertyRouter from "./routes/property.route";
+import uploadRouter from "./routes/upload.route";
+import roomRouter from "./routes/room.route";
 import cors from "cors";
 import morgan from "morgan";
 import { AppError } from "./utils/appError";
@@ -23,11 +23,11 @@ const DB = process.env.MONGO_URI;
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/property", propertyRouter);
+app.use("/api/v1/upload", uploadRouter);
 app.use("/api/v1", queryRouter);
-app.use("/api/v1",hotelRouter)
-app.use("/api/v1",propertyRouter)
-app.use("/api/v1",roomRouter)
-
+app.use("/api/v1", hotelRouter);
+app.use("/api/v1", roomRouter);
 
 app.all("*", (req: Request, _res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} path on the server`, 404));

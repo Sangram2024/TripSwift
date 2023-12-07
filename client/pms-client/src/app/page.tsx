@@ -9,9 +9,5 @@ type Props = {
 export default function Home(props: Props) {
   const auth = props.searchParams?.auth;
 
-  const isPropertyThere = false;
-
-  return (
-    <main className="">{!isPropertyThere ? <CreatePropertyForm /> : null}</main>
-  );
+  return <main className=""></main>;
 }

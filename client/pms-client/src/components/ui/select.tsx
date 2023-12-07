@@ -5,6 +5,34 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "../../lib/utils";
+import { cva } from "class-variance-authority";
+
+const triggerVariants = {
+  variant: {
+    default:
+      "rounded-md border border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ",
+    error:
+      "rounded-md border border-red-500 file:border-0 file:bg-transparent file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 ring-offset-background",
+  },
+  size: {
+    default: "h-10 px-3 py-2",
+    md: "h-12 px-3 py-10",
+    lg: "h-16 px-12 py-4",
+  },
+};
+
+const defaultTriggerVariants = {
+  variant: "default" as const,
+  size: "default" as const,
+};
+
+const selectTriggerVariants = cva(
+  "flex w-full items-center justify-between bg-background text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+  {
+    variants: triggerVariants,
+    defaultVariants: defaultTriggerVariants,
+  }
+);
 
 const Select = SelectPrimitive.Root;
 
@@ -14,14 +42,14 @@ const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    size?: keyof typeof triggerVariants.size;
+    variant?: keyof typeof triggerVariants.variant;
+  }
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      className
-    )}
+    className={cn(selectTriggerVariants())}
     {...props}
   >
     {children}

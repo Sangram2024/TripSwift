@@ -15,6 +15,8 @@ export const protect = catchAsync(
       token = req.headers.authorization.split(" ")[1];
     }
 
+    console.log(token);
+
     if (!token) {
       return next(
         new AppError("You'r not logged in, please login to continue", 401)
@@ -27,6 +29,7 @@ export const protect = catchAsync(
 
     // const manager = await managerService.getManagerById(decoded?.id);
 
+    req.user = decoded?.id;
     req.role = decoded?.role;
 
     next();
