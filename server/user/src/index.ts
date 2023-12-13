@@ -4,17 +4,14 @@ import { config } from "dotenv";
 
 config();
 
-
-
 connect(DB as string)
-  .then((connection) =>
+  .then((connection) => {
     console.log(
-      `Database successfully running on ${connection.connection.host}`
-    )
-  )
+      `User database successfully running on ${connection.connection.host}`
+    );
+    // consumeEvent();
+    app.listen(PORT, () => {
+      console.log(`User server is running on port ${PORT}`);
+    });
+  })
   .catch((err) => console.log(`Error: ${err}`));
-
-app.listen(PORT, () => {
-  console.log(`user Server listening on port ${PORT}`);
-});
-

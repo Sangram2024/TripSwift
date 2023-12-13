@@ -41,12 +41,15 @@ import {
 import Dropzone from "./dropzone";
 import { FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
-import axios from "axios";
-import { z } from "zod";
+import axios, { Axios, AxiosError } from "axios";
+import { boolean, z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { BookOpen, MapPinned, ShowerHead } from "lucide-react";
+import { cn } from "../lib/utils";
+import { Textarea } from "./../components/ui/textarea";
+import { useSearchParams } from "next/navigation";
 
 type Props = {};
 
@@ -63,6 +66,7 @@ const createPropertySchema = z.object({
   property_contact: z.string().min(1, "Property contact is reuqired"),
   star_rating: z.string().default("1"),
   property_code: z.string().min(1, "Property code is required"),
+  description: z.string().min(1, "Description is required"),
 });
 
 type Inputs = {
@@ -71,6 +75,7 @@ type Inputs = {
   property_contact: string;
   star_rating: string;
   property_code: string;
+  description: string;
 };
 
 const steps = [
@@ -79,25 +84,45 @@ const steps = [
     icon: <BookOpen size={20} />,
     name: "Property Information",
     description: "General property information",
+    api: "http://localhost:8040/api/v1/property",
   },
   {
     id: 2,
     icon: <MapPinned size={20} />,
     name: "Property Address",
     description: "Location of property",
+    api: "http://localhost:8040/api/v1/property/address",
   },
   {
     id: 3,
     icon: <ShowerHead size={20} />,
     name: "Property Amenities",
     description: "Amenities availabilty",
+    api: "http://localhost:8040/api/v1/property/amenities",
   },
 ];
 
 export default function CreatePropertyForm({}: Props) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currenStep, setCurrentStep] = useState(0);
-  const [propertyImageUrls, setPropertyImageUrls] = useState<string[]>([]);
+  const [propertyImageUrls, setPropertyImageUrls] = useState<
+    {
+      public_id: string;
+      url: string;
+      secure_url: string;
+    }[]
+  >([]);
+
+  const [propertyImagePreviewDialog, setPropertyImagePreviewDialog] =
+    useState(false);
+
+  const [files, setFiles] = useState<IFileWithPreview[]>([]);
+  const [rejected, setRejected] = useState<FileRejection[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [formLoading, setFormLoading] = useState<boolean>(false);
+
+  const userId = useSearchParams().get("userId");
+  const accessToken = useSearchParams().get("auth");
 
   const next = () => {
     if (currenStep < steps.length - 1) {
@@ -118,6 +143,7 @@ export default function CreatePropertyForm({}: Props) {
       property_contact: "",
       star_rating: "1",
       property_code: "",
+      description: "",
     },
     resolver: zodResolver(createPropertySchema),
   });
@@ -148,28 +174,69 @@ export default function CreatePropertyForm({}: Props) {
   ]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
+    const currentFormStep = steps.filter(
+      (step) => step.id === currenStep + 1
+    )[0];
+
+    const imageUrls = propertyImageUrls.map(
+      (propertyImage) => propertyImage.url
+    );
+
+    const propertyCreateBody = {
+      ...data,
+      user_id: userId,
+      image: imageUrls,
+    };
+
+    setFormLoading(true);
+
+    try {
+      const { data: propertyCreateResponse } = await axios.post(
+        `${currentFormStep.api}`,
+        propertyCreateBody,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(propertyCreateResponse);
+      setFormLoading(false);
+      next();
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setFormLoading(false);
+        toast.error(err?.response?.data?.message);
+      }
+    }
   };
 
-  const handlePropertyImageUpload = async (files: any) => {
-    const fd = new FormData();
+  const packFiles = (files) => {
+    const data = new FormData();
 
-    fd.append("file", files);
-
-    console.log(fd.get("file")?.toString());
-
-    const {
-      data: {
-        data: { urls },
-      },
-    } = await axios.post("http://localhost:8040/api/v1/upload", fd, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    [...files].forEach((file, i) => {
+      data.append(`file`, file, file.name);
     });
+    return data;
+  };
 
-    setOpenDialog(false);
-    setPropertyImageUrls(urls);
+  const handlePropertyImageUpload = async () => {
+    if (files.length) {
+      const data = packFiles(files);
+
+      const {
+        data: {
+          data: { urls },
+        },
+      } = await axios.post("http://localhost:8040/api/v1/upload", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setOpenDialog(false);
+      setPropertyImageUrls(urls);
+    }
   };
 
   return (
@@ -177,75 +244,114 @@ export default function CreatePropertyForm({}: Props) {
       <div className="w-[80vw] flex items-center justify-center gap-20">
         <CreateFormSteps currentStep={currenStep} step={steps} />
         <div className="w-[60%]">
-          <CardTitle>Property Details</CardTitle>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-full">
-                <Label htmlFor="property_name">Property Name</Label>
-                <Input
-                  id="property_name"
-                  {...register("property_name")}
-                  size={"md"}
-                  type="text"
-                  variant={propertyNameError && "error"}
-                />
-              </div>
-              <div className="w-full">
-                <Label htmlFor="property_email">Property Email</Label>
-                <Input
-                  id="property_email"
-                  size={"md"}
-                  variant={propertyEmailError && "error"}
-                  {...register("property_email")}
-                  type="email"
-                />
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-full">
-                <Label htmlFor="property_contact">Property Contact</Label>
-                <Input
-                  id="property_contact"
-                  size={"md"}
-                  variant={propertyContactError && "error"}
-                  {...register("property_contact")}
-                  type="text"
-                />
-              </div>
-              <div className="w-full">
-                <Label htmlFor="property_code">Property Code</Label>
-                <Input
-                  variant={propertyCodeError && "error"}
-                  id="property_code"
-                  {...register("property_code")}
-                  type="text"
-                  size={"md"}
-                />
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1/2">
-                <Label htmlFor="property_star_rating">Star Rating</Label>
-                <Input
-                  size={"md"}
-                  id="property_star_rating"
-                  type="text"
-                  variant={starRatingError && "error"}
-                  {...register("star_rating")}
-                />
-              </div>
-              <div className="self-end">
-                <UploadPropertyImages
-                  open={openDialog}
-                  setOpen={setOpenDialog}
-                  handlePropertyImageUpload={handlePropertyImageUpload}
-                />
-              </div>
-              <div className="self-end w-full">
-                <SubmitButton content="Next" />
-              </div>
-            </div>
-          </form>
+          {currenStep === 0 ? (
+            <>
+              <CardTitle>Property Details</CardTitle>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-4 mt-6"
+              >
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-full">
+                    <Label htmlFor="property_name">Property Name</Label>
+                    <Input
+                      id="property_name"
+                      {...register("property_name")}
+                      size={"md"}
+                      type="text"
+                      variant={propertyNameError && "error"}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <Label htmlFor="property_email">Property Email</Label>
+                    <Input
+                      id="property_email"
+                      size={"md"}
+                      variant={propertyEmailError && "error"}
+                      {...register("property_email")}
+                      type="email"
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-full">
+                    <Label htmlFor="property_contact">Property Contact</Label>
+                    <Input
+                      id="property_contact"
+                      size={"md"}
+                      variant={propertyContactError && "error"}
+                      {...register("property_contact")}
+                      type="text"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <Label htmlFor="property_code">Property Code</Label>
+                    <Input
+                      variant={propertyCodeError && "error"}
+                      id="property_code"
+                      {...register("property_code")}
+                      type="text"
+                      size={"md"}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-full">
+                    <Label htmlFor="description">Property Description</Label>
+                    <Textarea
+                      id="description"
+                      // variant={propertyContactError && "error"}
+                      {...register("description")}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1/2">
+                    <Label htmlFor="property_star_rating">Star Rating</Label>
+                    <Input
+                      size={"md"}
+                      id="property_star_rating"
+                      type="text"
+                      variant={starRatingError && "error"}
+                      {...register("star_rating")}
+                    />
+                  </div>
+                  <div className="self-end">
+                    {propertyImageUrls?.length ? (
+                      <PreviewPropertyImages
+                        open={propertyImagePreviewDialog}
+                        setOpen={setPropertyImagePreviewDialog}
+                        files={propertyImageUrls}
+                      />
+                    ) : (
+                      <UploadPropertyImages
+                        files={files}
+                        setFiles={setFiles}
+                        rejected={rejected}
+                        loading={loading}
+                        setLoading={setLoading}
+                        setRejected={setRejected}
+                        open={openDialog}
+                        setOpen={setOpenDialog}
+                        handlePropertyImageUpload={handlePropertyImageUpload}
+                      />
+                    )}
+                  </div>
+                  <div className="self-end w-full">
+                    <SubmitButton content="Next" loading={formLoading} />
+                  </div>
+                </div>
+              </form>
+            </>
+          ) : currenStep === 1 ? (
+            <>
+              <h1>Step 2</h1>
+            </>
+          ) : currenStep === 2 ? (
+            <>
+              <h1>Step 3</h1>
+            </>
+          ) : null}
         </div>
       </div>
     </div>
@@ -253,18 +359,26 @@ export default function CreatePropertyForm({}: Props) {
 }
 
 function UploadPropertyImages({
+  files,
+  setFiles,
+  rejected,
+  setRejected,
+  loading,
+  setLoading,
   open,
   setOpen,
   handlePropertyImageUpload,
 }: {
   open: boolean;
+  files: IFileWithPreview[];
+  setFiles: React.Dispatch<React.SetStateAction<IFileWithPreview[]>>;
+  rejected: any;
+  setRejected: any;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handlePropertyImageUpload: any;
 }) {
-  const [files, setFiles] = useState<IFileWithPreview[]>([]);
-  const [rejected, setRejected] = useState<FileRejection[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
   // const [propertyImageState, uploadPropertyImagesAction] = useFormState(
   //   uploadPropertyImages,
   //   null
@@ -285,7 +399,10 @@ function UploadPropertyImages({
       }
 
       if (rejectedFiles?.length) {
-        setRejected((previousFiles) => [...previousFiles, ...rejectedFiles]);
+        setRejected((previousFiles: any) => [
+          ...previousFiles,
+          ...rejectedFiles,
+        ]);
       }
     },
     []
@@ -308,19 +425,14 @@ function UploadPropertyImages({
   };
 
   const removeRejected = (name: string) => {
-    setRejected((files) => files.filter(({ file }) => file.name !== name));
+    setRejected((files: any) =>
+      files.filter(({ file }: { file: any }) => file.name !== name)
+    );
   };
 
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      setLoading(true);
-      handlePropertyImageUpload(files);
-      setLoading(false);
-    } catch (err) {
-      console.log(err, "Error: ");
-      setLoading(false);
-    }
+    await handlePropertyImageUpload();
   };
 
   return (
@@ -414,12 +526,16 @@ function UploadPropertyImages({
   );
 }
 
-function SubmitButton({ content }: { content: string }) {
-  const { pending } = useFormStatus();
-
+function SubmitButton({
+  content,
+  loading,
+}: {
+  content: string;
+  loading: boolean;
+}) {
   return (
-    <Button type="submit" className="w-[200px]" disabled={pending}>
-      {pending ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : content}
+    <Button type="submit" className="w-[200px]" disabled={loading}>
+      {loading ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : content}
     </Button>
   );
 }
@@ -432,8 +548,6 @@ function CreateFormSteps({
   currentStep: number;
 }) {
   function checkIfStepIsCompleted(step: number) {
-    console.log({ step, currentStep });
-    console.log(step > currentStep);
     return step > currentStep;
   }
 
@@ -533,5 +647,73 @@ function CreateFormSteps({
         <p className="text-sm">Step details here</p>
       </li> */}
     </ol>
+  );
+}
+
+function PreviewPropertyImages({
+  open,
+  setOpen,
+  files,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  files: {
+    public_id: string;
+    url: string;
+    secure_url: string;
+  }[];
+}) {
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        className={buttonVariants({
+          variant: "outline",
+        })}
+      >
+        property images
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Property Images</DialogTitle>
+        </DialogHeader>
+        <div className="flex items-center gap-2">
+          {!files.length
+            ? "No preview available"
+            : files?.map((file, i) => (
+                <div
+                  onClick={() => setCurrentImage(i)}
+                  className="rounded-md cursor-pointer overflow-hidden"
+                >
+                  <Image
+                    key={file?.public_id}
+                    src={file?.url}
+                    height={60}
+                    width={60}
+                    alt=""
+                  />
+                </div>
+              ))}
+        </div>
+        <div className="rounded-md min-h-[250px] max-h-[350px] overflow-hidden">
+          <Image
+            key={files[currentImage]?.public_id}
+            src={files[currentImage]?.url}
+            className={cn(
+              "duration-700 ease-in-out",
+              isLoading
+                ? "grayscale blur-2xl scale-110"
+                : "grayscale-0 blur-0 scale-100"
+            )}
+            onLoadingComplete={() => setIsLoading(false)}
+            height={500}
+            width={500}
+            alt=""
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

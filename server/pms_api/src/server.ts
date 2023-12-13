@@ -18,7 +18,6 @@ app.use(morgan("dev"));
 const PORT = process.env.PORT;
 const DB = process.env.MONGO_URI;
 
-
 app.use("/api/v1/property", propertyRouter);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/v1", hotelRouter);

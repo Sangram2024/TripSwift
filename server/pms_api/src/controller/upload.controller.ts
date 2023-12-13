@@ -9,7 +9,7 @@ export const uploadHandler = catchAsync(
     const files = req.files;
     let cloudinaryFolderName = "";
 
-    console.log({ files: req.file });
+    console.log({ files: req.body.files });
 
     if (!files?.length) {
       return next(new AppError("Upload at least one file", 400));
