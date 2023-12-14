@@ -10,7 +10,7 @@ import {
 import { UserType } from "./user.model";
 
 interface PropertyInfoType extends Document {
-  user_Id: Types.ObjectId | UserType;
+  user_id: Types.ObjectId | UserType;
   property_name: string;
   property_email: string;
   property_contact: number;
@@ -18,13 +18,13 @@ interface PropertyInfoType extends Document {
   property_code: string;
   property_address: Types.ObjectId | PropertyAddressType;
   property_aminite: Types.ObjectId | PropertyAnimiteType;
-  image: string;
+  image: string[];
   description: string;
   isDraft: boolean;
 }
 
 const propertyInfoSchema = new Schema<PropertyInfoType>({
-  user_Id: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
   property_name: { type: String, required: true },
   property_email: { type: String, required: true },
   property_contact: { type: Number, required: true },
@@ -32,7 +32,7 @@ const propertyInfoSchema = new Schema<PropertyInfoType>({
   property_code: { type: String, required: true },
   property_address: { type: Schema.Types.ObjectId, ref: "PropertyAddress" },
   property_aminite: { type: Schema.Types.ObjectId, ref: "PropertyAminite" },
-  image: { type: String },
+  image: [{ type: String }],
   description: { type: String },
   isDraft: {
     type: Boolean,

@@ -33,11 +33,11 @@ const getMyProperties = catchAsync(
 const createpropertyInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const {
-      user_Id,
+      user_id,
       property_name,
       property_email,
       property_contact,
-      star_ratings,
+      star_rating,
       property_code,
       image,
       description,
@@ -52,33 +52,31 @@ const createpropertyInfo = catchAsync(
     });
 
     if (property.length) {
-      next(new AppError("An user is already exits with this email", 400));
+      next(new AppError("A property is already exits with this email", 400));
     }
 
-    if (req.role !== "PROPERTY_MANAGER") {
+    if (req.role === "user") {
       return next(
         new AppError("You do not allowed to perform this  action", 400)
       );
     }
 
-    const newPropertyInfo = await PropertyInfo.create({
-      user_Id,
+    await PropertyInfo.create({
+      user_id,
       property_name,
       property_email,
       property_contact,
-      star_ratings,
+      star_rating,
       property_code,
       image,
       description,
     });
-    const totalProperty = await PropertyInfo.find();
 
     res.status(201).json({
       status: "success",
       error: false,
-      total_property: totalProperty.length,
       message: "Property registered successfully",
-      data: newPropertyInfo,
+      data: null,
     });
   }
 );
@@ -91,7 +89,7 @@ const updatePropertyInfo = catchAsync(
       property_name,
       property_email,
       property_contact,
-      star_ratings,
+      star_rating,
       property_code,
       image,
       description,
@@ -111,7 +109,7 @@ const updatePropertyInfo = catchAsync(
         property_name,
         property_email,
         property_contact,
-        star_ratings,
+        star_rating,
         property_code,
         image,
         description,

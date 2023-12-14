@@ -54,7 +54,8 @@ const login = catchAsync(
         new AppError("Please provide all the required credentials", 400)
       );
     }
-    const users = await Auth.find().byEmail(email);
+
+    const users = await Auth.find().byEmail(email).select("password");
 
     if (!users.length || !(await compareHash(password, users[0]?.password))) {
       return next(new AppError("Invalid email or password", 401));

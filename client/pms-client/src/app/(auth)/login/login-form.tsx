@@ -41,7 +41,7 @@ import { AtSign, Eye, EyeOff, Lock } from "lucide-react";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 type Props = {};
 
@@ -95,22 +95,60 @@ export default function LoginForm({}: Props) {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
+
+    console.log(data);
+
     try {
-      const res = await axios.post("http://localhost:8040/api/v1/auth/login", {
+      const res = await axios.post("http://localhost:8020/api/v1/auth/login", {
         ...data,
       });
+
+      // const {
+      //   data: {
+      //     data: { properties, draftProperties },
+      //   },
+      // } = await axios.get("http://localhost:8040/api/v1/property/me", {
+      //   headers: {
+      //     Authorization: "Bearer " + res.data.data.accessToken,
+      //   },
+      // });
+
+      // await axios.get("http://localhost:8020/api/v1/user/me", {
+      //   headers: {
+      //     Authorization: "Bearer " + res.data.data.accessToken,
+      //   },
+      // });
+
+      const results: PromiseSettledResult<AxiosResponse<any, any>>[] =
+        await Promise.allSettled([
+          axios.get("http://localhost:8040/api/v1/property/me", {
+            headers: {
+              Authorization: "Bearer " + res.data.data.accessToken,
+            },
+          }),
+          axios.get("http://localhost:8020/api/v1/user/me", {
+            headers: {
+              Authorization: "Bearer " + res.data.data.accessToken,
+            },
+          }),
+        ]);
+
       const {
-        data: {
-          data: { properties, draftProperties },
-        },
-      } = await axios.get("http://localhost:8040/api/v1/property/me", {
-        headers: {
-          Authorization: "Bearer " + res.data.data.accessToken,
-        },
-      });
+        fulfilledResults: [propertyResponse, getMeResponse],
+        rejectedResults: [propertyError, getMeError],
+      } = handleResults(results);
+
+      const {
+        data: { draftProperties, properties },
+      } = propertyResponse;
+      const {
+        data: { user },
+      } = getMeResponse;
 
       if (!properties.length && !draftProperties.length) {
-        router.push(`/property/create?auth=${res.data.data.accessToken}`);
+        router.push(
+          `/property/create?auth=${res.data.data.accessToken}&userId=${user?._id}`
+        );
       }
       setLoading(false);
     } catch (err) {
@@ -121,6 +159,24 @@ export default function LoginForm({}: Props) {
       return;
     }
   };
+
+  function handleResults(
+    results: PromiseSettledResult<AxiosResponse<any, any>>[]
+  ) {
+    const fulfilledResults: AxiosResponse<any, any>[] = [];
+    const rejectedResults: AxiosResponse<any, any>[] = [];
+
+    results.forEach((result, index) => {
+      if (result.status === "fulfilled") {
+        fulfilledResults.push(result.value!.data);
+      }
+      if (result.status === "rejected") {
+        rejectedResults.push(result.reason.response.data);
+      }
+    });
+
+    return { fulfilledResults, rejectedResults };
+  }
 
   return (
     <div className="w-[500px]">

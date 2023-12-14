@@ -19,14 +19,17 @@ import {
 } from "../controller/propertyaminite.controller";
 
 import { createPaymentMethod } from "../controller/property/paymentmethod.controller";
-import { protect } from "@quotus_packages/auth_middleware";
+// import { protect } from "@quotus_packages/auth_middleware";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 
 router.route("/me").get(protect as any, getMyProperties as any);
 
 // property payment router
-router.route("/payment_method").post(protect as any, createPaymentMethod as any);
+router
+  .route("/payment_method")
+  .post(protect as any, createPaymentMethod as any);
 
 // property address router
 router.route("/address").post(protect as any, createPropertyAddress as any);
@@ -47,7 +50,7 @@ router
   .post(protect as any, createpropertyInfo as any);
 router
   .route("/:id")
-  .get( getPropertyInfoById as any)
+  .get(getPropertyInfoById as any)
   .patch(protect as any, updatePropertyInfo as any)
   .delete(protect as any, deleteProperty as any);
 
