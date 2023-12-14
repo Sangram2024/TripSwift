@@ -37,11 +37,7 @@ export default function HomeSection() {
                 src={item.img}
               />
             </CardBody>
-            {/* <CardFooter className="text-small justify-between">
-              <b>{item.title}</b>
-              <p className="text-default-500">{item.price}</p>
-            </CardFooter> */}
-          </Card>
+                  </Card>
         ))}
       </div>
       <div>
