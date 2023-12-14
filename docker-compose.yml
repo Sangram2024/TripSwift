@@ -190,3 +190,6 @@ services:
 
 networks:
   tripswift-network:
+
+volumes:
+  data:
