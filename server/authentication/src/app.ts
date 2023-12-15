@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { AppError } from "./utils/appError";
 import { errorHandler } from "./utils/errorHandler";
 import authRouter from "./routes/auth.route";
+import userRouter from "./routes/user.route";
 config();
 
 const app = express();
@@ -18,6 +19,7 @@ const PORT = process.env.PORT;
 const DB = process.env.MONGO_URI;
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
 
 app.all("*", (req: Request, _res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} path on the server`, 404));

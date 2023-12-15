@@ -54,7 +54,8 @@ const login = catchAsync(
         new AppError("Please provide all the required credentials", 400)
       );
     }
-    const users = await Auth.find().byEmail(email);
+
+    const users = await Auth.find().byEmail(email).select("password");
 
     if (!users.length || !(await compareHash(password, users[0]?.password))) {
       return next(new AppError("Invalid email or password", 401));
@@ -66,8 +67,8 @@ const login = catchAsync(
         email: users[0]?.email,
         role: users[0]?.role as Role,
       },
-      process.env.JWT_SECRET_KEY!,
-      process.env.JWT_EXPIRES_IN!
+      process.env.JWT_SECRET_KEY_DEV!,
+      process.env.JWT_EXPIRES_IN_DEV!
     );
 
     return res.status(200).json({

@@ -11,9 +11,12 @@ export const kafkaClient = new Kafka({
 
 connect(DB as string)
   .then((connection) => {
-    console.log(`Authentication database successfully connected`);
+    console.log(
+      `Authentication database successfully running on ${connection.connection.host}`
+    );
+    // handlerUserCreateEvent();
     app.listen(PORT, () => {
-      console.log(`Authentication Server listening on port ${PORT}`);
+      console.log(`Pms server is running on port ${PORT}`);
     });
   })
   .catch((err) => console.log(`Error: ${err}`));

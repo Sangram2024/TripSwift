@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.9"
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -9,8 +9,6 @@ services:
       - 2181:2181
     networks:
       - tripswift-network
-    logging:
-      driver: none
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
@@ -27,8 +25,8 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     volumes:
       - ./data/kafka:/var/run/docker.sock
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
   mongo:
     image: mongo
     container_name: mongo
@@ -39,8 +37,8 @@ services:
       - ./data/mongo:/data/db
     networks:
       - tripswift-network
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
   payment:
     container_name: "tripswift-payment"
     build:
@@ -78,7 +76,11 @@ services:
       - MONGO_URI=mongodb://mongo:27017/authDB
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
+      - JWT_SECRET_KEY_DEV=712fe68a80519cd3812dca082ec4ff2fd0dd2fe80d1f1c0d00871b387109767c39bb595df2a20a5dd6f54f60fbf096f5b23599f4584c8cdc85d9918ca9228504
+      - JWT_EXPIRES_IN_DEV=15d
       - NODE_ENV=development
+      - JWT_EXPIRES_IN=7d
+      - JWT_SECRET_KEY=32ed647ffbc55050ecfe5b1b9a33600776973f441e9257fd73315c8444ac8eb1f1a813190f4c34c59caaa1304f5d09149fb2320d20195ac6645adb09f59ba59d
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - KAFKA_AUTH_TOPIC=auth
     depends_on:
@@ -89,7 +91,6 @@ services:
     volumes:
       - ./server/authentication:/app/
       - /app/node_modules
-  
   search:
     container_name: "tripswift-search-engine"
     build:
@@ -115,6 +116,130 @@ services:
     volumes:
       - ./server/search-engine:/app/
       - /app/node_modules
+  pms_api:
+    container_name: "tripswift-pms_api"
+    build:
+      context: .
+      dockerfile: ./server/pms_api/Dockerfile
+    restart: always
+    ports:
+      - 8040:8040
+    environment:
+      - PORT=8040
+      - MONGO_URI=mongodb://mongo:27017/propertyDB
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - JWT_SECRET_KEY_DEV=712fe68a80519cd3812dca082ec4ff2fd0dd2fe80d1f1c0d00871b387109767c39bb595df2a20a5dd6f54f60fbf096f5b23599f4584c8cdc85d9918ca9228504
+      - JWT_EXPIRES_IN_DEV=15d
+      - NODE_ENV=development
+      - JWT_EXPIRES_IN=7d
+      - JWT_SECRET_KEY=32ed647ffbc55050ecfe5b1b9a33600776973f441e9257fd73315c8444ac8eb1f1a813190f4c34c59caaa1304f5d09149fb2320d20195ac6645adb09f59ba59d
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_AUTH_TOPIC=auth
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/pms_api:/app/
+      - /app/node_modules
+  user:
+    container_name: "tripswift-user"
+    build:
+      context: .
+      dockerfile: ./server/user/Dockerfile
+    restart: always
+    ports:
+      - 8050:8050
+    environment:
+      - PORT=8050
+      - MONGO_URI=mongodb://mongo:27017/user_db
+      - NODE_ENV=development
+      - JWT_EXPIRES_IN=7d
+      - JWT_SECRET_KEY=32ed647ffbc55050ecfe5b1b9a33600776973f441e9257fd73315c8444ac8eb1f1a813190f4c34c59caaa1304f5d09149fb2320d20195ac6645adb09f59ba59d
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_AUTH_TOPIC=auth
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/user:/app/
+      - /app/node_modules
+  # pms_client:
+  #   container_name: "tripswift-pms_client"
+  #   build:
+  #     context: .
+  #     dockerfile: ./client/pms-client/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - kafka
+  #     - mongo
+  #     - search
+  #     - authentication
+  #     - payment
+  #   networks:
+  #     - tripswift-network
+  #   volumes:
+  #     - ./client/pms-client:/app/
+  #     - /app/node_modules
+
+  booking_engine:
+    container_name: "tripswift-booking_engine"
+    build:
+      context: .
+      dockerfile: ./server/booking_engine/Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - MONGO_URI=mongodb://mongo:27017/authDB
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - JWT_SECRET_KEY_DEV=712fe68a80519cd3812dca082ec4ff2fd0dd2fe80d1f1c0d00871b387109767c39bb595df2a20a5dd6f54f60fbf096f5b23599f4584c8cdc85d9918ca9228504
+      - JWT_EXPIRES_IN_DEV=15d
+      - NODE_ENV=development
+      - JWT_EXPIRES_IN=7d
+      - JWT_SECRET_KEY=32ed647ffbc55050ecfe5b1b9a33600776973f441e9257fd73315c8444ac8eb1f1a813190f4c34c59caaa1304f5d09149fb2320d20195ac6645adb09f59ba59d
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_AUTH_TOPIC=auth
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/booking_engine:/app/
+      - /app/node_modules
+
+  booking_engine_client:
+    container_name: "tripswift-booking_engine_client"
+    build:
+      context: .
+      dockerfile: ./client/booking_engine_client/Dockerfile
+    restart: always
+    ports:
+      - 9000:9000
+    depends_on:
+      - kafka
+      - mongo
+      - search
+      - authentication
+      - payment
+      - pms_api
+    networks:
+      - tripswift-network
+    volumes:
+      - ./client/booking_engine_client:/app/
+      - /app/node_modules
 
 networks:
   tripswift-network:
+
+volumes:
+  data:
