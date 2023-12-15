@@ -9,6 +9,8 @@ services:
       - 2181:2181
     networks:
       - tripswift-network
+    logging:
+      driver: none
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
@@ -25,8 +27,8 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     volumes:
       - ./data/kafka:/var/run/docker.sock
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
   mongo:
     image: mongo
     container_name: mongo
@@ -37,8 +39,8 @@ services:
       - ./data/mongo:/data/db
     networks:
       - tripswift-network
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
   payment:
     container_name: "tripswift-payment"
     build:
@@ -102,10 +104,10 @@ services:
     environment:
       - PORT=8030
       - MONGO_URI=mongodb+srv://techquotus:techquotus@cluster0.yjw0a6g.mongodb.net/?retryWrites=true&w=majority
-      - ELASTICSEARCH_ID=98793fd777f24ad18b7ccefefe21796c:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyRiZTkyOGFjOGI1ZTc0ZDk3YTY3MzM2OTFmMjkzNzMyZSQ4ZmM3M2E1N2VkNjM0N2U3YjAwMjY4YzcyOTNlNzA3Ng==
+      - ELASTICSEARCH_ID=tripswift:YXNpYS1zb3V0aDEuZ2NwLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQzOTMyYzAxZTA1ZGM0MTcwYmQ1ZWRmMzliNzc0Mjg2YSQxMDVkOWRiNjczZDc0ZmFiOTA1ZTRmZGE0MjI4MTI1Ng==
       - NODE_ENV=development
-      - ELASTICSEARCH_USER=dwitidibyajyoti
-      - ELASTICSEARCH_PASS=FJkggVbSMH8SFWG
+      - ELASTICSEARCH_USER=elastic
+      - ELASTICSEARCH_PASS=ArDnaZvq958zlThdlGOkEExn
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - KAFKA_AUTH_TOPIC=auth
     depends_on:
