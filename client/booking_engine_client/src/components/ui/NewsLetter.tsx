@@ -31,7 +31,7 @@ const Newsletter = () => {
           onClick={handleSubscribe}
           className="bg-[#D80032] text-white px-6 py-2 rounded-md hover:bg-red-500 focus:outline-none"
         >
-          Subscribe
+          Notify Me
         </button>
       </div>
     </div>

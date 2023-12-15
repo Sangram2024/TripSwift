@@ -1,8 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import LoginImg from "../../components/assets/login.jpg";
 import Link from "next/link";
 import { login } from "@/api/auth";
+import LoginIcon from "@/components/assets/TRIP-1.png";
 
 type LoginData = {
   email: string;
@@ -14,18 +16,18 @@ const Login: React.FC = () => {
     email: "",
     password: "",
   });
-  
-  const handelSubmit = () =>{
+
+  const handelSubmit = () => {
     login(values)
-    .then(async(res)=>{
-      if(res){
-        console.log("login successfull")
-      }
-    })
-    .catch((error)=>{
-      console.log("the err is ",error)
-    })
-  }
+      .then(async (res) => {
+        if (res) {
+          console.log("login successfull");
+        }
+      })
+      .catch((error) => {
+        console.log("the err is ", error);
+      });
+  };
   return (
     <div className="flex ">
       {/* Image Section */}
@@ -35,8 +37,18 @@ const Login: React.FC = () => {
 
       {/* Sign-up Section */}
       <div className="relative flex flex-col min-h-screen overflow-hidden">
-        <div className="w-full bg-white border mt-28 p-12 gap-6 rounded-md shadow-md shadow-[#FF745C] lg:max-w-xl">
-          <h1 className="text-3xl font-bold text-center text-gray-700">Logo</h1>
+        <div className="w-full  bg-white border mt-28 p-12 gap-6 rounded-md shadow-md shadow-[#FF745C] lg:max-w-xl">
+          {/* <h1 className="text-3xl font-bold text-center text-gray-700">Logo</h1> */}
+          <div className="flex justify-center items-center  p-4">
+            <Image
+              src={LoginIcon}
+              width={80}
+              height={39}
+              alt={"logo"}
+              className=" "
+            />
+          </div>
+
           <form className="mt-6">
             <div className="mb-4">
               <label

@@ -1,19 +1,23 @@
+"use client";
 import Image from "next/image";
 import React from "react";
-import img from '../assets/TRIP-2.png'
+import img from "../assets/TRIP-2.png";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
 const Footter = (props: Props) => {
+  const pathname = usePathname();
   return (
     <>
-      <div className="flex mt-10">
+      <div
+        className={`flex mt-10 ${pathname === "/my-trip" ? "hidden" : "none"}`}
+      >
         <header className="bg-zinc-800 w-full flex-col justify-center items-center px-6 py-3 max-md:max-w-full max-md:px-5">
           <div className="flex items-start justify-between gap-5 mt-8 px-2 max-md:flex-wrap">
             <div className="flex">
               <div className="text-white text-lg md:text-xl  leading-6">
-              <Image src={img} width={170} height={20} alt="Logo" />
-
+                <Image src={img} width={170} height={20} alt="Logo" />
               </div>
             </div>
 

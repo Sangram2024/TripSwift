@@ -200,7 +200,7 @@ services:
       - 8080:8080
     environment:
       - PORT=8080
-      - MONGO_URI=mongodb://mongo:27017/authDB
+      - MONGO_URI=mongodb://mongo:27017/bookngEngineDB
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - JWT_SECRET_KEY_DEV=712fe68a80519cd3812dca082ec4ff2fd0dd2fe80d1f1c0d00871b387109767c39bb595df2a20a5dd6f54f60fbf096f5b23599f4584c8cdc85d9918ca9228504
