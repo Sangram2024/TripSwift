@@ -4,6 +4,7 @@ import GuestBox from "./GuestBox";
 import DateRange from "./DateRange";
 import Image from "next/image";
 import HeroImage from "../assets/hotel-1.jpg";
+import SearchBox from "./SearchBox";
 
 const HotelCard = () => {
   return (
@@ -19,13 +20,7 @@ const HotelCard = () => {
         <div className="lg:flex justify-center sm:flex-row items-center lg:gap-7">
           {/* Search Box Section */}
           <div className="rounded-md border-2">
-            <input
-              type="text"
-              id="search"
-              name="search"
-              className="p-2 w-80 rounded-md focus:outline-none"
-              placeholder="Search by city, hotel and location"
-            />
+            <SearchBox />
           </div>
 
           {/* Date Section */}

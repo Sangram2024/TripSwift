@@ -65,6 +65,9 @@ services:
     volumes:
       - ./server/payment:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   authentication:
     container_name: "tripswift-auth"
     build:
@@ -93,6 +96,9 @@ services:
     volumes:
       - ./server/authentication:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   search:
     container_name: "tripswift-search-engine"
     build:
@@ -118,6 +124,9 @@ services:
     volumes:
       - ./server/search-engine:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   pms_api:
     container_name: "tripswift-pms_api"
     build:
@@ -146,6 +155,9 @@ services:
     volumes:
       - ./server/pms_api:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   user:
     container_name: "tripswift-user"
     build:
@@ -170,6 +182,8 @@ services:
     volumes:
       - ./server/user:/app/
       - /app/node_modules
+    logging:
+      driver: none
   # pms_client:
   #   container_name: "tripswift-pms_client"
   #   build:
@@ -218,6 +232,8 @@ services:
     volumes:
       - ./server/booking_engine:/app/
       - /app/node_modules
+    logging:
+      driver: none
 
   booking_engine_client:
     container_name: "tripswift-booking_engine_client"
@@ -239,6 +255,8 @@ services:
     volumes:
       - ./client/booking_engine_client:/app/
       - /app/node_modules
+    logging:
+      driver: none
 
 networks:
   tripswift-network:
