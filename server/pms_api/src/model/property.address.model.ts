@@ -8,6 +8,7 @@ interface PropertyAddressType extends Document {
   country: string;
   state: string;
   city: string;
+  location: string;
   landmark: string;
   zip_code: number;
 }
@@ -23,6 +24,7 @@ const propertyAddressSchema = new Schema<PropertyAddressType>({
   country: { type: String, required: true },
   state: { type: String, required: true },
   city: { type: String, required: true },
+  location: { type: String, required: true },
   landmark: { type: String, required: true },
   zip_code: { type: Number, required: true },
 });
