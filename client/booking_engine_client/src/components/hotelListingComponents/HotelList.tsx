@@ -14,14 +14,13 @@ const HotelList = (props: Props) => {
     "Price low to high",
   ];
 
-
-  const renderHotelList = () =>{
-    const preview = []
-    for(let i=0; i< 9 ; i++){
-      preview.push(<HotelListingBox key={i}/> )
+  const renderHotelList = () => {
+    const preview = [];
+    for (let i = 0; i < 8; i++) {
+      preview.push(<HotelListingBox key={i} />);
     }
-    return preview
-  }
+    return preview;
+  };
 
   return (
     <div>
@@ -42,11 +41,7 @@ const HotelList = (props: Props) => {
               <DropdownComponents dropdownItems={dynamicDropdownItems} />
             </span>
           </div>
-          <div className="  mt-3 mb-4">
-            {renderHotelList()}
-           
-         
-          </div>
+          <div className="  mt-3 mb-4">{renderHotelList()}</div>
         </div>
       </div>
     </div>

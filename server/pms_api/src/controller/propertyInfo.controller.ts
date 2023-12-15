@@ -61,7 +61,7 @@ const createpropertyInfo = catchAsync(
       );
     }
 
-    await PropertyInfo.create({
+    const newPropertyInfo = await PropertyInfo.create({
       user_id,
       property_name,
       property_email,
@@ -76,7 +76,7 @@ const createpropertyInfo = catchAsync(
       status: "success",
       error: false,
       message: "Property registered successfully",
-      data: null,
+      data: newPropertyInfo,
     });
   }
 );

@@ -2,9 +2,10 @@ import React from "react";
 import Power from "@/components/assets/car-battery.png";
 import Parking from "@/components/assets/car.png";
 import Wifi from "@/components/assets/wifi.png";
-import Star from "@/components/assets/star-2.png"
+import Star from "@/components/assets/star-2.png";
 import Image from "next/image";
 import Link from "next/link";
+import HotelImage from "./HotelImage";
 
 type Props = {};
 
@@ -12,7 +13,10 @@ const HotelListingBox = (props: Props) => {
   return (
     <>
       <div className="flex  mb-3 mt-2">
-        <div className="w-[350px] border border-red-500 h-[280px]">image</div>
+        <div className="w-[350px] border   border-red-500 h-[280px]">
+          {/* <HotelImage /> */}
+          image
+        </div>
         <div className="flex-1">
           <div className=" p-4">
             <h1 className="text-2xl font-bold">Le-merdin</h1>

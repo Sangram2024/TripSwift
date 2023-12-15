@@ -9,6 +9,8 @@ services:
       - 2181:2181
     networks:
       - tripswift-network
+    logging:
+      driver: none
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
@@ -25,8 +27,8 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     volumes:
       - ./data/kafka:/var/run/docker.sock
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
   mongo:
     image: mongo
     container_name: mongo
@@ -37,8 +39,8 @@ services:
       - ./data/mongo:/data/db
     networks:
       - tripswift-network
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
   payment:
     container_name: "tripswift-payment"
     build:
@@ -63,6 +65,9 @@ services:
     volumes:
       - ./server/payment:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   authentication:
     container_name: "tripswift-auth"
     build:
@@ -91,6 +96,9 @@ services:
     volumes:
       - ./server/authentication:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   search:
     container_name: "tripswift-search-engine"
     build:
@@ -102,10 +110,10 @@ services:
     environment:
       - PORT=8030
       - MONGO_URI=mongodb+srv://techquotus:techquotus@cluster0.yjw0a6g.mongodb.net/?retryWrites=true&w=majority
-      - ELASTICSEARCH_ID=98793fd777f24ad18b7ccefefe21796c:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyRiZTkyOGFjOGI1ZTc0ZDk3YTY3MzM2OTFmMjkzNzMyZSQ4ZmM3M2E1N2VkNjM0N2U3YjAwMjY4YzcyOTNlNzA3Ng==
+      - ELASTICSEARCH_ID=tripswift:YXNpYS1zb3V0aDEuZ2NwLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQzOTMyYzAxZTA1ZGM0MTcwYmQ1ZWRmMzliNzc0Mjg2YSQxMDVkOWRiNjczZDc0ZmFiOTA1ZTRmZGE0MjI4MTI1Ng==
       - NODE_ENV=development
-      - ELASTICSEARCH_USER=dwitidibyajyoti
-      - ELASTICSEARCH_PASS=FJkggVbSMH8SFWG
+      - ELASTICSEARCH_USER=elastic
+      - ELASTICSEARCH_PASS=ArDnaZvq958zlThdlGOkEExn
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - KAFKA_AUTH_TOPIC=auth
     depends_on:
@@ -116,6 +124,9 @@ services:
     volumes:
       - ./server/search-engine:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   pms_api:
     container_name: "tripswift-pms_api"
     build:
@@ -144,6 +155,9 @@ services:
     volumes:
       - ./server/pms_api:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   user:
     container_name: "tripswift-user"
     build:
@@ -168,6 +182,8 @@ services:
     volumes:
       - ./server/user:/app/
       - /app/node_modules
+    logging:
+      driver: none
   # pms_client:
   #   container_name: "tripswift-pms_client"
   #   build:
@@ -198,7 +214,7 @@ services:
       - 8080:8080
     environment:
       - PORT=8080
-      - MONGO_URI=mongodb://mongo:27017/authDB
+      - MONGO_URI=mongodb://mongo:27017/bookngEngineDB
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - JWT_SECRET_KEY_DEV=712fe68a80519cd3812dca082ec4ff2fd0dd2fe80d1f1c0d00871b387109767c39bb595df2a20a5dd6f54f60fbf096f5b23599f4584c8cdc85d9918ca9228504
@@ -216,6 +232,8 @@ services:
     volumes:
       - ./server/booking_engine:/app/
       - /app/node_modules
+    logging:
+      driver: none
 
   booking_engine_client:
     container_name: "tripswift-booking_engine_client"
@@ -237,6 +255,8 @@ services:
     volumes:
       - ./client/booking_engine_client:/app/
       - /app/node_modules
+    logging:
+      driver: none
 
 networks:
   tripswift-network:
