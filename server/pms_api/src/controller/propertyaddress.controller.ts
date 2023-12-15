@@ -14,6 +14,7 @@ const createPropertyAddress = catchAsync(
       state,
       city,
       location,
+      landmark,
       neighbour_area,
       zip_code,
     } = req.body;
@@ -30,6 +31,7 @@ const createPropertyAddress = catchAsync(
       state,
       city,
       location,
+      landmark,
       neighbour_area,
       zip_code,
     });
@@ -60,6 +62,7 @@ const updatePropertyAddress = catchAsync(
       state,
       city,
       location,
+      landmark,
       neighbour_area,
       zip_code,
     } = req.body;
@@ -81,6 +84,7 @@ const updatePropertyAddress = catchAsync(
         state,
         city,
         location,
+        landmark,
         neighbour_area,
         zip_code,
       },
