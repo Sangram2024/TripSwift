@@ -6,6 +6,7 @@ import Hotel from "./model/hotel.model";
 import './model/property.info.model';
 import './model/property.aminites.model';
 import { createPropertyIndexAndDoc} from "./sync_controllers/syncData";
+import { Room } from "./model/room.model";
 dotenv.config()
 
 
@@ -33,3 +34,17 @@ connectDB()
 })
 checkElasticClient();
 createPropertyIndexAndDoc();
+
+
+
+(async()=>{
+    const changeStream = Room.watch();
+    changeStream.on("change", next => {
+        createPropertyIndexAndDoc();
+        close();
+    });
+
+    async function close() {
+        await changeStream.close();
+    }
+})()
