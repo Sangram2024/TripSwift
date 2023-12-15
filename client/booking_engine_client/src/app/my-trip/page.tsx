@@ -1,13 +1,17 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
+import Booked from "@/components/assets/booking.png";
+import Cancel from "@/components/assets/calendar.png";
+import Complete from "@/components/assets/checked.png";
 
 export default function Tabs() {
   const [openTab, setOpenTab] = React.useState(1);
 
   return (
     <>
-      <div>
+      <div className="">
         <div
           className={`${
             openTab === 1
@@ -17,15 +21,15 @@ export default function Tabs() {
               : "bg-green-500"
           } h-[17vh]`}
         ></div>
-        <div className="flex flex-wrap justify-center items-center mb-unit-4xl">
-          <div className="w-full max-w-[50%] border absolute bg-white px-7 mt-9  rounded">
+        <div className="flex flex-wrap justify-center items-center mt-24 mb-unit-4xl">
+          <div className="w-full max-w-[73%] border absolute bg-white px-7 mt-9  rounded">
             <ul
-              className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+              className="flex mb-0 list-none flex-wrap pt-9  pb-4 flex-row"
               role="tablist"
             >
-              <li className="-mb-px mr-2 last:mr-0 flex-auto text-center cursor-pointer">
+              <li className="-mb-px mr-2 last:mr-0 flex-auto border text-center cursor-pointer">
                 <a
-                  className={`text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ${
+                  className={`text-xs font-bold uppercase px-5 py-3 shadow-lg rounded flex justify-center items-center leading-normal ${
                     openTab === 1
                       ? "border-b-3 border-blue-500 "
                       : "text-gray-600 bg-white"
@@ -35,13 +39,13 @@ export default function Tabs() {
                     setOpenTab(1);
                   }}
                 >
-                  <i className="fas fa-space-shuttle text-base mr-1"></i>{" "}
-                  Booking
+                  <Image className=" text-base mr-1" src={Booked} alt={""} />{" "}
+                  <span>Booking</span>
                 </a>
               </li>
-              <li className="-mb-px mr-2 last:mr-0 flex-auto text-center cursor-pointer">
+              <li className="-mb-px mr-2 last:mr-0 flex-auto border text-center cursor-pointer">
                 <a
-                  className={`text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ${
+                  className={`text-xs font-bold uppercase px-5 py-3 shadow-lg rounded flex justify-center items-center leading-normal ${
                     openTab === 2
                       ? "border-b-3 border-red-500"
                       : "text-gray-600 bg-white"
@@ -51,12 +55,13 @@ export default function Tabs() {
                     setOpenTab(2);
                   }}
                 >
-                  <i className="fas fa-cog text-base mr-1"></i> Cancelled
+                  <Image className=" text-base mr-1" src={Cancel} alt={""} />{" "}
+                  <span>Cancelled</span>
                 </a>
               </li>
-              <li className="-mb-px mr-2 last:mr-0 flex-auto text-center cursor-pointer">
+              <li className="-mb-px mr-2 last:mr-0 flex-auto border text-center cursor-pointer">
                 <a
-                  className={`text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal ${
+                  className={`text-xs font-bold uppercase px-5 py-3 shadow-lg rounded flex justify-center items-center leading-normal ${
                     openTab === 3
                       ? "border-b-3 border-green-500"
                       : "text-gray-600 bg-white"
@@ -66,7 +71,8 @@ export default function Tabs() {
                     setOpenTab(3);
                   }}
                 >
-                  <i className="fas fa-briefcase text-base mr-1"></i> Completed
+                  <Image className=" text-base mr-1" src={Complete} alt={""} />
+                  <span className="">Completed</span>
                 </a>
               </li>
             </ul>
@@ -77,40 +83,30 @@ export default function Tabs() {
                     className={openTab === 1 ? "block" : "hidden"}
                     id="link1"
                   >
-                    <p>
-                      Collaboratively administrate empowered markets via
-                      plug-and-play networks. Dynamically procrastinate B2C
-                      users after installed base benefits.
+                    <p className="text-2xl p-7 m-3">
+                      You have no booking yet
                       <br />
-                      <br /> Dramatically visualize customer directed
-                      convergence without revolutionary ROI.
+                      <br />
                     </p>
                   </div>
                   <div
                     className={openTab === 2 ? "block" : "hidden"}
                     id="link2"
                   >
-                    <p>
-                      Completely synergize resource taxing relationships via
-                      premier niche markets. Professionally cultivate one-to-one
-                      customer service with robust ideas.
+                    <p className="text-2xl p-7 m-3">
+                      You've no cancelled bookings.
                       <br />
                       <br />
-                      Dynamically innovate resource-leveling customer service
-                      for state of the art customer service.
                     </p>
                   </div>
                   <div
                     className={openTab === 3 ? "block" : "hidden"}
                     id="link3"
                   >
-                    <p>
-                      Efficiently unleash cross-media information without
-                      cross-media value. Quickly maximize timely deliverables
-                      for real-time schemas.
+                    <p className="text-2xl p-7 m-3">
+                      You've no completed any bookings.
                       <br />
-                      <br /> Dramatically maintain clicks-and-mortar solutions
-                      without functional solutions.
+                      <br />
                     </p>
                   </div>
                 </div>

@@ -23,7 +23,7 @@ const Navbar = (props: Props) => {
   };
 
   return (
-    <div className="h-[8vh] px-6 top-0 bg-transparent left-0 sticky bg-white z-20 shadow">
+    <div className="h-[8vh] px-6 top-0 bg-transparent left-0 sticky bg-white sm:z-20 lg:z-0 shadow">
       <div className="flex items-center h-full p-4 justify-between px-4 rounded-lg bg-opacity-40">
         <div className="flex items-center gap-10">
           <Link href={"/"}>
