@@ -39,12 +39,21 @@ import { cn } from "../../lib/utils";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Settings, User } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
 export default function Navbar({}: Props) {
+  const pathname = usePathname();
+
+  const pathnameWithoutHeaderAndFooter = pathname === "/login" || "/register";
+
   return (
-    <nav className="h-[10vh] w-screen border-b px-10 flex items-center justify-between">
+    <nav
+      className={`h-[10vh] w-screen border-b px-10 flex items-center justify-between ${
+        pathnameWithoutHeaderAndFooter && "hidden"
+      }`}
+    >
       <div>
         <Image
           src={"/assets/TRIP-2.png"}
