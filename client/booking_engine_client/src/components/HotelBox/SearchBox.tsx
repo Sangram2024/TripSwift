@@ -3,24 +3,24 @@ import axios from "axios";
 import React, { useState } from "react";
 
 type SearchBoxProps = {
-  onSearch: (query: string, capacity: number) => void;
+  handleSearch: (responseData: any) => void;
 };
 
-const SearchBox: React.FC<SearchBoxProps> = ({ onSearch }) => {
+const SearchBox = (props: SearchBoxProps) => {
   const [search, setSearch] = useState<string>("");
   const [capacity, setCapacity] = useState<number>(2);
 
-  const handleSearch = async () => {
+  const handleInputChange = async (value: string) => {
+    // Update the search state as the user types
+    setSearch(value);
+
     try {
       const response = await axios.post("http://localhost:8030/api/search", {
-        location: search,
+        location: value,
         capacity,
       });
 
-      console.log(response.data);
-
-      // Pass the search query, capacity, and amenities to the parent component
-      onSearch(search, capacity);
+      props.handleSearch(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -35,23 +35,8 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearch }) => {
         className="p-2 w-80 rounded-md focus:outline-none"
         placeholder="Search by city, hotel and location"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => handleInputChange(e.target.value)}
       />
-      <label>
-        Capacity:
-        <input
-          type="number"
-          value={capacity}
-          onChange={(e) => setCapacity(Number(e.target.value))}
-        />
-      </label>
-      {/* You can add more input fields for other search criteria */}
-      <button
-        className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md"
-        onClick={handleSearch}
-      >
-        Search
-      </button>
     </div>
   );
 };

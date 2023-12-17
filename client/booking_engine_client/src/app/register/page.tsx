@@ -8,7 +8,6 @@ import LoginIcon from "@/components/assets/TRIP-1.png";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import InputFields from "@/components/ui/input/input";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -63,7 +62,6 @@ const Login: React.FC = () => {
         <Image src={LoginImg} alt={"Login"} className="" />
       </div>
 
-      {/* Sign-up Section */}
       <div className="relative flex flex-col min-h-screen overflow-hidden">
         <div className="w-full  bg-white border mt-28 p-12 gap-6 rounded-md shadow-md shadow-[#FF745C] lg:max-w-xl">
           {/* <h1 className="text-3xl font-bold text-center text-gray-700">Logo</h1> */}
@@ -78,28 +76,22 @@ const Login: React.FC = () => {
           </div>
 
           <form className="mt-6" onSubmit={handleSubmit}>
-            <InputFields
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+            <label htmlFor="firstname">First Name </label>
+            <input
+              type="text"
+              name="firstname"
+              id="firstname"
+              placeholder="Enter your first name"
             />
-            <InputFields
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            {/* <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               name="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="block w-full px-4 py-5 mt-2 text-gray-700 bg-white border rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              onChange={(e) => setEmail(e.target.value)} // Connect input to state
+              className="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
-            <label htmlFor="password" className="mt-6">
+            <label htmlFor="password" className="mt-4">
               Password
             </label>
             <input
@@ -108,7 +100,7 @@ const Login: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)} // Connect input to state
               className="block w-full px-4 py-2 mb-7 mt-2 text-gray-700 bg-white border rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
-            /> */}
+            />
 
             <button className="w-full px-4 py-2 tracking-wide text-white font-bold transition-colors duration-200 transform bg-[#FF745C] rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
               Sign In

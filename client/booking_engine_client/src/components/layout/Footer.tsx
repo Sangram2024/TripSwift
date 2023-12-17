@@ -94,7 +94,7 @@ const Footter = (props: Props) => {
             </div>
           </div>
 
-          <div className="flex items-center max-w-full justify-between gap-5 mt-8 items-start max-md:flex-wrap max-md:mt-10 relative">
+          <div className="flex max-w-full justify-between gap-5 mt-8 items-start max-md:flex-wrap max-md:mt-10 relative">
             {/* Left Line */}
             <div className="flex-1 h-px bg-white hidden md:block"></div>
 

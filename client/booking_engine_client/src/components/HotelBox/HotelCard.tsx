@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import date from "date-and-time";
 import GuestBox from "./GuestBox";
@@ -7,6 +8,10 @@ import HeroImage from "../assets/hotel-1.jpg";
 import SearchBox from "./SearchBox";
 
 const HotelCard = () => {
+  function handleSearch(responseData: any): void {
+    console.log(responseData, "+++++++++++++");
+  }
+
   return (
     <>
       <div className="sm:hidden md:block lg:block">
@@ -20,7 +25,7 @@ const HotelCard = () => {
         <div className="lg:flex justify-center sm:flex-row items-center lg:gap-7">
           {/* Search Box Section */}
           <div className="rounded-md border-2">
-            <SearchBox />
+            <SearchBox handleSearch={handleSearch} />
           </div>
 
           {/* Date Section */}
