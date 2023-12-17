@@ -121,8 +121,8 @@ export default function CreatePropertyForm({}: Props) {
   };
 
   return (
-    <div className="h-screen w-screen grid place-content-center">
-      <div className="w-[80vw] flex items-center justify-center gap-20">
+    <div className="grid place-content-center">
+      <div className="w-max flex items-center justify-center gap-20">
         <CreateFormSteps currentStep={currenStep} step={steps} />
         <div className="w-[60%]">{renderStepContent()}</div>
       </div>
