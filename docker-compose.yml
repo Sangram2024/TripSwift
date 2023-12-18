@@ -231,7 +231,7 @@ services:
       dockerfile: ./client/booking_engine_client/Dockerfile
     restart: always
     ports:
-      - 9000:9000
+      - 3001:3001
     depends_on:
       - kafka
       - mongo

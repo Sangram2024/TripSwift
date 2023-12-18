@@ -41,6 +41,8 @@ const createPropertyAddress = catchAsync(
     });
     const address = await PropertyAddress.find({ propertyInfo: propertyInfo });
 
+
+
     res.status(201).json({
       status: "success",
       error: false,
