@@ -118,6 +118,9 @@ services:
     volumes:
       - ./server/search-engine:/app/
       - /app/node_modules
+    logging:
+      driver: none
+
   pms_api:
     container_name: "tripswift-pms_api"
     build:
@@ -218,6 +221,8 @@ services:
     volumes:
       - ./server/booking_engine:/app/
       - /app/node_modules
+    logging:
+      driver: none
 
   booking_engine_client:
     container_name: "tripswift-booking_engine_client"

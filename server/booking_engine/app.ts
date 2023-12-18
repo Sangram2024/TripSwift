@@ -1,8 +1,8 @@
 import { connect } from "mongoose";
 import { DB, PORT, app } from "./server";
 import { config } from "dotenv";
-import {consumeEvent} from "./utils/kafkaEventHandler";
-import {Kafka} from "kafkajs";
+import { consumeEvent } from "./utils/kafkaEventHandler";
+import { Kafka } from "kafkajs";
 
 config();
 
@@ -20,5 +20,3 @@ connect(DB as string)
     });
   })
   .catch((err: any) => console.log(`Error: ${err}`));
-
-
