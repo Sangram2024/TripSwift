@@ -44,7 +44,7 @@ const Navbar = (props: Props) => {
               className={`fixed top-0 right-0 sm:h-screen lg:h-auto lg:w-auto sm:w-[80%] lg:bg-white sm:bg-gray-100 lg:z-0 sm:z-40 transition-all duration-300`}
               onClick={closeMenu}
             >
-              <ul className="lg:flex flex-col lg:flex-row items-center lg:mt-0 sm:mt-20  lg:p-3 sm:p-1 font-bold gap-4">
+              <ul className="lg:flex flex-col lg:flex-row items-center lg:mt-0 sm:mt-20  lg:p-3 sm:p-1  gap-4">
                 <li className="border flex lg:p-[7px] sm:p-7  rounded-md hover:border-gray-400 transition items-center sm:border-b sm:text-black  lg:hover:border-gray-400">
                   <span className="mr-2 ">
                     <Image src={Home} alt={"home"} width={20} height={20} />

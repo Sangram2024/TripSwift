@@ -60,7 +60,7 @@ const Login: React.FC = () => {
       <div className="relative flex flex-col min-h-screen overflow-hidden">
         <div className="w-full  bg-white border mt-28 p-12 gap-6 rounded-md shadow-md shadow-[#FF745C] lg:max-w-xl">
           {/* <h1 className="text-3xl font-bold text-center text-gray-700">Logo</h1> */}
-          <div className="flex justify-center items-center  p-4">
+          <div className="flex justify-center items-center ">
             {/* <Image
               src={LoginIcon}
               width={80}
@@ -68,11 +68,11 @@ const Login: React.FC = () => {
               alt={"logo"}
               className=" "
             /> */}
-            <h1>Register </h1>
+            <h1 className="text-2xl font-semibold">Register </h1>
           </div>
 
           <form className="mt-6" onSubmit={handleSubmit}>
-            <div>
+            <div className=" py-2 mb-2">
               <InputFields
                 label="First Name"
                 type="firstName"
@@ -80,15 +80,15 @@ const Login: React.FC = () => {
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
-            <div>
+            <div className=" py-2 mb-2">
               <InputFields
                 label="Last Name"
                 type="lastName"
                 value={lastName}
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
-            <div className="py-2">
+            <div className="py-2 mb-2">
               <InputFields
                 label="Email"
                 type="email"
@@ -114,12 +114,12 @@ const Login: React.FC = () => {
             <div className="absolute px-5 bg-white">Or</div>
           </div>
           <p className="mt-4 text-sm text-center text-gray-700">
-            Don't have an account?{" "}
+            Already have an account?
             <Link
-              href="/signup"
+              href="/login"
               className="font-medium text-[#FF745C] hover:underline"
             >
-              Sign up
+              Sign in
             </Link>
           </p>
         </div>

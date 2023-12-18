@@ -15,14 +15,11 @@ const bookingSchema = new Schema<BookingsType>({
     type: Schema.Types.ObjectId,
     required: [true, "User id is required field"],
   },
-  hotel: {
+  propery: {
     type: Schema.Types.ObjectId,
     required: [true, "property id is required "],
   },
-  userName: {
-    type: String,
-    required: [true, "Name is required"],
-  },
+
   amount: {
     type: Number,
     required: [true, "Amount is required"],
@@ -56,7 +53,6 @@ const bookingSchema = new Schema<BookingsType>({
     required: true,
     validate: {
       validator: function (value: { toISOString: () => string }) {
-        //  date format (YYYY-MM-DD)
         return /^\d{4}-\d{2}-\d{2}$/.test(value.toISOString().split("T")[0]);
       },
       message: "Invalid date format for check-in date",
@@ -67,7 +63,6 @@ const bookingSchema = new Schema<BookingsType>({
     required: true,
     validate: {
       validator: function (value: { toISOString: () => string }) {
-        // date format (YYYY-MM-DD)
         return /^\d{4}-\d{2}-\d{2}$/.test(value.toISOString().split("T")[0]);
       },
       message: "Invalid date format for check-out date",

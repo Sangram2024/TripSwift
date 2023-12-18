@@ -1,29 +1,26 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import HeroImage from "../assets/hotel-1.jpg";
 import DateRange from "./DateRange";
 import GuestBox from "./GuestBox";
+import Link from "next/link";
 
-const HotelCard = ({}) => {
-  const [capacity, setCapacity] = useState<number>(2);
-  const [location, setLocation] = useState<string>("");
+const HotelCard = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const handleClick = async () => {
-    try {
-      const response = await axios.post("http://localhost:8030/api/search", {
-        location: location,
-        capacity,
-      });
-      console.log("API Response:", response.data);
-    } catch (error: any) {
-      console.error("Error fetching data:", error);
-      if (error.response) {
-        console.error("Response status:", error.response.status);
-        console.error("Response data:", error.response.data);
-      }
-    }
+  const handleSearch = (event: {
+    preventDefault: () => void;
+    target: { elements: { search: { value: any } } };
+  }) => {
+    event.preventDefault();
+    const newSearchQuery = event.target.elements.search.value;
+    setSearchQuery(newSearchQuery);
+    router.push(`/search?q=${newSearchQuery}`);
   };
 
   return (
@@ -42,10 +39,10 @@ const HotelCard = ({}) => {
               type="text"
               id="search"
               name="search"
-              value={location}
+              value={searchQuery}
               className="p-2 w-80 rounded-md focus:outline-none"
               placeholder="Search by city, hotel and location"
-              onChange={(e) => setLocation(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <div className="inline-block rounded-md border-2 w-[280px]">
@@ -55,12 +52,11 @@ const HotelCard = ({}) => {
             <GuestBox />
           </div>
           <div>
-            <button
-              className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md"
-              onClick={handleClick}
-            >
-              Search
-            </button>
+            <Link href={`/destination?location=${searchQuery}`} passHref>
+              <button className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md">
+                Search
+              </button>
+            </Link>
           </div>
         </div>
       </section>
