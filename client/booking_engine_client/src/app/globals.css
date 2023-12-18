@@ -2,11 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-
 ::-webkit-scrollbar {
   height: 1px;
   width: 2px;
+}
 
+.input-autofill::autofill,
+.input-autofill:-webkit-autofill {
+  background-color: red !important;
 }
 
 /* ::-webkit-scrollbar-track {
@@ -31,8 +34,5 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-   
   }
 }
-
-
