@@ -103,7 +103,7 @@ services:
       - 8030:8030
     environment:
       - PORT=8030
-      - MONGO_URI=mongodb+srv://techquotus:techquotus@cluster0.yjw0a6g.mongodb.net/?retryWrites=true&w=majority
+      - MONGO_URI=mongodb://mongo:27017/propertyDB
       - ELASTICSEARCH_ID=tripswift:YXNpYS1zb3V0aDEuZ2NwLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQzOTMyYzAxZTA1ZGM0MTcwYmQ1ZWRmMzliNzc0Mjg2YSQxMDVkOWRiNjczZDc0ZmFiOTA1ZTRmZGE0MjI4MTI1Ng==
       - NODE_ENV=development
       - ELASTICSEARCH_USER=elastic
@@ -118,8 +118,8 @@ services:
     volumes:
       - ./server/search-engine:/app/
       - /app/node_modules
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
 
   pms_api:
     container_name: "tripswift-pms_api"
@@ -149,6 +149,8 @@ services:
     volumes:
       - ./server/pms_api:/app/
       - /app/node_modules
+    logging:
+      driver: none
   # user:
   #   container_name: "tripswift-user"
   #   build:
@@ -244,6 +246,8 @@ services:
     volumes:
       - ./client/booking_engine_client:/app/
       - /app/node_modules
+    logging:
+      driver: none
 
 networks:
   tripswift-network:

@@ -77,19 +77,23 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <form className="mt-6" onSubmit={handleSubmit}>
-            <InputFields
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <InputFields
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <form className="mt-6 gap-5 " onSubmit={handleSubmit}>
+            <div className="py-2">
+              <InputFields
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className=" py-2 mb-4">
+              <InputFields
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
             {/* <label htmlFor="email">Email</label>
             <input
