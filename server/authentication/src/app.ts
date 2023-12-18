@@ -6,13 +6,19 @@ import { AppError } from "./utils/appError";
 import { errorHandler } from "./utils/errorHandler";
 import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
+import cookieParser from "cookie-parser";
 config();
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(morgan("dev"));
 
 const PORT = process.env.PORT;

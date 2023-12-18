@@ -49,17 +49,25 @@ const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
+    console.log("1-----------");
+
     if (!email || !password) {
       return next(
         new AppError("Please provide all the required credentials", 400)
       );
     }
 
+    console.log("2-----------");
+
     const users = await Auth.find().byEmail(email).select("password");
+
+    console.log("3-----------");
 
     if (!users.length || !(await compareHash(password, users[0]?.password))) {
       return next(new AppError("Invalid email or password", 401));
     }
+
+    console.log("4-----------");
 
     const accessToken = assignToken(
       {
@@ -71,14 +79,20 @@ const login = catchAsync(
       process.env.JWT_EXPIRES_IN_DEV!
     );
 
-    return res.status(200).json({
-      status: "success",
-      error: false,
-      message: "User login successfully",
-      data: {
-        accessToken,
-      },
-    });
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+      })
+      .json({
+        status: "success",
+        error: false,
+        message: "User login successfully",
+        data: {
+          accessToken,
+        },
+      });
   }
 );
 

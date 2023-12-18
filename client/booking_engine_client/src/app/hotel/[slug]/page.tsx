@@ -1,5 +1,6 @@
-import { useRouter } from 'next/router';
-import React from "react";
+"use client";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Img from "@/components/assets/hotel-1.jpg";
 import Battery from "@/components/assets/battery.png";
@@ -7,11 +8,39 @@ import AC from "@/components/assets/air-conditioner.png";
 import TV from "@/components/assets/smart-tv.png";
 import Wifi from "@/components/assets/wifi.png";
 import Link from "next/link";
-
-
-
+import Cookies from "js-cookie";
 
 const page = () => {
+  const router = useRouter();
+
+  // console.log(isAuthenticated, "++++++");
+
+  const handlePayNowClick = () => {
+    const authToken = Cookies.get("ota-auth");
+    console.log(authToken, "(((((((((((((((((");
+
+    if (!authToken) {
+      router.push("/login");
+    } else {
+      router.push("/booking/1");
+    }
+    return () => {
+      return;
+    };
+  };
+
+  // useEffect(() => {
+  //   const authToken = Cookies.get("ota-auth");
+  //   console.log(authToken, "(((((((((((((((((");
+
+  //   if (!authToken) {
+  //     router.push("/login");
+  //   }
+  //   return () => {
+  //     return;
+  //   };
+  // }, []);
+
   return (
     <>
       <div className="bg-[#EF0107] ">
@@ -153,13 +182,18 @@ const page = () => {
               </div>
             </div>
             <div className="border p-4  flex rounded-md shadow-md justify-center transition hover:bg-red-600  bg-[#EF0107]  sticky top-64 mt-4">
-              <Link href="/booking/1" className="text-2xl text-white font-bold">Pay Now</Link>
+              <button
+                className="text-2xl text-white font-bold"
+                onClick={handlePayNowClick}
+              >
+                Pay Now
+              </button>
             </div>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default page
+export default page;
