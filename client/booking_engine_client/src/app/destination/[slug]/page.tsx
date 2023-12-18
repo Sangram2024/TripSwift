@@ -11,14 +11,16 @@ import { useRouter } from 'next/navigation';
 
 
 const page = ({ params }: { params: { slug: string } }) =>{
+const decodedSlug = params.slug ? decodeURIComponent(params.slug as string) : null;
+console.log("param data",decodedSlug)
 
-  // const router = useRouter();
-  // // const { slug } = router.query;
-  // const slug = router.query.slug;
-  const decodedSlug = params.slug ? decodeURIComponent(params.slug as string) : null;
+const handleSearch = () =>{
+  
+}
 
+useEffect (() =>{
 
-  console.log("param data",decodedSlug)
+})
 
 
 
