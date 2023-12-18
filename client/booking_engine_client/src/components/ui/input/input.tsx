@@ -1,12 +1,17 @@
 // InputFields.tsx
+import Item from "antd/es/list/Item";
 import React from "react";
+import { Input } from "@nextui-org/react";
 
 type InputProps = {
   label: string;
   type: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 };
+
+const placements = "outside-left";
 
 const InputFields: React.FC<InputProps> = ({
   label,
@@ -15,16 +20,26 @@ const InputFields: React.FC<InputProps> = ({
   onChange,
 }) => {
   return (
-    <div>
-      <label htmlFor={label}>{label}</label>
-      <input
+    // <div className="flex w-full flex-wrap md:flex-nowrap gap-2 ">
+    <>
+      <label>{label}</label>
+      <Input
+        variant="bordered"
         type={type}
         name={label.toLowerCase()}
         value={value}
         onChange={onChange}
-        className="block w-full px-4 py-5 mt-2 text-gray-700 bg-white border rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
+        className="focus:bg-none  "
+        onInput={(e) => {
+          if (e.currentTarget.value === "") {
+            e.currentTarget.style.backgroundColor = "transparent";
+          } else {
+            e.currentTarget.style.backgroundColor = "red";
+          }
+        }}
       />
-    </div>
+    </>
+    // </div>
   );
 };
 
