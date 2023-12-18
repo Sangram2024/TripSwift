@@ -125,7 +125,7 @@ const Login: React.FC = () => {
           <p className="mt-4 text-sm text-center text-gray-700">
             Don't have an account?{" "}
             <Link
-              href="/signup"
+              href="/register"
               className="font-medium text-[#FF745C] hover:underline"
             >
               Sign up

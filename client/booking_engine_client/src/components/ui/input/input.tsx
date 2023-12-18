@@ -20,26 +20,20 @@ const InputFields: React.FC<InputProps> = ({
   onChange,
 }) => {
   return (
-    // <div className="flex w-full flex-wrap md:flex-nowrap gap-2 ">
-    <>
-      <label>{label}</label>
-      <Input
-        variant="bordered"
-        type={type}
-        name={label.toLowerCase()}
-        value={value}
-        onChange={onChange}
-        className="focus:bg-none  "
-        onInput={(e) => {
-          if (e.currentTarget.value === "") {
-            e.currentTarget.style.backgroundColor = "transparent";
-          } else {
-            e.currentTarget.style.backgroundColor = "red";
-          }
-        }}
-      />
-    </>
-    // </div>
+    <div className="flex w-full flex-wrap md:flex-nowrap gap-2 ">
+      <>
+        {/* <label>{label}</label> */}
+        <Input
+          variant="bordered"
+          type={type}
+          // name={label.toLowerCase()}
+          label={label}
+          value={value}
+          onChange={onChange}
+          className="focus:bg-none  "
+        />
+      </>
+    </div>
   );
 };
 

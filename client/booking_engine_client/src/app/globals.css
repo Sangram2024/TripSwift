@@ -9,7 +9,7 @@
 
 .input-autofill::autofill,
 .input-autofill:-webkit-autofill {
-  background-color: red !important;
+  background-color: none !important;
 }
 
 /* ::-webkit-scrollbar-track {
