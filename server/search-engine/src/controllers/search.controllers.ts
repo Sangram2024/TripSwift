@@ -366,7 +366,7 @@ async function getAmenities(filter: amanitas) {
 
     if(filter?.destination_type){
       should.push({
-        term: {
+        match: {
           "propertyId.property_aminite.destination_type":
             filter.destination_type,
         },
