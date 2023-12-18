@@ -7,25 +7,6 @@ import { Room } from "../model/room.model";
 import elasticClient from "../service/elasticsearch";
 
 
-// export async function createRoomIndexAndDoc() {
-
-//   const propertyInfo = await Room.find().lean();
-//   const client = elasticClient();
-
-//   try {
-//     propertyInfo.forEach(async (element) => {
-//       const { _id, ...rest } = element;
-//       const result = await client.index({
-//         index: "property_room",
-//         id: _id,
-//         body: rest,
-//       });
-//     });
-//   } catch (error) {
-//     console.log("Error while indexing PropertyRoom to elasticsearch", error);
-//   }
-// }
-
 export async function createPropertyIndexAndDoc() {
   // const propertyAminite = await PropertyAminite.find().lean();
 
@@ -36,6 +17,7 @@ export async function createPropertyIndexAndDoc() {
       model: 'PropertyAminite'
     }
   }).lean();
+  console.log(location);
   
   const client = elasticClient();
   try {
@@ -50,7 +32,7 @@ export async function createPropertyIndexAndDoc() {
         index: "property_data",
         id: _id,
         body: restData,
-      });
+      });      
     });
   } catch (error) {
     console.log("Error while indexing Property to elasticsearch", error);

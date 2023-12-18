@@ -1,9 +1,27 @@
+"use client";
+
 import Header from "@/components/hotelListingComponents/Header";
 import HotelCard from "@/components/hotelListingComponents/HotelCard";
 import HotelCardDetails from "@/components/hotelListingComponents/HotelCardDetails";
 import HotelMap from "@/components/hotelListingComponents/HotelMap";
+import React, { useState, useEffect} from "react";
+import { useRouter } from 'next/navigation';
 
-const page = () =>{
+
+
+
+const page = ({ params }: { params: { slug: string } }) =>{
+
+  // const router = useRouter();
+  // // const { slug } = router.query;
+  // const slug = router.query.slug;
+  const decodedSlug = params.slug ? decodeURIComponent(params.slug as string) : null;
+
+
+  console.log("param data",decodedSlug)
+
+
+
     return(
         <>
          <div className="flex flex-col items-stretch">
