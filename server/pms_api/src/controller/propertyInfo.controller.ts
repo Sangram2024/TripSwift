@@ -187,6 +187,25 @@ const getAllProperty = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getProperties = catchAsync (
+  async (req:Request, res:Response, next:NextFunction) =>{
+    const property = await PropertyInfo.find()
+
+    if (!property) {
+      return next(
+        new AppError(`No property found with this id `, 404)
+      );
+    }
+
+    res.status(200).json({
+      status: "success",
+      error: false,
+      message: "Property  fetched successfully",
+      data: property,
+    });
+  }
+)
+
 export {
   createpropertyInfo,
   updatePropertyInfo,
@@ -194,4 +213,5 @@ export {
   getPropertyInfoById,
   getAllProperty,
   getMyProperties,
+  getProperties
 };

@@ -1,6 +1,6 @@
 
  const Config = {
-    BaseUrl : 'http://164.164.178.26:5000'
+    BaseUrl : 'http://localhost:8040'
 }
 
 export default Config

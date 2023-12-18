@@ -6,6 +6,7 @@ import {
   updatePropertyInfo,
   deleteProperty,
   getMyProperties,
+  getProperties
 } from "../controller/propertyInfo.controller";
 import {
   createPropertyAddress,
@@ -16,6 +17,8 @@ import {
 import {
   createPropertyAminite,
   getPropertyAminiteById,
+  getPropertyAminites,
+  getDestinationType
 } from "../controller/propertyaminite.controller";
 
 import { createPaymentMethod } from "../controller/property/paymentmethod.controller";
@@ -42,8 +45,14 @@ router
 // property aminites router
 router.route("/amenities").post(protect as any, createPropertyAminite as any);
 router.route("/amenities/:id").get(getPropertyAminiteById as any);
+router.route("/allamenities").get(getPropertyAminites as any);
+router.route("/destination").get(getDestinationType as any);
+
+
 
 // property router
+router.route("/properties").get(getProperties as any);
+
 router
   .route("/")
   .get(getAllProperty as any)
