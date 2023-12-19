@@ -16,15 +16,21 @@ const page = () => {
   const searchParams = useSearchParams()
 
   const [params, setParams] = useState({})
+  const [allHotel, setAllHotel] = useState(null)
 
   const destination = searchParams.get("destination")
   const location = searchParams.get("location")
 
-  console.log("params data", params)
+  console.log("params data", allHotel)
 
   useEffect(() => {
     if (params && (params.location || params.destination)) {
-      hotelSearch(params);
+      hotelSearch(params)
+      .then(async (response)=>{
+        if(response){
+          setAllHotel(response)
+        }
+      })
     }
   }, [params]);
 
@@ -48,25 +54,30 @@ const page = () => {
   return (
     <>
       <div className="flex flex-col items-stretch">
-        <Header />
         <div className="bg-white w-full max-md:max-w-full">
+        <Header />
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-            <div className="flex flex-col items-stretch w-[58%] max-md:w-full max-md:ml-0">
-              <div className="items-stretch self-stretch flex grow flex-col pt-10 px-10 max-md:max-w-full max-md:px-5">
-                <div className="text-gray-500 text-base leading-6 whitespace-nowrap max-md:max-w-full">
-                  200+ stays in Bordeaux
-                </div>
-                <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
-                <div className="mt-6 max-md:max-w-full">
-                  <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-                    <HotelCardDetails />
+            <div  className="flex flex-col items-stretch w-[58%] max-md:w-full max-md:ml-0">
+                  <div className="text-gray-500 text-base m-5 leading-6 whitespace-nowrap max-md:max-w-full">
+                    {allHotel?.length} + stays in {location ? location : destination}
                   </div>
+            {
+              allHotel?.map((hotel:any, index:any) =>(
+                <div key={hotel?._source?.propertyId?._id} className="items-stretch self-stretch flex grow flex-col  px-10 max-md:max-w-full max-md:px-5">
+                  <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
+                  <div className="mt-6 max-md:max-w-full">
+                    <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
+                      <HotelCardDetails hotelData={hotel} />
+                    </div>
+                  </div>
+                  <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
+  
+                  <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
                 </div>
-                <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
-
-                <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
-              </div>
+              ))
+            }
             </div>
+           
             <HotelMap />
           </div>
         </div>

@@ -20,7 +20,7 @@ const destinationType = [
   "Adventure Destination",
   "Beach Resort",
   "Cultural City",
-  "Hotel",
+  "Fantasia",
   "Mountain Retreat",
   "Urban Metropolis",
   "Wildlife Safari"
