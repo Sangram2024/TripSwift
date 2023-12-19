@@ -15,7 +15,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
-  const [role, setRole] = useState<string>("");
+  // const [role, setRole] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (!email || !password) {
+    if (!email || !password || !firstName || !lastName) {
       setLoading(false);
       return;
     }
@@ -36,17 +36,22 @@ const Login: React.FC = () => {
           email,
           firstName,
           lastName,
-          role,
           password,
+          role: "user",
         }
       );
 
-      console.log(response.data);
+      if (response.status === 201) {
+        setLoading(false);
+        router.push("/login");
+        console.log(response.data);
+      } else {
+        setLoading(true);
+        console.error(`Unexpected status code: ${response.status}`);
+      }
+    } catch (error: any) {
       setLoading(false);
-      router.push("/login");
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
+      console.error(error.response?.data || error.message);
     }
   };
 
@@ -61,13 +66,6 @@ const Login: React.FC = () => {
         <div className="w-full  bg-white border mt-28 p-12 gap-6 rounded-md shadow-md shadow-[#FF745C] lg:max-w-xl">
           {/* <h1 className="text-3xl font-bold text-center text-gray-700">Logo</h1> */}
           <div className="flex justify-center items-center ">
-            {/* <Image
-              src={LoginIcon}
-              width={80}
-              height={39}
-              alt={"logo"}
-              className=" "
-            /> */}
             <h1 className="text-2xl font-semibold">Register </h1>
           </div>
 
@@ -119,6 +117,7 @@ const Login: React.FC = () => {
               href="/login"
               className="font-medium text-[#FF745C] hover:underline"
             >
+              {" "}
               Sign in
             </Link>
           </p>

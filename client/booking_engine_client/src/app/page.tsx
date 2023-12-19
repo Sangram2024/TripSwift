@@ -1,4 +1,5 @@
 import HotelCard from "@/components/HotelBox/HotelCard";
+import PayNowFunction from "@/components/paymentComponents/PayNowFunction";
 import HotelPicture from "@/components/ui/HomeSection";
 import Image from "next/image";
 
@@ -8,6 +9,7 @@ export default function Home() {
       {/* <BookingBox/> */}
       <HotelCard />
       <HotelPicture />
+      <PayNowFunction />
     </div>
   );
 }

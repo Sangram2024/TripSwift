@@ -1,6 +1,6 @@
 import { Model, Schema, model } from "mongoose";
 import { validateBookingDates } from "../utils/booking.validator.dates";
-import { BookingsType } from "../types";
+import { BookingsType } from "../../types";
 
 interface IBooking extends BookingsType, Document {}
 
@@ -15,7 +15,7 @@ const bookingSchema = new Schema<BookingsType>({
     type: Schema.Types.ObjectId,
     required: [true, "User id is required field"],
   },
-  propery: {
+  property: {
     type: Schema.Types.ObjectId,
     required: [true, "property id is required "],
   },
@@ -25,12 +25,8 @@ const bookingSchema = new Schema<BookingsType>({
     required: [true, "Amount is required"],
   },
   booking_dates: {
-    type: [Date],
+    type: Date,
     required: [true, "Booking `booking_dates` is required field"],
-    validate: [
-      validateBookingDates,
-      "Please provide valid future dates for `booking_dates`",
-    ],
   },
   payment: {
     type: Schema.Types.ObjectId,
