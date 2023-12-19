@@ -1,12 +1,12 @@
 import { Types } from "mongoose";
 
 export type BookingsType = {
-  hotel: Types.ObjectId;
-  propery: Types.ObjectId;
+  property: Types.ObjectId;
+  room: Types.ObjectId;
   user: Types.ObjectId;
   amount: Number;
   payment: Types.ObjectId;
-  booking_dates: Date[];
+  booking_dates: Dates;
   status: string;
   checkInDate: Date;
   checkOutDate: Date;
