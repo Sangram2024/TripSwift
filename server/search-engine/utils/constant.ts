@@ -1,1 +1,1 @@
-export const DB_NAME = "travelDB"
+export const DB_NAME = "propertyDB"

@@ -18,9 +18,8 @@ const HotelCard = () => {
     target: { elements: { search: { value: any } } };
   }) => {
     event.preventDefault();
-    const newSearchQuery = event.target.elements.search.value;
-    setSearchQuery(newSearchQuery);
-    router.push(`/search?q=${newSearchQuery}`);
+    // setSearchQuery(newSearchQuery);
+    router.push(`/destination?location=${searchQuery}`);
   };
 
   return (
@@ -52,11 +51,12 @@ const HotelCard = () => {
             <GuestBox />
           </div>
           <div>
-            <Link href={`/destination?location=${searchQuery}`} passHref>
-              <button className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md">
+            {/* <Link   onClick={handleSearch} */}
+ {/* href={`/destination?location=${searchQuery}`} passHref> */}
+              <button onClick={handleSearch}   className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md">
                 Search
               </button>
-            </Link>
+            {/* </Link> */}
           </div>
         </div>
       </section>

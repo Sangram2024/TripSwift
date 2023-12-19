@@ -7,10 +7,9 @@ import './model/property.info.model';
 import './model/property.aminites.model';
 import { createPropertyIndexAndDoc} from "./sync_controllers/syncData";
 import { Room } from "./model/room.model";
+
+
 dotenv.config()
-
-
-
 
 async function checkElasticClient() {
     try {

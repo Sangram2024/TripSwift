@@ -56,7 +56,7 @@ for (let i = 1; i <= galleryLength; i++) {
       <div className="gap-2 grid grid-cols-2 mx-44 rounded-xl shadow-2xl p-14 mt-4 sm:grid-cols-3">
         {images.map((item, index) => (
           <div key={index}>
-                  <Link href={`/destination/${item.destination_type}`}>
+                  <Link  href={`/destination?destination=${item.destination_type}`} passHref>
 
             <h3 className="text-xl font-semibold mb-2">{item.destination_type}</h3>
             <Card shadow="sm">
