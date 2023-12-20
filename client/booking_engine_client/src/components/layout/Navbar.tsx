@@ -45,12 +45,12 @@ const Navbar = (props: Props) => {
               onClick={closeMenu}
             >
               <ul className="lg:flex flex-col lg:flex-row items-center lg:mt-0 sm:mt-20  lg:p-3 sm:p-1  gap-4">
-                <li className="border flex lg:p-[7px] sm:p-7  rounded-md hover:border-gray-400 transition items-center sm:border-b sm:text-black  lg:hover:border-gray-400">
+                {/* <li className="border flex lg:p-[7px] sm:p-7  rounded-md hover:border-gray-400 transition items-center sm:border-b sm:text-black  lg:hover:border-gray-400">
                   <span className="mr-2 ">
                     <Image src={Home} alt={"home"} width={20} height={20} />
                   </span>{" "}
                   <h2 className="lg:text-lg sm:text-sm"> List your property</h2>
-                </li>
+                </li> */}
                 <Link href={"/my-trip"}>
                   <li className="border flex lg:p-[7px] sm:p-7 sm:text-xs rounded-md hover:border-gray-400 transition items-center sm:border-b sm:text-black  lg:hover:border-gray-400">
                     <span className="mr-2 ">

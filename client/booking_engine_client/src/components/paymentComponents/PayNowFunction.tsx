@@ -32,6 +32,7 @@ const PayNowFunction = (props: Props) => {
           }
         );
         if (response.data.status) {
+          console.log(response.data);
           console.log(response.data.status);
           console.log("Reservation created successfully");
         } else {
