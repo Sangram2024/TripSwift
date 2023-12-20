@@ -114,3 +114,25 @@ export const getReservation = CatchAsyncError(
     }
   }
 );
+
+export const getAllReservations = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // Fetch all reservations from the database
+      const reservations = await Bookings.find();
+
+      // Check if there are no reservations
+      if (!reservations || reservations.length === 0) {
+        return res.status(404).json({
+          message: "No reservations found",
+        });
+      }
+
+      // Return the list of reservations
+      res.json(reservations);
+    } catch (error: any) {
+      console.error("Error getting all reservations:", error);
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);

@@ -70,7 +70,7 @@ type Props = {
   onNext: () => void;
 };
 
-export default function PropertyAddress({ onNext, onPrevious }: Props) {
+export default function Rooms({ onNext, onPrevious }: Props) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currenStep, setCurrentStep] = useState(0);
 

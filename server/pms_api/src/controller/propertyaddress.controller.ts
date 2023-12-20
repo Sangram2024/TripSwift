@@ -33,15 +33,13 @@ const createPropertyAddress = catchAsync(
       location,
       landmark,
       neighbour_area,
-      zip_code,
+      zip_code: parseInt(zip_code),
     });
 
     await PropertyInfo.findByIdAndUpdate(propertyInfo, {
       property_address: newPropertyAddress._id,
     });
     const address = await PropertyAddress.find({ propertyInfo: propertyInfo });
-
-
 
     res.status(201).json({
       status: "success",
