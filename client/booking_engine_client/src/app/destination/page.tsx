@@ -7,6 +7,8 @@ import Header from "@/components/hotelListingComponents/Header";
 import HotelCardDetails from "@/components/hotelListingComponents/HotelCardDetails";
 import HotelMap from "@/components/hotelListingComponents/HotelMap";
 import { hotelSearch } from "@/api/hotel";
+import Link from "next/link";
+
 
 
 
@@ -55,7 +57,9 @@ const page = () => {
     <>
       <div className="flex flex-col items-stretch">
         <div className="bg-white w-full max-md:max-w-full">
-        <Header />
+        {
+        location ? <Header tag={`All hotels in ${location}`}/> : <Header tag={`All hotels in ${destination}`}/>
+       }
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
             <div  className="flex flex-col items-stretch w-[58%] max-md:w-full max-md:ml-0">
                   <div className="text-gray-500 text-base m-5 leading-6 whitespace-nowrap max-md:max-w-full">
@@ -66,9 +70,9 @@ const page = () => {
                 <div key={hotel?._source?.propertyId?._id} className="items-stretch self-stretch flex grow flex-col  px-10 max-md:max-w-full max-md:px-5">
                   <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
                   <div className="mt-6 max-md:max-w-full">
-                    <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
+                    <Link  href={`/hotel/${hotel?._source?.propertyId?._id}`} passHref className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                       <HotelCardDetails hotelData={hotel} />
-                    </div>
+                    </Link>
                   </div>
                   <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
   

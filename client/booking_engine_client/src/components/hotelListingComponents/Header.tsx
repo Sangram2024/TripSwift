@@ -1,22 +1,17 @@
 
 
-const Header = () => {
+const Header = ({tag}) => {
     return(
         <>
-        <div className="items-stretch shadow-sm bg-white flex w-full flex-col px-6 py-5 max-md:max-w-full max-md:px-5">
+        <div className="items-stretch shadow-sm bg-white flex w-full flex-col px-6 py-4 max-md:max-w-full max-md:px-5">
     
-        <div className="items-stretch flex justify-between gap-5 mt-6 pr-3.5 max-md:max-w-full max-md:flex-wrap">
+        <div className="items-stretch flex justify-between gap-5 mt-3 pr-3.5 max-md:max-w-full max-md:flex-wrap">
         <div className="self-stretch flex items-stretch justify-end gap-5 max-md:max-w-full max-md:flex-wrap">
             <div className="items-start border border-[color:var(--gray-200,#E5E7EB)] shadow-md bg-white flex justify-between gap-4 pl-6 pr-2 py-2 rounded-[1000px] border-solid max-md:justify-center max-md:pl-5">
               <div className="text-black text-sm font-medium leading-5 self-center grow whitespace-nowrap my-auto">
-                Bordeaux
+                 {tag}
               </div>
-              <div className="text-black text-sm font-medium leading-5 self-center my-auto">
-                Feb 19-26
-              </div>
-              <div className="text-black text-sm font-medium leading-5 self-center my-auto">
-                2 guests
-              </div>
+              
               <div className="justify-center items-center self-stretch shadow-sm bg-rose-600 flex aspect-square flex-col w-8 h-8 px-1.5 rounded-[100px]">
                 <img
                   loading="lazy"
