@@ -2,6 +2,8 @@ import { NextFunction, Response } from "express";
 import { AppError } from "../utils/appError";
 import { Request, catchAsync } from "../utils/catchAsync";
 import { Room } from "../model/room.model";
+import { PropertyInfo } from "../model/property.info.model";
+
 
 const createRoom = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -31,6 +33,9 @@ const createRoom = catchAsync(
       amenities,
       image,
       description,
+    });
+    await PropertyInfo.findByIdAndUpdate(propertyInfo_id, {
+      property_room: newRoom._id,
     });
     const totalRoom = await Room.find();
 
