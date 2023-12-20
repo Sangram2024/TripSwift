@@ -42,12 +42,13 @@ import toast from "react-hot-toast";
 import { BookOpen, MapPinned, ShowerHead } from "lucide-react";
 import { cn } from "./../../lib/utils";
 import { Textarea } from "./../ui/textarea";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { RootState, useSelector } from "../../redux/store";
 
 const createPropertyAmenitiesSchema = z.object({
   destination_type: z.string().min(1, "Destination type is required"),
   property_type: z.string().min(1, "Property type is required"),
-  no_of_rooms_available: z.number().min(1, "No of rooms is required"),
+  no_of_rooms_available: z.string().min(1, "No of rooms is required"),
   wifi: z.boolean(),
   swimming_pool: z.boolean(),
   fitness_center: z.boolean(),
@@ -93,8 +94,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [formLoading, setFormLoading] = useState<boolean>(false);
 
-  const userId = useSearchParams().get("userId");
-  const accessToken = useSearchParams().get("auth");
+  const { accessToken } = useSelector((state: RootState) => state.authReducer);
+  const property_id = useSearchParams().get("property_id");
+  const router = useRouter();
 
   const form = useForm<Inputs>({
     defaultValues: {
@@ -134,28 +136,18 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
   }, [destinationTypeError, propertyTypeError, noOfRoomsAvailableError]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    /**
-    const currentFormStep = steps.filter(
-      (step) => step.id === currenStep + 1
-    )[0];
-
-    const imageUrls = propertyImageUrls.map(
-      (propertyImage) => propertyImage.url
-    );
-
     const propertyCreateBody = {
       ...data,
-      user_id: userId,
-      image: imageUrls,
+      propertyInfo: property_id,
     };
 
     setFormLoading(true);
-     */
 
     try {
-      /**
-      const { data: propertyCreateResponse } = await axios.post(
-        `${currentFormStep.api}`,
+      const {
+        data: { data: propertyAmenitiesCreateResponse },
+      } = await axios.post(
+        `http://localhost:8040/api/v1/property/amenities`,
         propertyCreateBody,
         {
           headers: {
@@ -163,10 +155,10 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
           },
         }
       );
-      console.log(propertyCreateResponse);
+      console.log(propertyAmenitiesCreateResponse);
       setFormLoading(false);
-       */
-      onNext();
+
+      router.push("/property");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setFormLoading(false);
@@ -184,7 +176,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             <Label htmlFor="Destination Type">Destination Type</Label>
             <Input
               id="Destination Type"
-              // {...register("address_line_1")}
+              {...register("destination_type")}
               size={"md"}
               type="text"
               variant={destinationTypeError && "error"}
@@ -196,8 +188,8 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               id="property_type"
               size={"md"}
               variant={propertyTypeError && "error"}
-              // {...register("property_email")}
-              type="email"
+              {...register("property_type")}
+              type="text"
             />
           </div>
         </div>
@@ -208,7 +200,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               id="no_of_rooms_available"
               size={"md"}
               variant={noOfRoomsAvailableError && "error"}
-              // {...register("property_contact")}
+              {...register("no_of_rooms_available")}
               type="text"
             />
           </div>
@@ -362,8 +354,8 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             >
               Back
             </Button>
-            <Button className="w-[200px]" onClick={onNext} type="button">
-              Next
+            <Button className="w-[200px]" type="submit">
+              Submit
             </Button>
             {/* <SubmitButton content="Next" loading={formLoading} /> */}
           </div>

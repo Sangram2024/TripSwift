@@ -42,7 +42,8 @@ import toast from "react-hot-toast";
 import { BookOpen, MapPinned, ShowerHead } from "lucide-react";
 import { cn } from "./../../lib/utils";
 import { Textarea } from "./../ui/textarea";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { RootState, useSelector } from "../../redux/store";
 
 const createPropertyAddressSchema = z.object({
   address_line_1: z.string().min(1, "Address line 1 is required"),
@@ -51,7 +52,7 @@ const createPropertyAddressSchema = z.object({
   state: z.string().min(1, "State is required"),
   city: z.string().min(1, "City is required"),
   landmark: z.string(),
-  zip_code: z.number().min(1, "Zipcode is required"),
+  zip_code: z.string().min(1, "Zipcode is required"),
 });
 
 type Inputs = {
@@ -61,7 +62,7 @@ type Inputs = {
   state: string;
   city: string;
   landmark: string;
-  zip_code: number;
+  zip_code: string;
 };
 
 type Props = {
@@ -76,8 +77,10 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [formLoading, setFormLoading] = useState<boolean>(false);
 
-  const userId = useSearchParams().get("userId");
-  const accessToken = useSearchParams().get("auth");
+  const { accessToken } = useSelector((state: RootState) => state.authReducer);
+  const property_id = useSearchParams().get("property_id");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm<Inputs>({
     defaultValues: {
@@ -124,28 +127,20 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
   ]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    /**
-    const currentFormStep = steps.filter(
-      (step) => step.id === currenStep + 1
-    )[0];
-
-    const imageUrls = propertyImageUrls.map(
-      (propertyImage) => propertyImage.url
-    );
+    console.log({ addressData: data });
 
     const propertyCreateBody = {
       ...data,
-      user_id: userId,
-      image: imageUrls,
+      propertyInfo: property_id,
     };
 
     setFormLoading(true);
-     */
 
     try {
-      /**
-      const { data: propertyCreateResponse } = await axios.post(
-        `${currentFormStep.api}`,
+      const {
+        data: { data: propertyAddressCreateResponse },
+      } = await axios.post(
+        `http://localhost:8040/api/v1/property/address`,
         propertyCreateBody,
         {
           headers: {
@@ -153,9 +148,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
           },
         }
       );
-      console.log(propertyCreateResponse);
+      console.log(propertyAddressCreateResponse);
       setFormLoading(false);
-       */
+
       onNext();
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -174,7 +169,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             <Label htmlFor="address_line_1">Address Line 1</Label>
             <Input
               id="address_line_1"
-              // {...register("address_line_1")}
+              {...register("address_line_1")}
               size={"md"}
               type="text"
               variant={addressLine1Error && "error"}
@@ -186,8 +181,8 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               id="address_line_2"
               size={"md"}
               variant={addressLine2Error && "error"}
-              // {...register("property_email")}
-              type="email"
+              {...register("address_line_2")}
+              type="text"
             />
           </div>
         </div>
@@ -198,7 +193,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               id="city"
               size={"md"}
               variant={cityError && "error"}
-              // {...register("property_contact")}
+              {...register("city")}
               type="text"
             />
           </div>
@@ -207,7 +202,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             <Input
               variant={stateError && "error"}
               id="state"
-              // {...register("property_code")}
+              {...register("state")}
               type="text"
               size={"md"}
             />
@@ -220,7 +215,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               id="country"
               size={"md"}
               variant={countryError && "error"}
-              // {...register("property_contact")}
+              {...register("country")}
               type="text"
             />
           </div>
@@ -229,7 +224,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             <Input
               variant={landmarkError && "error"}
               id="landmark"
-              // {...register("property_code")}
+              {...register("landmark")}
               type="text"
               size={"md"}
             />
@@ -243,7 +238,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               id="zip_code"
               type="text"
               variant={zipCodeError && "error"}
-              // {...register("star_rating")}
+              {...register("zip_code")}
             />
           </div>
           <div className="self-end gap-2 flex w-full">
@@ -255,7 +250,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             >
               Back
             </Button>
-            <Button className="w-[200px]" onClick={onNext} type="button">
+            <Button className="w-[200px]" type="submit">
               Next
             </Button>
             {/* <SubmitButton content="Next" loading={formLoading} /> */}

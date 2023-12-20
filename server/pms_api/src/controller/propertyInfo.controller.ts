@@ -32,8 +32,8 @@ const getMyProperties = catchAsync(
 
 const createpropertyInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as any;
     const {
-      user_id,
       property_name,
       property_email,
       property_contact,
@@ -62,7 +62,7 @@ const createpropertyInfo = catchAsync(
     }
 
     const newPropertyInfo = await PropertyInfo.create({
-      user_id,
+      user_id: user,
       property_name,
       property_email,
       property_contact,
@@ -187,14 +187,12 @@ const getAllProperty = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getProperties = catchAsync (
-  async (req:Request, res:Response, next:NextFunction) =>{
-    const property = await PropertyInfo.find()
+const getProperties = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const property = await PropertyInfo.find();
 
     if (!property) {
-      return next(
-        new AppError(`No property found with this id `, 404)
-      );
+      return next(new AppError(`No property found with this id `, 404));
     }
 
     res.status(200).json({
@@ -204,7 +202,7 @@ const getProperties = catchAsync (
       data: property,
     });
   }
-)
+);
 
 export {
   createpropertyInfo,
@@ -213,5 +211,5 @@ export {
   getPropertyInfoById,
   getAllProperty,
   getMyProperties,
-  getProperties
+  getProperties,
 };
