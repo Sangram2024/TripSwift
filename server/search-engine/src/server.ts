@@ -39,8 +39,10 @@ createPropertyIndexAndDoc();
 (async()=>{
     const changeStream = Room.watch();
     changeStream.on("change", next => {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>', 'change');
+        
         createPropertyIndexAndDoc();
-        close();
+        // close();
     });
 
     async function close() {

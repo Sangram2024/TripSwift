@@ -1,7 +1,22 @@
 "use client";
 
 import { NextUIProvider } from "@nextui-org/react";
+import ReduxProvider from "../redux/ReduxProvider";
+import { store } from "../redux/store";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <NextUIProvider>{children}</NextUIProvider>;
+  const { accessToken } = store.getState().authReducer;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!accessToken) router.push("/login");
+  }, [accessToken]);
+
+  return (
+    <NextUIProvider>
+      <ReduxProvider>{children}</ReduxProvider>
+    </NextUIProvider>
+  );
 }

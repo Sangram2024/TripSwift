@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -45,13 +45,18 @@ type Props = {};
 
 export default function Navbar({}: Props) {
   const pathname = usePathname();
+  const [noNav, setNoNav] = useState(false);
 
-  const pathnameWithoutHeaderAndFooter = pathname === "/login" || "/register";
+  useEffect(() => {
+    const isLoginORregisterPath =
+      pathname === "/login" ?? pathname === "/register";
+    setNoNav(isLoginORregisterPath);
+  }, [pathname]);
 
   return (
     <nav
-      className={`h-[10vh] w-screen border-b px-10 flex items-center justify-between ${
-        pathnameWithoutHeaderAndFooter && "hidden"
+      className={`h-[10vh] w-screen border-b px-10 ${
+        noNav ? "hidden" : "flex items-center justify-between"
       }`}
     >
       <div>

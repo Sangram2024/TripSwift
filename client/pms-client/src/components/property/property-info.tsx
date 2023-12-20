@@ -45,7 +45,8 @@ import toast from "react-hot-toast";
 import { BookOpen, MapPinned, ShowerHead } from "lucide-react";
 import { cn } from "./../../lib/utils";
 import { Textarea } from "./../ui/textarea";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { RootState, useSelector } from "../../redux/store";
 
 const createPropertySchema = z.object({
   property_name: z.string().min(1, "Property name is required"),
@@ -95,8 +96,11 @@ export default function PropertyInfo({ onNext }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [formLoading, setFormLoading] = useState<boolean>(false);
 
-  const userId = useSearchParams().get("userId");
-  const accessToken = useSearchParams().get("auth");
+  const { accessToken, user } = useSelector(
+    (state: RootState) => state.authReducer
+  );
+  const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm<Inputs>({
     defaultValues: {
@@ -136,45 +140,40 @@ export default function PropertyInfo({ onNext }: Props) {
   ]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    /**
-    const currentFormStep = steps.filter(
-      (step) => step.id === currenStep + 1
-    )[0];
-
     const imageUrls = propertyImageUrls.map(
       (propertyImage) => propertyImage.url
     );
 
     const propertyCreateBody = {
       ...data,
-      user_id: userId,
       image: imageUrls,
     };
 
     setFormLoading(true);
-     */
 
-    try {
-      /**
-      const { data: propertyCreateResponse } = await axios.post(
-        `${currentFormStep.api}`,
-        propertyCreateBody,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log(propertyCreateResponse);
-      setFormLoading(false);
-       */
-      onNext();
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setFormLoading(false);
-        toast.error(err?.response?.data?.message);
-      }
-    }
+    // try {
+    //   const {
+    //     data: { data: newPropertyInfo },
+    //   } = await axios.post(
+    //     `http://localhost:8040/api/v1/property`,
+    //     propertyCreateBody,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     }
+    //   );
+
+    //   router.push(`${pathname}?property_id=${newPropertyInfo?._id}`);
+    //   setFormLoading(false);
+
+    //   onNext();
+    // } catch (err) {
+    //   if (axios.isAxiosError(err)) {
+    //     setFormLoading(false);
+    //     toast.error(err?.response?.data?.message);
+    //   }
+    // }
   };
 
   const packFiles = (files) => {
@@ -296,7 +295,10 @@ export default function PropertyInfo({ onNext }: Props) {
             )}
           </div>
           <div className="self-end w-full">
-            <Button className="w-[200px]" onClick={onNext} type="button">
+            {/* <Button className="w-[200px]" type="submit">
+              Next
+            </Button> */}
+            <Button className="w-[200px]" type="button" onClick={onNext}>
               Next
             </Button>
             {/* <SubmitButton content="Next" loading={formLoading} /> */}
