@@ -20,8 +20,8 @@ const DB = process.env.MONGO_URI;
 
 app.use("/api/v1/property", propertyRouter);
 app.use("/api/v1/upload", uploadRouter);
+app.use("/api/v1/room", roomRouter);
 app.use("/api/v1", hotelRouter);
-app.use("/api/v1", roomRouter);
 
 app.all("*", (req: Request, _res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} path on the server`, 404));
