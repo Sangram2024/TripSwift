@@ -168,4 +168,4 @@ const roomSchema = new Schema<RoomType>({
 
 const Room = mongoose.model<RoomType>("Room", roomSchema);
 
-export { Room };
+export { Room, RoomType };

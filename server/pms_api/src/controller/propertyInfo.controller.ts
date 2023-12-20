@@ -151,7 +151,8 @@ const deleteProperty = catchAsync(
 const getPropertyInfoById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const propertyId = req.params.id;
-    const property = await PropertyInfo.findById(propertyId);
+    const property =  await PropertyInfo.findById(propertyId).populate({path:'property_address'}).populate({path:'property_aminite'}).populate({path:'property_room'}).lean();
+  console.log(property);
 
     if (!property) {
       return next(
