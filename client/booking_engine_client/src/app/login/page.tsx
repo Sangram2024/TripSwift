@@ -78,7 +78,7 @@ const Login: React.FC = () => {
           </div>
 
           <form className="mt-6 gap-5 " onSubmit={handleSubmit}>
-            <div className="py-2">
+            <div className="py-2 ">
               <InputFields
                 label="Email"
                 type="email"

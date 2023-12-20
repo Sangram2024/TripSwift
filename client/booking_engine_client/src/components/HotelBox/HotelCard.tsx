@@ -52,10 +52,13 @@ const HotelCard = () => {
           </div>
           <div>
             {/* <Link   onClick={handleSearch} */}
- {/* href={`/destination?location=${searchQuery}`} passHref> */}
-              <button onClick={handleSearch}   className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md">
-                Search
-              </button>
+            {/* href={`/destination?location=${searchQuery}`} passHref> */}
+            <button
+              onClick={handleSearch}
+              className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md"
+            >
+              Search
+            </button>
             {/* </Link> */}
           </div>
         </div>
