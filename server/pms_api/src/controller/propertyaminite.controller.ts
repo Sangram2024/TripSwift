@@ -34,7 +34,7 @@ const createPropertyAminite = catchAsync(
       propertyInfo,
       destination_type,
       property_type,
-      no_of_rooms_available,
+      no_of_rooms_available: parseInt(no_of_rooms_available),
       wifi,
       swimming_pool,
       fitness_center,
@@ -83,14 +83,12 @@ const getPropertyAminiteById = catchAsync(
   }
 );
 
-const getPropertyAminites = catchAsync (
-  async (req:Request, res:Response, next:NextFunction) =>{
-    const propertyAminites = await PropertyAminite.find()
+const getPropertyAminites = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const propertyAminites = await PropertyAminite.find();
 
     if (!propertyAminites) {
-      return next(
-        new AppError(`No property found with this id `, 404)
-      );
+      return next(new AppError(`No property found with this id `, 404));
     }
 
     res.status(200).json({
@@ -100,16 +98,15 @@ const getPropertyAminites = catchAsync (
       data: propertyAminites,
     });
   }
-)
+);
 
-const getDestinationType = catchAsync (
-  async (req:Request, res:Response, next:NextFunction) =>{
-    const uniqueDestinationTypes = await PropertyAminite.distinct('destination_type');
+const getDestinationType = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const uniqueDestinationTypes =
+      await PropertyAminite.distinct("destination_type");
 
     if (!uniqueDestinationTypes) {
-      return next(
-        new AppError(`No destination type found  `, 404)
-      );
+      return next(new AppError(`No destination type found  `, 404));
     }
 
     res.status(200).json({
@@ -118,7 +115,11 @@ const getDestinationType = catchAsync (
       message: "Destination type  fetched successfully",
       data: uniqueDestinationTypes,
     });
-
   }
-)
-export { createPropertyAminite, getPropertyAminiteById,getPropertyAminites, getDestinationType };
+);
+export {
+  createPropertyAminite,
+  getPropertyAminiteById,
+  getPropertyAminites,
+  getDestinationType,
+};

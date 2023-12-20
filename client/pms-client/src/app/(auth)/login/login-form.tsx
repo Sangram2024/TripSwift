@@ -1,15 +1,6 @@
 "use client";
 
-import { login } from "../../../actions/actions";
 import { Button } from "../../../components/ui/button";
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "../../../components/ui/card";
 import { Checkbox } from "../../../components/ui/checkbox";
 import {
   Dialog,
@@ -42,6 +33,8 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosResponse } from "axios";
+import { RootState, useDispatch, useSelector } from "./../../../redux/store";
+import { login, getUser } from "./../../../redux/slices/authSlice";
 
 type Props = {};
 
@@ -65,9 +58,11 @@ type Inputs = {
 };
 
 export default function LoginForm({}: Props) {
-  const [state, formAction] = useFormState(login, null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [isVisible, setIsVisible] = React.useState(false);
+  const dispatch = useDispatch();
+
+  const { accessToken } = useSelector((state: RootState) => state.authReducer);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -96,59 +91,22 @@ export default function LoginForm({}: Props) {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
 
-    console.log(data);
-
     try {
-      const res = await axios.post("http://localhost:8020/api/v1/auth/login", {
-        ...data,
+      await dispatch(login(data));
+      await dispatch(getUser());
+
+      const {
+        data: {
+          data: { properties, draftProperties },
+        },
+      } = await axios.get("http://localhost:8040/api/v1/property/me", {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
       });
 
-      // const {
-      //   data: {
-      //     data: { properties, draftProperties },
-      //   },
-      // } = await axios.get("http://localhost:8040/api/v1/property/me", {
-      //   headers: {
-      //     Authorization: "Bearer " + res.data.data.accessToken,
-      //   },
-      // });
-
-      // await axios.get("http://localhost:8020/api/v1/user/me", {
-      //   headers: {
-      //     Authorization: "Bearer " + res.data.data.accessToken,
-      //   },
-      // });
-
-      const results: PromiseSettledResult<AxiosResponse<any, any>>[] =
-        await Promise.allSettled([
-          axios.get("http://localhost:8040/api/v1/property/me", {
-            headers: {
-              Authorization: "Bearer " + res.data.data.accessToken,
-            },
-          }),
-          axios.get("http://localhost:8020/api/v1/user/me", {
-            headers: {
-              Authorization: "Bearer " + res.data.data.accessToken,
-            },
-          }),
-        ]);
-
-      const {
-        fulfilledResults: [propertyResponse, getMeResponse],
-        rejectedResults: [propertyError, getMeError],
-      } = handleResults(results);
-
-      const {
-        data: { draftProperties, properties },
-      } = propertyResponse;
-      const {
-        data: { user },
-      } = getMeResponse;
-
       if (!properties.length && !draftProperties.length) {
-        router.push(
-          `/property/create?auth=${res.data.data.accessToken}&userId=${user?._id}`
-        );
+        router.push(`/property/create`);
       }
       setLoading(false);
     } catch (err) {
