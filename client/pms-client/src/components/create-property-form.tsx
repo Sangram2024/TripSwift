@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 
-import { BookOpen, MapPinned, ShowerHead } from "lucide-react";
+import { BookOpen, DoorOpen, MapPinned, ShowerHead } from "lucide-react";
 
 import PropertyInfo from "./property/property-info";
 import PropertyAddress from "./property/property-address";
 import PropertyAmenities from "./property/property-amenities";
+import Rooms from "./property/room";
 
 type Props = {};
 
@@ -16,21 +17,24 @@ const steps = [
     icon: <BookOpen size={20} />,
     name: "Property Information",
     description: "General property information",
-    api: "http://localhost:8040/api/v1/property",
   },
   {
     id: 2,
     icon: <MapPinned size={20} />,
     name: "Property Address",
     description: "Location of property",
-    api: "http://localhost:8040/api/v1/property/address",
   },
   {
     id: 3,
+    icon: <DoorOpen size={20} />,
+    name: "Rooms",
+    description: "Available room types and their facilities",
+  },
+  {
+    id: 4,
     icon: <ShowerHead size={20} />,
     name: "Property Amenities",
     description: "Amenities availabilty",
-    api: "http://localhost:8040/api/v1/property/amenities",
   },
 ];
 
@@ -60,6 +64,9 @@ export default function CreatePropertyForm({}: Props) {
         Component = <PropertyAddress onNext={next} onPrevious={previous} />;
         break;
       case 2:
+        Component = <Rooms onNext={next} onPrevious={previous} />;
+        break;
+      case 3:
         Component = <PropertyAmenities onNext={next} onPrevious={previous} />;
       default:
         break;

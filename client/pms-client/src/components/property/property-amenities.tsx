@@ -354,8 +354,16 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             >
               Back
             </Button>
-            <Button className="w-[200px]" type="submit">
+            {/* <Button className="w-[200px]" type="submit">
               Submit
+            </Button> */}
+            <Button
+              className="w-[200px]"
+              type="button"
+              onClick={onNext()}
+              type="button"
+            >
+              Next
             </Button>
             {/* <SubmitButton content="Next" loading={formLoading} /> */}
           </div>

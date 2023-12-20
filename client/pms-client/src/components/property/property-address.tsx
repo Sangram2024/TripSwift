@@ -136,28 +136,28 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
 
     setFormLoading(true);
 
-    try {
-      const {
-        data: { data: propertyAddressCreateResponse },
-      } = await axios.post(
-        `http://localhost:8040/api/v1/property/address`,
-        propertyCreateBody,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log(propertyAddressCreateResponse);
-      setFormLoading(false);
+    // try {
+    //   const {
+    //     data: { data: propertyAddressCreateResponse },
+    //   } = await axios.post(
+    //     `http://localhost:8040/api/v1/property/address`,
+    //     propertyCreateBody,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     }
+    //   );
+    //   console.log(propertyAddressCreateResponse);
+    //   setFormLoading(false);
 
-      onNext();
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setFormLoading(false);
-        toast.error(err?.response?.data?.message);
-      }
-    }
+    //   onNext();
+    // } catch (err) {
+    //   if (axios.isAxiosError(err)) {
+    //     setFormLoading(false);
+    //     toast.error(err?.response?.data?.message);
+    //   }
+    // }
   };
 
   return (
@@ -250,7 +250,10 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             >
               Back
             </Button>
-            <Button className="w-[200px]" type="submit">
+            {/* <Button className="w-[200px]" type="submit">
+              Next
+            </Button> */}
+            <Button className="w-[200px]" type="button" onClick={onNext}>
               Next
             </Button>
             {/* <SubmitButton content="Next" loading={formLoading} /> */}
