@@ -1,7 +1,12 @@
 import { Router } from "express";
-import { updateUser, deleteUser, getAllUsers, getUserById } from "../controller/user/user.controller";
+import {
+  updateUser,
+  deleteUser,
+  getAllUsers,
+  getUserById,
+} from "../controller/user/user.controller";
 
-import {protect} from "@quotus_packages/auth_middleware"
+import { protect } from "@quotus_packages/auth_middleware";
 const router = Router();
 
 router.route("/").get(getAllUsers as any);
@@ -13,6 +18,3 @@ router
   .get(getUserById as any);
 
 export default router;
-
-
-

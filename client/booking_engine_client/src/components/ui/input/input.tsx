@@ -30,7 +30,7 @@ const InputFields: React.FC<InputProps> = ({
           label={label}
           value={value}
           onChange={onChange}
-          className="focus:bg-none  "
+          className="focus:bg-none"
         />
       </>
     </div>
