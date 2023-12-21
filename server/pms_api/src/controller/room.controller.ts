@@ -4,7 +4,6 @@ import { Request, catchAsync } from "../utils/catchAsync";
 import { Room } from "../model/room.model";
 import { PropertyInfo } from "../model/property.info.model";
 
-
 const createRoom = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const {
@@ -27,9 +26,9 @@ const createRoom = catchAsync(
       propertyInfo_id,
       name,
       type,
-      price,
+      price: parseInt(price),
       available,
-      capacity,
+      capacity: parseInt(capacity),
       amenities,
       image,
       description,
