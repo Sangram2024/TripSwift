@@ -46,3 +46,18 @@ export const hotelSearch = (data: any) => {
         });
     });
   };
+
+
+  export const roomsByProperty = (id:any) =>{
+    return new Promise((resolve, reject)=>{
+      axios.get(`${Config.BaseUrl}/api/v1/room/rooms_by_propertyId/${id}`)
+      .then((result:any)=>{
+        resolve(result.data);
+          console.log("all rooms  data",result.data)
+      })
+      .catch((error: any) => {
+        console.error("Error in romms data:", error);
+        reject(error);
+      });
+    })
+  }
