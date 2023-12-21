@@ -1,25 +1,25 @@
-// import { authReducer } from "./slices/auth.slice";
-// import {
-//   useDispatch as useDispatchBase,
-//   useSelector as useSelectorBase,
-// } from "react-redux";
+"use client";
 
-// import { configureStore } from "@reduxjs/toolkit";
+import {
+  useDispatch as useDispatchBase,
+  useSelector as useSelectorBase,
+} from "react-redux";
 
-// export const store = configureStore({
-//   reducer: {
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./slices/auth.slice";
 
-//     authReducer,
+export const store = configureStore({
+  reducer: {
+    authReducer,
+  },
+});
 
-//   },
-// });
+export type RootState = ReturnType<typeof store.getState>;
 
-// export type RootState = ReturnType<typeof store.getState>;
+type AppDispatch = typeof store.dispatch;
 
-// type AppDispatch = typeof store.dispatch;
+export const useDispatch = () => useDispatchBase<AppDispatch>();
 
-// export const useDispatch = () => useDispatchBase<AppDispatch>();
-
-// export const useSelector = <TSelected = unknown>(
-//   selector: (state: RootState) => TSelected
-// ): TSelected => useSelectorBase<RootState, TSelected>(selector);
+export const useSelector = <TSelected = unknown>(
+  selector: (state: RootState) => TSelected
+): TSelected => useSelectorBase<RootState, TSelected>(selector);
