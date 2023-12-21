@@ -5,9 +5,12 @@ import {
   deleteRoom,
   getRoomById,
   getRooms,
+  getRoomsByPropertyId,
 } from "../controller/room.controller";
 
 const router = Router();
+
+router.route("/rooms_by_propertyId/:id").get( getRoomsByPropertyId as any);
 
 router
   .route("/")

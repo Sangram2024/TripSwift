@@ -100,12 +100,11 @@ const Navbar = React.memo((props: Props) => {
                 </li>
 
                 <Link href={"/my-trip"}>
-                  <li className="justify-end items-stretch flex gap-2  p-2 border rounded-lg hover:border-gray-500 transition max-md:max-w-full max-md:flex-wrap max-md:pl-5">
-                    <Image
+                  <li className="justify-end items-stretch flex gap-4  p-2 border rounded-lg hover:border-gray-500 transition max-md:max-w-full max-md:flex-wrap max-md:pl-5">
+                    <img
                       loading="lazy"
-                      src={MTrip}
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/3e6875fa2cf4225b8651e5b60638488dbf76ca42a575a25b1180ad99cc07db86?apiKey=06bef42c624743a9888f5d8e0d15a6ad&"
                       className="aspect-square object-contain object-center w-6 overflow-hidden self-center shrink-0 max-w-full my-auto"
-                      alt={""}
                     />
                     <div className="text-black text-sm font-medium leading-5 self-center grow whitespace-nowrap my-auto">
                       My Trip

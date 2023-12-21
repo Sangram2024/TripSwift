@@ -4,7 +4,6 @@ import { Request, catchAsync } from "../utils/catchAsync";
 import { Room } from "../model/room.model";
 import { PropertyInfo } from "../model/property.info.model";
 
-
 const createRoom = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const {
@@ -27,9 +26,9 @@ const createRoom = catchAsync(
       propertyInfo_id,
       name,
       type,
-      price,
+      price: parseInt(price),
       available,
-      capacity,
+      capacity: parseInt(capacity),
       amenities,
       image,
       description,
@@ -136,4 +135,28 @@ const getRooms = catchAsync(
   }
 );
 
-export { createRoom, updateRoom, deleteRoom, getRoomById, getRooms };
+const getRoomsByPropertyId = catchAsync(
+  async(req:Request, res:Response, next:NextFunction) =>{
+
+    const propertyInfoId = req.params.id;
+
+    const rooms = await Room.find({ propertyInfo_id: propertyInfoId }).exec();
+
+    if (!rooms) {
+      return next(
+        new AppError(`No property found with this id ${propertyInfoId}`, 404)
+      );
+    }
+
+    res.status(200).json({
+      status: "success",
+      error: false,
+      message: "Room  fetched by property id successfully",
+      data: rooms,
+    });
+
+
+  }
+)
+
+export { createRoom, updateRoom, deleteRoom, getRoomById, getRooms, getRoomsByPropertyId };

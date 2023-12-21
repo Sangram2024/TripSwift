@@ -70,7 +70,7 @@ const page = () => {
                 <div key={hotel?._source?.propertyId?._id} className="items-stretch self-stretch flex grow flex-col  px-10 max-md:max-w-full max-md:px-5">
                   <div className="bg-gray-200 shrink-0 h-px mt-6 max-md:max-w-full" />
                   <div className="mt-6 max-md:max-w-full">
-                    <Link  href={`/hotel/${hotel?._source?.propertyId?._id}`} passHref className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
+                    <Link  href={`/hotel?id=${hotel?._source?.propertyId?._id}`} passHref className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                       <HotelCardDetails hotelData={hotel} />
                     </Link>
                   </div>

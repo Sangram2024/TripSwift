@@ -20,6 +20,16 @@ const bookingSchema = new Schema<BookingsType>({
     required: [true, "property id is required "],
   },
 
+  booking_user_name:{
+    type:String,
+  },
+  booking_user_email:{
+    type:String,
+  },
+  booking_user_phone:{
+    type:Number
+  },
+
   amount: {
     type: Number,
     required: [true, "Amount is required"],
