@@ -17,11 +17,6 @@
   width: 2px;
 }
 
-.input-autofill::autofill,
-.input-autofill:-webkit-autofill {
-  background-color: none !important;
-}
-
 /* ::-webkit-scrollbar-track {
     background: #f1f1f1;
 } */
@@ -129,13 +124,4 @@ header p {
 
 label {
   margin-bottom: 9px;
-}
-
-input,
-input:active,
-input:focus {
-  border: 1px solid #dfdee0;
-  height: 45px;
-  border-radius: 8px;
-  text-indent: 16px;
 }

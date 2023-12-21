@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/navigation";
+
+import { Providers } from "./provider";
 import Footer from "../components/layout/Footer";
 const popins = Poppins({
   subsets: ["latin"],
@@ -25,9 +27,11 @@ export default function RootLayout({
       <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </head>
       <body className={popins.className}>
-        <Navbar />
-        {children}
-        <Footer />
+        <Providers>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

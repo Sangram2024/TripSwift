@@ -36,10 +36,6 @@ const page = () => {
     }
   }, [propertyId]);
 
-
-
-  // console.log(roomId, "++++++");
-
   const handlePayNowClick = () => {
     const authToken = Cookies.get("ota-auth");
     console.log(authToken, "(((((((((((((((((");
@@ -167,11 +163,11 @@ const page = () => {
                                 (7 Reviews)
                               </div>
                             </div>{" "}
-                        <button
+                        <Link   href={`/booking?id=${allRooms._id}`} passHref
                           className="bg-red-600  rounded px-4 py-2 text-white hover:bg-red-700 focus:outline-none focus:ring focus:border-blue-300"
                         >
                           Book Now
-                        </button>
+                        </Link>
                         </div>
                        
   
