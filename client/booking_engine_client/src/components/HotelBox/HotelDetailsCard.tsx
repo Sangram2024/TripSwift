@@ -6,7 +6,7 @@ import Image from "next/image";
 import Img from "@/components/assets/doublebedroom.jpg";
 
 
-const HotelDetailsCard = () => {
+const HotelDetailsCard = (data) => {
     const imageUrl = "https://www.google.com/uhttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpn6wvs8jjO-kh6Bpu53TdGrl5cKHmdERfPw&usqp=CAUrl?sa=i&url=https%3A%2F%2Fwww.businessinsider.in%2Fheres-why-hotel-room-rates-in-india-may-double-in-the-next-3-to-4-years%2Farticleshow%2F68664363.cms&psig=AOvVaw3vS1qmib69i8JDrURQt4ky&ust=1702532564318000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOipkKLai4MDFQAAAAAdAAAAABAE"
     const rating = 4.5
     const roomName = "Deluxe Double Room"
@@ -14,15 +14,17 @@ const HotelDetailsCard = () => {
     const type = "Dulex"
     const bookingDateFrom = "2023-12-15"
     const bookingDateTo = "2023-12-20"
-    const price = 3000
+    const price = data?.data?.roomData?.data?.price
     const discount = 0.1
     const buttonText = "Book Now"
 
     const discountAmount = Math.round(price * discount);
     const totalPrice = price; // Replace with your actual total price
-    const instantDiscount = 251; // Replace with your actual instant discount
-    const couponDiscount = 892; // Replace with your actual coupon discount
+    const instantDiscount = 50; // Replace with your actual instant discount
+    const couponDiscount = 100; // Replace with your actual coupon discount
     const payableAmount = totalPrice - instantDiscount - couponDiscount;
+
+    console.log("inside the hotel card",data)
 
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -34,9 +36,9 @@ const HotelDetailsCard = () => {
             <div className="flex flex-col">
                 <div className='flex justify-between m-4'>
                     <div className="">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-2">{roomName}</h2>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-2">{data?.data?.roomData?.data?.name}</h2>
 
-                        <p className="text-gray-600  mb-4">{description}</p>
+                        <p className="text-gray-600  mb-4">{data?.data?.roomData?.data?.description}</p>
                         <div className="flex items-center ">
                             <span className="text-sm text-gray-600  mr-2">{rating}</span>
                             {stars}
@@ -79,7 +81,7 @@ const HotelDetailsCard = () => {
                         <span className="text-sm  text-gray-500">-{instantDiscount}</span>
                     </div>
                     <div className="flex items-center justify-between mb-6">
-                        <span className="text-gray-600 mr-2">59% Coupon Discount:</span>
+                        <span className="text-gray-600 mr-2"> Coupon Discount:</span>
                         <span className="text-sm  text-gray-500">-{couponDiscount}</span>
                     </div>
                     <div className="flex items-center justify-between ">
