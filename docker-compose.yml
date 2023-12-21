@@ -41,30 +41,30 @@ services:
       - tripswift-network
     logging:
       driver: none
-  # payment:
-  #   container_name: "tripswift-payment"
-  #   build:
-  #     context: .
-  #     dockerfile: ./server/payment/Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 8010:8010
-  #   environment:
-  #     PORT: 8010
-  #     MONGO_URI: mongodb://mongo:27017/paymentDB
-  #     NODE_ENV: development
-  #     KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-  #     KAFKA_AUTH_TOPIC: auth
-  #     RAZORPAY_KEY_ID: rzp_test_mBBfOCZrMx5wNc
-  #     RAZORPAY_KEY_SECRET: VUMKbAtOs9T2fy8WHlQmXj5l
-  #   depends_on:
-  #     - kafka
-  #     - mongo
-  #   networks:
-  #     - tripswift-network
-  #   volumes:
-  #     - ./server/payment:/app/
-  #     - /app/node_modules
+  payment:
+    container_name: "tripswift-payment"
+    build:
+      context: .
+      dockerfile: ./server/payment/Dockerfile
+    restart: always
+    ports:
+      - 8010:8010
+    environment:
+      PORT: 8010
+      MONGO_URI: mongodb://mongo:27017/paymentDB
+      NODE_ENV: development
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_AUTH_TOPIC: auth
+      RAZORPAY_KEY_ID: rzp_test_mBBfOCZrMx5wNc
+      RAZORPAY_KEY_SECRET: VUMKbAtOs9T2fy8WHlQmXj5l
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/payment:/app/
+      - /app/node_modules
   authentication:
     container_name: "tripswift-auth"
     build:
@@ -118,8 +118,8 @@ services:
     volumes:
       - ./server/search-engine:/app/
       - /app/node_modules
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
 
   pms_api:
     container_name: "tripswift-pms_api"
@@ -175,25 +175,25 @@ services:
     volumes:
       - ./server/user:/app/
       - /app/node_modules
-  # pms_client:
-  #   container_name: "tripswift-pms_client"
-  #   build:
-  #     context: .
-  #     dockerfile: ./client/pms-client/Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 3000:3000
-  #   depends_on:
-  #     - kafka
-  #     - mongo
-  #     - search
-  #     - authentication
-  #     - payment
-  #   networks:
-  #     - tripswift-network
-  #   volumes:
-  #     - ./client/pms-client:/app/
-  #     - /app/node_modules
+  pms_client:
+    container_name: "tripswift-pms_client"
+    build:
+      context: .
+      dockerfile: ./client/pms-client/Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - kafka
+      - mongo
+      - search
+      - authentication
+      - payment
+    networks:
+      - tripswift-network
+    volumes:
+      - ./client/pms-client:/app/
+      - /app/node_modules
 
   booking_engine:
     container_name: "tripswift-booking_engine"
