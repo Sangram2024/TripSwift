@@ -80,7 +80,7 @@ interface RoomType extends Document {
     workLeisure: WorkLeisureAmenities;
     accessibilityFeatures: AccessibilityFeaturesAmenities;
   };
-  image: string;
+  image: string[];
   description: string;
 }
 
@@ -162,10 +162,10 @@ const roomSchema = new Schema<RoomType>({
       wheelchairAccessibility: { type: Boolean, default: false },
     },
   },
-  image: { type: String },
+  image: [{ type: String }],
   description: { type: String },
 });
 
 const Room = mongoose.model<RoomType>("Room", roomSchema);
 
-export { Room };
+export { Room, RoomType };

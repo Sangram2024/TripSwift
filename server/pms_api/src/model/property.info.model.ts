@@ -7,6 +7,11 @@ import {
   PropertyAminite,
   PropertyAnimiteType,
 } from "../model/property.aminites.model";
+
+import {
+  Room,
+  RoomType
+} from '../model/room.model'
 import { UserType } from "./user.model";
 
 interface PropertyInfoType extends Document {
@@ -18,6 +23,7 @@ interface PropertyInfoType extends Document {
   property_code: string;
   property_address: Types.ObjectId | PropertyAddressType;
   property_aminite: Types.ObjectId | PropertyAnimiteType;
+  property_room: Types.ObjectId | RoomType;
   image: string[];
   description: string;
   isDraft: boolean;
@@ -32,6 +38,8 @@ const propertyInfoSchema = new Schema<PropertyInfoType>({
   property_code: { type: String, required: true },
   property_address: { type: Schema.Types.ObjectId, ref: "PropertyAddress" },
   property_aminite: { type: Schema.Types.ObjectId, ref: "PropertyAminite" },
+  property_room: { type: Schema.Types.ObjectId, ref: "Room" },
+
   image: [{ type: String }],
   description: { type: String },
   isDraft: {
