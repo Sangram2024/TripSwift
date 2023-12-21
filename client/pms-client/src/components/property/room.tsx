@@ -52,6 +52,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./../ui/accordion";
+import { ScrollArea } from "./../ui/scrollarea";
 
 const BedType = z.enum(["single", "double", "king", "twin", "queen"]);
 
@@ -116,9 +117,9 @@ const AccessibilityFeaturesAmenities = z.object({
 const roomSchema = z.object({
   name: z.string().min(1, "Room name is required"),
   type: z.string().min(1, "Room type is required"),
-  price: z.number().min(1, "Room price is required"),
+  price: z.string().min(1, "Room price is required"),
   available: z.boolean(),
-  capacity: z.number().min(1, "Room capacity is required"),
+  capacity: z.string().min(1, "Room capacity is required"),
   basic: RoomAmenities,
   furniture: FurnitureAmenities,
   technology: TechnologyAmenities,
@@ -135,9 +136,9 @@ const roomSchema = z.object({
 type Inputs = {
   name: string;
   type: string;
-  price: number;
+  price: string;
   available: boolean;
-  capacity: number;
+  capacity: string;
   bed: "single" | "double" | "king" | "twin" | "queen";
   bathroom: boolean;
   towels: boolean;
@@ -190,9 +191,9 @@ export default function Rooms({ onNext, onPrevious }: Props) {
     defaultValues: {
       name: "",
       type: "",
-      price: 0,
+      price: "0",
       available: false,
-      capacity: 0,
+      capacity: "0",
       bed: "single",
       bathroom: false,
       towels: false,
@@ -223,63 +224,47 @@ export default function Rooms({ onNext, onPrevious }: Props) {
       wheelchairAccessibility: false,
       description: "",
     },
-    resolver: zodResolver(roomSchema),
+    // resolver: zodResolver(roomSchema),
   });
 
   const { register, control, handleSubmit, formState } = form;
   const {
     errors: {
-      address_line_1: addressLine1Error,
-      address_line_2: addressLine2Error,
-      country: countryError,
-      state: stateError,
-      city: cityError,
-      landmark: landmarkError,
-      zip_code: zipCodeError,
+      name: nameError,
+      type: typeError,
+      price: priceError,
+      capacity: capacityError,
     },
   } = formState;
 
   useEffect(() => {
-    addressLine1Error && toast.error(addressLine1Error.message!);
-    addressLine2Error && toast.error(addressLine2Error.message!);
-    countryError && toast.error(countryError.message!);
-    stateError && toast.error(stateError.message!);
-    cityError && toast.error(cityError.message!);
-    landmarkError && toast.error(landmarkError.message!);
-    zipCodeError && toast.error(zipCodeError.message!);
-  }, [
-    addressLine1Error,
-    addressLine2Error,
-    countryError,
-    stateError,
-    cityError,
-    landmarkError,
-    zipCodeError,
-  ]);
+    nameError && toast.error(nameError.message!);
+    typeError && toast.error(typeError.message!);
+    priceError && toast.error(priceError.message!);
+    capacityError && toast.error(capacityError.message!);
+  }, [nameError, typeError, priceError, capacityError]);
+
+  useEffect(() => {
+    console.log({ errors: formState.errors });
+  }, [formState.errors]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log({ addressData: data });
-
-    const propertyCreateBody = {
+    const roomBody = {
       ...data,
-      propertyInfo: property_id,
+      propertyInfo_id: property_id,
     };
 
     setFormLoading(true);
 
     try {
       const {
-        data: { data: propertyAddressCreateResponse },
-      } = await axios.post(
-        `http://localhost:8040/api/v1/property/address`,
-        propertyCreateBody,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log(propertyAddressCreateResponse);
+        data: { data: newRoom },
+      } = await axios.post(`http://localhost:8040/api/v1/room`, roomBody, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      console.log({ newRoom });
       setFormLoading(false);
 
       onNext();
@@ -298,23 +283,11 @@ export default function Rooms({ onNext, onPrevious }: Props) {
         <div className="flex items-center justify-center gap-4">
           <div className="w-full">
             <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              {...register("name")}
-              size={"md"}
-              type="text"
-              variant={addressLine1Error && "error"}
-            />
+            <Input id="name" {...register("name")} size={"md"} type="text" />
           </div>
           <div className="w-full">
             <Label htmlFor="type">Type</Label>
-            <Input
-              id="type"
-              size={"md"}
-              variant={addressLine2Error && "error"}
-              {...register("type")}
-              type="text"
-            />
+            <Input id="type" size={"md"} {...register("type")} type="text" />
           </div>
         </div>
         <div className="flex items-center justify-center gap-4">
@@ -323,7 +296,6 @@ export default function Rooms({ onNext, onPrevious }: Props) {
             <Input
               id="price"
               size={"md"}
-              variant={cityError && "error"}
               {...register("price")}
               type="number"
             />
@@ -339,396 +311,407 @@ export default function Rooms({ onNext, onPrevious }: Props) {
             />
           </div>
         </div>
-        <Card className="w-full">
+        <Card className="w-[800px]">
           <CardHeader>
             <CardTitle>Amenities</CardTitle>
           </CardHeader>
           <CardContent className="flex gap-4 flex-wrap">
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="amenity-1">
-                <AccordionTrigger>Room Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <Label>Bed Type</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select bed type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectLabel>Bed Type</SelectLabel>
-                        {["single", "double", "king", "twin", "queen"]?.map(
-                          (item) => (
-                            <SelectItem value={item}>
-                              {item.charAt(0).toUpperCase() + item.substring(1)}
-                            </SelectItem>
-                          )
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="bathroom" {...register("bathroom")} />
-                      <label
-                        htmlFor="bathroom"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Bathroom
-                      </label>
+            <ScrollArea className="h-72 w-full">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="amenity-1">
+                  <AccordionTrigger>Room Amenities</AccordionTrigger>
+                  <AccordionContent className="flex gap-4 items-center justify-between">
+                    <div className="w-full">
+                      <Label>Bed Type</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select bed type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {["single", "double", "king", "twin", "queen"]?.map(
+                            (item) => (
+                              <SelectItem value={item}>
+                                {item.charAt(0).toUpperCase() +
+                                  item.substring(1)}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="w-full">
                       <div className="flex items-center space-x-2">
-                        <Checkbox id="towels" {...register("towels")} />
+                        <Checkbox id="bathroom" {...register("bathroom")} />
                         <label
-                          htmlFor="towels"
+                          htmlFor="bathroom"
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                          Towels
+                          Bathroom
                         </label>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="towels" {...register("towels")} />
+                          <label
+                            htmlFor="towels"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            Towels
+                          </label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="linensBedding"
+                            {...register("linensBedding")}
+                          />
+                          <label
+                            htmlFor="linensBedding"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            Linens Bedding
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-2">
+                  <AccordionTrigger>Furniture Amenities</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="tableChairs"
+                          {...register("tableChairs")}
+                        />
+                        <Label
+                          htmlFor="tableChairs"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Table Chairs
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="desk" {...register("desk")} />
+                        <Label
+                          htmlFor="desk"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Desk
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Checkbox
-                          id="linensBedding"
-                          {...register("linensBedding")}
+                          id="dresserWardrobe"
+                          {...register("dresserWardrobe")}
                         />
-                        <label
-                          htmlFor="linensBedding"
+                        <Label
+                          htmlFor="dresserWardrobe"
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                          Linens Bedding
-                        </label>
+                          Dresser Wardrobe
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="sofaSeating"
+                          {...register("sofaSeating")}
+                        />
+                        <Label
+                          htmlFor="sofaSeating"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Sofa Seating
+                        </Label>
                       </div>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-2">
-                <AccordionTrigger>Furniture Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="tableChairs" {...register("tableChairs")} />
-                      <Label
-                        htmlFor="tableChairs"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Table Chairs
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-3">
+                  <AccordionTrigger>Technology Amenities</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="television" {...register("television")} />
+                        <Label
+                          htmlFor="television"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Television
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="telephone" {...register("telephone")} />
+                        <Label
+                          htmlFor="telephone"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Telephone
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="wifiInternet"
+                          {...register("wifiInternet")}
+                        />
+                        <Label
+                          htmlFor="wifiInternet"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Wifi Internet
+                        </Label>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="desk" {...register("desk")} />
-                      <Label
-                        htmlFor="desk"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Desk
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-4">
+                  <AccordionTrigger>Climate Control Amenities</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="airConditioning"
+                          {...register("airConditioning")}
+                        />
+                        <Label
+                          htmlFor="airConditioning"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Air Conditioning
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="heating" {...register("heating")} />
+                        <Label
+                          htmlFor="heating"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Heating
+                        </Label>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="dresserWardrobe"
-                        {...register("dresserWardrobe")}
-                      />
-                      <Label
-                        htmlFor="dresserWardrobe"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Dresser Wardrobe
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-5">
+                  <AccordionTrigger>
+                    Kitchenette MiniBar Amenities
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="smallRefrigerator"
+                          {...register("smallRefrigerator")}
+                        />
+                        <Label
+                          htmlFor="smallRefrigerator"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Small Refrigerator
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="microwave" {...register("microwave")} />
+                        <Label
+                          htmlFor="microwave"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Microwave
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="coffeeMaker"
+                          {...register("coffeeMaker")}
+                        />
+                        <Label
+                          htmlFor="coffeeMaker"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Coffee Maker
+                        </Label>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="sofaSeating" {...register("sofaSeating")} />
-                      <Label
-                        htmlFor="sofaSeating"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Sofa Seating
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-6">
+                  <AccordionTrigger>Security Amenities</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="safe" {...register("safe")} />
+                        <Label
+                          htmlFor="safe"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Safe
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="smokeDetectors"
+                          {...register("smokeDetectors")}
+                        />
+                        <Label
+                          htmlFor="smokeDetectors"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Smoke Detectors
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="fireExtinguisher"
+                          {...register("fireExtinguisher")}
+                        />
+                        <Label
+                          htmlFor="fireExtinguisher"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Fire Extinguisher
+                        </Label>
+                      </div>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-3">
-                <AccordionTrigger>Technology Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="television" {...register("television")} />
-                      <Label
-                        htmlFor="television"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Television
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-7">
+                  <AccordionTrigger>Toiletries Amenities</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="shampooConditioner"
+                          {...register("shampooConditioner")}
+                        />
+                        <Label
+                          htmlFor="shampooConditioner"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Shampoo Conditioner
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="soap" {...register("soap")} />
+                        <Label
+                          htmlFor="soap"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Soap
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="hairdryer" {...register("hairdryer")} />
+                        <Label
+                          htmlFor="hairdryer"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Hair Dryer
+                        </Label>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="telephone" {...register("telephone")} />
-                      <Label
-                        htmlFor="telephone"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Telephone
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-8">
+                  <AccordionTrigger>View Amenities</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="view" {...register("view")} />
+                        <Label
+                          htmlFor="view"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          View
+                        </Label>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="wifiInternet"
-                        {...register("wifiInternet")}
-                      />
-                      <Label
-                        htmlFor="wifiInternet"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Wifi Internet
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-9">
+                  <AccordionTrigger>Work Leisure Amenities</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="workDesk" {...register("workDesk")} />
+                        <Label
+                          htmlFor="workDesk"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Work Desk
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="readingChair"
+                          {...register("readingChair")}
+                        />
+                        <Label
+                          htmlFor="readingChair"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Reading Chair
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="additionalLighting"
+                          {...register("additionalLighting")}
+                        />
+                        <Label
+                          htmlFor="additionalLighting"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Additional Lighting
+                        </Label>
+                      </div>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-4">
-                <AccordionTrigger>Climate Control Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="airConditioning"
-                        {...register("airConditioning")}
-                      />
-                      <Label
-                        htmlFor="airConditioning"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Air Conditioning
-                      </Label>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="amenity-10">
+                  <AccordionTrigger>
+                    Accessibility Features Amenities
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="accessibleBathroom"
+                          {...register("accessibleBathroom")}
+                        />
+                        <Label
+                          htmlFor="accessibleBathroom"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Accessible Bathroom
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="wheelchairAccessibility"
+                          {...register("wheelchairAccessibility")}
+                        />
+                        <Label
+                          htmlFor="wheelchairAccessibility"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Wheelchair Accessibility
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="additionalLighting"
+                          {...register("additionalLighting")}
+                        />
+                        <Label
+                          htmlFor="additionalLighting"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Additional Lighting
+                        </Label>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="heating" {...register("heating")} />
-                      <Label
-                        htmlFor="heating"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Heating
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-5">
-                <AccordionTrigger>
-                  Kitchenette MiniBar Amenities
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="smallRefrigerator"
-                        {...register("smallRefrigerator")}
-                      />
-                      <Label
-                        htmlFor="smallRefrigerator"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Small Refrigerator
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="microwave" {...register("microwave")} />
-                      <Label
-                        htmlFor="microwave"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Microwave
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="coffeeMaker" {...register("coffeeMaker")} />
-                      <Label
-                        htmlFor="coffeeMaker"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Coffee Maker
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-6">
-                <AccordionTrigger>Security Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="safe" {...register("safe")} />
-                      <Label
-                        htmlFor="safe"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Safe
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="smokeDetectors"
-                        {...register("smokeDetectors")}
-                      />
-                      <Label
-                        htmlFor="smokeDetectors"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Smoke Detectors
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="fireExtinguisher"
-                        {...register("fireExtinguisher")}
-                      />
-                      <Label
-                        htmlFor="fireExtinguisher"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Fire Extinguisher
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-7">
-                <AccordionTrigger>Toiletries Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="shampooConditioner"
-                        {...register("shampooConditioner")}
-                      />
-                      <Label
-                        htmlFor="shampooConditioner"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Shampoo Conditioner
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="soap" {...register("soap")} />
-                      <Label
-                        htmlFor="soap"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Soap
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="hairdryer" {...register("hairdryer")} />
-                      <Label
-                        htmlFor="hairdryer"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Hair Dryer
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-8">
-                <AccordionTrigger>View Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="view" {...register("view")} />
-                      <Label
-                        htmlFor="view"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        View
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-9">
-                <AccordionTrigger>Work Leisure Amenities</AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="workDesk" {...register("workDesk")} />
-                      <Label
-                        htmlFor="workDesk"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Work Desk
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="readingChair"
-                        {...register("readingChair")}
-                      />
-                      <Label
-                        htmlFor="readingChair"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Reading Chair
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="additionalLighting"
-                        {...register("additionalLighting")}
-                      />
-                      <Label
-                        htmlFor="additionalLighting"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Additional Lighting
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="amenity-10">
-                <AccordionTrigger>
-                  Accessibility Features Amenities
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="accessibleBathroom"
-                        {...register("accessibleBathroom")}
-                      />
-                      <Label
-                        htmlFor="accessibleBathroom"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Accessible Bathroom
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="wheelchairAccessibility"
-                        {...register("wheelchairAccessibility")}
-                      />
-                      <Label
-                        htmlFor="wheelchairAccessibility"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Wheelchair Accessibility
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="additionalLighting"
-                        {...register("additionalLighting")}
-                      />
-                      <Label
-                        htmlFor="additionalLighting"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Additional Lighting
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </ScrollArea>
           </CardContent>
         </Card>
         <div className="flex items-center gap-2">
@@ -741,9 +724,9 @@ export default function Rooms({ onNext, onPrevious }: Props) {
             >
               Back
             </Button>
-            {/* <Button className="w-[200px]" type="submit">
+            <Button className="w-[200px]" type="submit">
               Next
-            </Button> */}
+            </Button>
             {/* <SubmitButton content="Next" loading={formLoading} /> */}
           </div>
         </div>

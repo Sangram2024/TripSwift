@@ -151,29 +151,29 @@ export default function PropertyInfo({ onNext }: Props) {
 
     setFormLoading(true);
 
-    // try {
-    //   const {
-    //     data: { data: newPropertyInfo },
-    //   } = await axios.post(
-    //     `http://localhost:8040/api/v1/property`,
-    //     propertyCreateBody,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${accessToken}`,
-    //       },
-    //     }
-    //   );
+    try {
+      const {
+        data: { data: newPropertyInfo },
+      } = await axios.post(
+        `http://localhost:8040/api/v1/property`,
+        propertyCreateBody,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
-    //   router.push(`${pathname}?property_id=${newPropertyInfo?._id}`);
-    //   setFormLoading(false);
+      router.push(`${pathname}?property_id=${newPropertyInfo?._id}`);
+      setFormLoading(false);
 
-    //   onNext();
-    // } catch (err) {
-    //   if (axios.isAxiosError(err)) {
-    //     setFormLoading(false);
-    //     toast.error(err?.response?.data?.message);
-    //   }
-    // }
+      onNext();
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setFormLoading(false);
+        toast.error(err?.response?.data?.message);
+      }
+    }
   };
 
   const packFiles = (files) => {
@@ -295,12 +295,12 @@ export default function PropertyInfo({ onNext }: Props) {
             )}
           </div>
           <div className="self-end w-full">
-            {/* <Button className="w-[200px]" type="submit">
-              Next
-            </Button> */}
-            <Button className="w-[200px]" type="button" onClick={onNext}>
+            <Button className="w-[200px]" type="submit">
               Next
             </Button>
+            {/* <Button className="w-[200px]" type="button" onClick={onNext}>
+              Next
+            </Button> */}
             {/* <SubmitButton content="Next" loading={formLoading} /> */}
           </div>
         </div>
