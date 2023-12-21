@@ -1,12 +1,12 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response ,Request} from "express";
 import { instance } from "..";
 import crypto from "crypto";
-import { Request, catchAsync } from "../utils";
+import {catchAsync } from "../utils";
 
 const checkout: ReturnType<typeof catchAsync> = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const options = {
-      amount: 50000,
+      amount: req.body.amount * 100,
       currency: "INR",
       receipt: "order_rcptid_11",
     };

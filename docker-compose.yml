@@ -41,30 +41,30 @@ services:
       - tripswift-network
     logging:
       driver: none
-  # payment:
-  #   container_name: "tripswift-payment"
-  #   build:
-  #     context: .
-  #     dockerfile: ./server/payment/Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 8010:8010
-  #   environment:
-  #     PORT: 8010
-  #     MONGO_URI: mongodb://mongo:27017/paymentDB
-  #     NODE_ENV: development
-  #     KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-  #     KAFKA_AUTH_TOPIC: auth
-  #     RAZORPAY_KEY_ID: rzp_test_mBBfOCZrMx5wNc
-  #     RAZORPAY_KEY_SECRET: VUMKbAtOs9T2fy8WHlQmXj5l
-  #   depends_on:
-  #     - kafka
-  #     - mongo
-  #   networks:
-  #     - tripswift-network
-  #   volumes:
-  #     - ./server/payment:/app/
-  #     - /app/node_modules
+  payment:
+    container_name: "tripswift-payment"
+    build:
+      context: .
+      dockerfile: ./server/payment/Dockerfile
+    restart: always
+    ports:
+      - 8010:8010
+    environment:
+      PORT: 8010
+      MONGO_URI: mongodb://mongo:27017/paymentDB
+      NODE_ENV: development
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_AUTH_TOPIC: auth
+      RAZORPAY_KEY_ID: rzp_test_mBBfOCZrMx5wNc
+      RAZORPAY_KEY_SECRET: VUMKbAtOs9T2fy8WHlQmXj5l
+    depends_on:
+      - kafka
+      - mongo
+    networks:
+      - tripswift-network
+    volumes:
+      - ./server/payment:/app/
+      - /app/node_modules
   authentication:
     container_name: "tripswift-auth"
     build:
