@@ -39,7 +39,7 @@ const Navbar = (props: Props) => {
           >
             <span>{!isMenuOpen ? <Menu /> : <X />}</span>
           </div>
-          {isMenuOpen || window.innerWidth >= 1024 ? (
+          {typeof window !== 'undefined' && (isMenuOpen || window.innerWidth >= 1024) ? (
             <div
               className={`fixed top-0 right-0 sm:h-screen lg:h-auto lg:w-auto sm:w-[80%] lg:bg-white sm:bg-gray-100 lg:z-0 sm:z-40 transition-all duration-300`}
               onClick={closeMenu}
