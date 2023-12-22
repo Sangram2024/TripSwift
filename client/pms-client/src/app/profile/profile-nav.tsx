@@ -12,15 +12,18 @@ const PROFILE_NAVLINKS = [
   {
     title: "Profile",
     link: "http://localhost:3000/profile",
+    disabled: false,
     icon: <User size={16} />,
   },
   {
     title: "Property",
+    disabled: true,
     link: "http://localhost:3000/profile/property",
     icon: <LandPlot size={16} />,
   },
   {
     title: "Address",
+    disabled: true,
     link: "http://localhost:3000/profile/address",
     icon: <MapPinned size={16} />,
   },
@@ -35,12 +38,14 @@ export default function ProfileNav({}: Props) {
 
   return (
     <nav className="flex flex-col border-r-2 pr-2 space-y-2">
-      {PROFILE_NAVLINKS?.map((link) => (
+      {PROFILE_NAVLINKS?.map((link, index) => (
         <Navitem
+          key={`${JSON.stringify(link) + index}`}
           activePath={activePath}
           title={link?.title}
           link={link?.link}
           icon={link?.icon}
+          disabled={link?.disabled}
         />
       ))}
     </nav>
@@ -51,10 +56,12 @@ function Navitem({
   title,
   link,
   icon,
+  disabled,
   activePath,
 }: {
   title: string;
   link: string;
+  disabled: boolean;
   icon: React.ReactNode;
   activePath: {
     title: string;
@@ -63,8 +70,9 @@ function Navitem({
   };
 }) {
   return (
-    <Link href={link}>
+    <Link aria-disabled={disabled} href={link}>
       <Button
+        disabled={disabled}
         variant={activePath.title === title ? "secondary" : "ghost"}
         className="w-[150px] gap-4 justify-start flex items-center"
       >

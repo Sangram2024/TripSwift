@@ -120,7 +120,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
     resolver: zodResolver(createPropertyAmenitiesSchema),
   });
 
-  const { register, control, handleSubmit, formState } = form;
+  const { register, control, handleSubmit, setValue, formState } = form;
   const {
     errors: {
       destination_type: destinationTypeError,
@@ -168,9 +168,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-max mt-6">
         <CardTitle>Property Amenities</CardTitle>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center gap-4">
           <div className="w-full">
             <Label htmlFor="Destination Type">Destination Type</Label>
             <Input
@@ -204,13 +204,17 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
             />
           </div>
         </div>
-        <Card className="w-full">
+        <Card className="w-[600px]">
           <CardHeader>
             <CardTitle>Other Amenities</CardTitle>
           </CardHeader>
           <CardContent className="flex gap-4 flex-wrap">
             <div className="flex items-center space-x-2">
-              <Checkbox id="wifi" {...register("wifi")} />
+              <Checkbox
+                id="wifi"
+                {...register("wifi")}
+                onCheckedChange={(value: boolean) => setValue("wifi", value)}
+              />
               <label
                 htmlFor="wifi"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -219,7 +223,13 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="swimming_pool" {...register("swimming_pool")} />
+              <Checkbox
+                id="swimming_pool"
+                {...register("swimming_pool")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("swimming_pool", value)
+                }
+              />
               <label
                 htmlFor="swimming_pool"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -228,7 +238,13 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="fitness_center" {...register("fitness_center")} />
+              <Checkbox
+                id="fitness_center"
+                {...register("fitness_center")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("fitness_center", value)
+                }
+              />
               <label
                 htmlFor="fitness_center"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -240,6 +256,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               <Checkbox
                 id="spa_and_wellness"
                 {...register("spa_and_wellness")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("spa_and_wellness", value)
+                }
               />
               <label
                 htmlFor="spa_and_wellness"
@@ -249,7 +268,13 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="restaurant" {...register("restaurant")} />
+              <Checkbox
+                id="restaurant"
+                {...register("restaurant")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("restaurant", value)
+                }
+              />
               <label
                 htmlFor="restaurant"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -258,7 +283,13 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="room_service" {...register("room_service")} />
+              <Checkbox
+                id="room_service"
+                {...register("room_service")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("room_service", value)
+                }
+              />
               <label
                 htmlFor="room_service"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -267,7 +298,13 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="bar_and_lounge" {...register("bar_and_lounge")} />
+              <Checkbox
+                id="bar_and_lounge"
+                {...register("bar_and_lounge")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("bar_and_lounge", value)
+                }
+              />
               <label
                 htmlFor="bar_and_lounge"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -276,7 +313,11 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="parking" {...register("parking")} />
+              <Checkbox
+                id="parking"
+                {...register("parking")}
+                onCheckedChange={(value: boolean) => setValue("parking", value)}
+              />
               <label
                 htmlFor="parking"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -288,6 +329,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               <Checkbox
                 id="concierge_services"
                 {...register("concierge_services")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("concierge_services", value)
+                }
               />
               <label
                 htmlFor="concierge_services"
@@ -297,7 +341,13 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="pet_friendly" {...register("pet_friendly")} />
+              <Checkbox
+                id="pet_friendly"
+                {...register("pet_friendly")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("pet_friendly", value)
+                }
+              />
               <label
                 htmlFor="pet_friendly"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -309,6 +359,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               <Checkbox
                 id="business_facilities"
                 {...register("business_facilities")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("business_facilities", value)
+                }
               />
               <label
                 htmlFor="business_facilities"
@@ -321,6 +374,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               <Checkbox
                 id="laundry_services"
                 {...register("laundry_services")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("laundry_services", value)
+                }
               />
               <label
                 htmlFor="laundry_services"
@@ -333,6 +389,9 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
               <Checkbox
                 id="child_friendly_facilities"
                 {...register("child_friendly_facilities")}
+                onCheckedChange={(value: boolean) =>
+                  setValue("child_friendly_facilities", value)
+                }
               />
               <label
                 htmlFor="child_friendly_facilities"

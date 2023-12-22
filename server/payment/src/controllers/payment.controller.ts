@@ -39,10 +39,19 @@ const verifyPayment: ReturnType<typeof catchAsync> = catchAsync(
     const signatureIsValid = generated_signature === razorpay_signature;
 
     if (signatureIsValid) {
-      res.redirect(
-        `http://localhost:3000/payment/success?reference=${razorpay_payment_id}`
-      );
+      // res.redirect(
+      //   `http://localhost:3000/payment/success?reference=${razorpay_payment_id}`
+      // );
+      res.status(201).json({
+        status: "success",
+        error: false,
+        message: "Payment conform.",
+        data: {
+          
+        },
+      });
     }
+
   }
 );
 

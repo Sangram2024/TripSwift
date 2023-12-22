@@ -16,15 +16,29 @@ import {
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import PropertySlide from "./property/property-slide";
+import axios from "axios";
 
 type Props = {
   searchParams: {
-    auth?: string;
+    token?: string;
   };
 };
 
-export default function Home(props: Props) {
-  const auth = props.searchParams?.auth;
+async function fetchProperties(accessToken: string) {
+  const { data } = await axios.get("http://localhost:8040/api/v1/property/me", {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+
+  const { properties, draftProperties } = data.data;
+  return { properties, draftProperties };
+}
+
+export default async function Home(props: Props) {
+  const token = props.searchParams?.token;
+
+  const { properties } = await fetchProperties(token!);
 
   return (
     <main className="py-8 px-8">
@@ -35,7 +49,7 @@ export default function Home(props: Props) {
         </CardHeader>
         <CardContent className="flex gap-4">
           <div className="flex gap-4 relative">
-            <PropertySlide />
+            <PropertySlide properties={properties} />
             <div className="bg-gradient-to-r right-0 rounded-tr-lg rounded-br-lg from-transparent from-10% via-black via-90% to-black h-full absolute w-20 z-[99]">
               &nbsp;
             </div>

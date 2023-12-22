@@ -9,12 +9,12 @@ const getMyProperties = catchAsync(
     const user = req.user;
 
     const properties = await PropertyInfo.find({
-      user_Id: user,
+      user_id: user,
       isDraft: false,
     });
 
     const draftProperties = await PropertyInfo.find({
-      user_Id: user,
+      user_id: user,
       isDraft: true,
     });
 
@@ -151,8 +151,12 @@ const deleteProperty = catchAsync(
 const getPropertyInfoById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const propertyId = req.params.id;
-    const property =  await PropertyInfo.findById(propertyId).populate({path:'property_address'}).populate({path:'property_aminite'}).populate({path:'property_room'}).lean();
-  console.log(property);
+    const property = await PropertyInfo.findById(propertyId)
+      .populate({ path: "property_address" })
+      .populate({ path: "property_aminite" })
+      .populate({ path: "property_room" })
+      .lean();
+    console.log(property);
 
     if (!property) {
       return next(
