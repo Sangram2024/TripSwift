@@ -1,30 +1,11 @@
 "use client";
 
-import React, {
-  MouseEventHandler,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./../ui/card";
+import React, { useCallback, useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./../ui/card";
 import { Label } from "./../ui/label";
 import { Input } from "./../ui/input";
 import { Button, buttonVariants } from "./../ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./../ui/select";
 import {
   Dialog,
   DialogContent,
@@ -33,7 +14,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./../ui/dialog";
-import { Checkbox } from "./../ui/checkbox";
 import Dropzone from "../dropzone";
 import { FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
@@ -42,7 +22,6 @@ import { boolean, number, z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { BookOpen, MapPinned, ShowerHead } from "lucide-react";
 import { cn } from "./../../lib/utils";
 import { Textarea } from "./../ui/textarea";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -176,7 +155,7 @@ export default function PropertyInfo({ onNext }: Props) {
     }
   };
 
-  const packFiles = (files) => {
+  const packFiles = (files: IFileWithPreview[]) => {
     const data = new FormData();
 
     [...files].forEach((file, i) => {
@@ -343,6 +322,7 @@ function PreviewPropertyImages({
             ? "No preview available"
             : files?.map((file, i) => (
                 <div
+                  key={`${JSON.stringify(file) + i}`}
                   onClick={() => setCurrentImage(i)}
                   className="rounded-md cursor-pointer overflow-hidden"
                 >
