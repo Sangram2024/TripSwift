@@ -60,4 +60,16 @@ export const hotelSearch = (data: any) => {
         reject(error);
       });
     })
+  };
+
+  export const roomsById = (id:any) =>{
+    return new Promise ((resolve, reject)=>{
+      axios.get(`${Config.BaseUrl}/api/v1/room/${id}`)
+      .then((result:any)=>{
+        resolve(result.data)
+      })
+      .catch((error:any)=>{
+        reject(error)
+      })
+    })
   }

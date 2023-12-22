@@ -1,12 +1,12 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response ,Request} from "express";
 import { instance } from "..";
 import crypto from "crypto";
-import { Request, catchAsync } from "../utils";
+import {catchAsync } from "../utils";
 
 const checkout: ReturnType<typeof catchAsync> = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const options = {
-      amount: 50000,
+      amount: req.body.amount * 100,
       currency: "INR",
       receipt: "order_rcptid_11",
     };
@@ -39,10 +39,19 @@ const verifyPayment: ReturnType<typeof catchAsync> = catchAsync(
     const signatureIsValid = generated_signature === razorpay_signature;
 
     if (signatureIsValid) {
-      res.redirect(
-        `http://localhost:3000/payment/success?reference=${razorpay_payment_id}`
-      );
+      // res.redirect(
+      //   `http://localhost:3000/payment/success?reference=${razorpay_payment_id}`
+      // );
+      res.status(201).json({
+        status: "success",
+        error: false,
+        message: "Payment conform.",
+        data: {
+          
+        },
+      });
     }
+
   }
 );
 

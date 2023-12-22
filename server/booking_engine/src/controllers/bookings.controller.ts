@@ -10,6 +10,9 @@ export const createReservation = CatchAsyncError(
     const {
       room,
       user,
+      booking_user_name,
+      booking_user_email,
+      booking_user_phone,
       property,
       amount,
       booking_dates,
@@ -53,6 +56,9 @@ export const createReservation = CatchAsyncError(
     const newReservation = new Bookings({
       room,
       user,
+      booking_user_name,
+      booking_user_email,
+      booking_user_phone,
       property,
       amount,
       booking_dates,

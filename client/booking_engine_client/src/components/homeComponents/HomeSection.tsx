@@ -41,7 +41,7 @@ export default function HomeSection() {
 
   return (
     <>
-      <div className=" flex justify-center mt-32 items-center">
+      <div className=" flex justify-center mt-60 items-center top-14">
         <p className="text-gray-300">SIMPLY AMAZING PLACES</p>
         <br />
       </div>
@@ -75,9 +75,9 @@ export default function HomeSection() {
         ))}
       </div>
 
-      <div>
+      {/* <div>
         <Newsletter />
-      </div>
+      </div> */}
     </>
   );
 }
