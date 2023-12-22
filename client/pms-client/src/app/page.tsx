@@ -17,6 +17,7 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import PropertySlide from "./property/property-slide";
 import axios from "axios";
+import { redirect } from "next/navigation";
 
 type Props = {
   searchParams: {
@@ -37,6 +38,8 @@ async function fetchProperties(accessToken: string) {
 
 export default async function Home(props: Props) {
   const token = props.searchParams?.token;
+
+  !token && redirect("/login");
 
   const { properties } = await fetchProperties(token!);
 

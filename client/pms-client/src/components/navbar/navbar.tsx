@@ -52,7 +52,7 @@ export default function Navbar({}: Props) {
 
   useEffect(() => {
     const isLoginORregisterPath =
-      pathname === "/login" ?? pathname === "/register";
+      pathname === "/login" || pathname === "/register";
     setNoNav(isLoginORregisterPath);
   }, [pathname]);
 
