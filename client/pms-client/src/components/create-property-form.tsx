@@ -8,6 +8,7 @@ import PropertyInfo from "./property/property-info";
 import PropertyAddress from "./property/property-address";
 import PropertyAmenities from "./property/property-amenities";
 import Rooms from "./property/room";
+import { RootState, useSelector } from "../redux/store";
 
 type Props = {};
 
@@ -41,6 +42,12 @@ const steps = [
 export default function CreatePropertyForm({}: Props) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currenStep, setCurrentStep] = useState(0);
+
+  const { properties, draftProperties } = useSelector(
+    (state: RootState) => state.propertyReducer
+  );
+
+  console.log({ properties, draftProperties });
 
   const next = () => {
     if (currenStep < steps.length - 1) {

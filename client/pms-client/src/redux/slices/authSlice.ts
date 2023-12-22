@@ -3,11 +3,25 @@ import { Draft, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { store } from "../store";
 
-const initialState = {
+export type User = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+};
+
+type InitialState = {
+  accessToken: string;
+  isAuthenticated: boolean;
+  authLoading: boolean;
+  user: User | undefined;
+};
+
+const initialState: InitialState = {
   accessToken: "",
   isAuthenticated: false,
-  authLoading: "",
-  user: {},
+  authLoading: false,
+  user: undefined,
 };
 
 const authSlice = createSlice({

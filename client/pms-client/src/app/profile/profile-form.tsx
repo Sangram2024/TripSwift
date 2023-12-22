@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { Button } from "../../components/ui/button";
 import { PenLine } from "lucide-react";
 import { Toggle } from "./../../components/ui/toggle";
+import { RootState, useSelector } from "../../redux/store";
 
 type Props = {
   data: Data;
@@ -30,12 +31,15 @@ const updateProfileSchema = z.object({
 
 export default function ProfileForm({ data }: Props) {
   const [isEditable, setIsEditable] = useState(false);
+  const { user } = useSelector((state: RootState) => state.authReducer);
+
+  console.log({ user });
 
   const form = useForm<Data>({
     defaultValues: {
-      firstname: data?.firstname,
-      lastname: data?.lastname,
-      email: data?.email,
+      firstname: user?.firstName,
+      lastname: user?.lastName,
+      email: user?.email,
     },
     resolver: zodResolver(updateProfileSchema),
   });
