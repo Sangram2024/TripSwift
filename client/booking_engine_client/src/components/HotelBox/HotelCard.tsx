@@ -2,11 +2,13 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "@/Redux/store";
 import { setHotelSearchDetails } from "@/Redux/slices/hotelcard.slice";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+
 import Image from "next/image";
 import HeroImage from "../assets/hotel-1.jpg";
 import DateRange from "./DateRange";
 import GuestBox from "./GuestBox";
-import { useRouter } from "next/navigation";
+import {} from "next/navigation";
 
 const HotelCard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,8 +41,6 @@ const HotelCard = () => {
       `/destination?location=${searchQuery}&${dateRangeQueryString}&${guestDetailsQueryString}`
     );
   };
-
-  // https://www.oyorooms.com/search?location=Puri%2C%20Odisha%2C%20India&city=Puri&searchType=city&checkin=22%2F12%2F2023&checkout=23%2F12%2F2023&roomConfig%5B%5D=1&guests=1&rooms=1&filters%5Bcity_id%5D=97
 
   return (
     <>

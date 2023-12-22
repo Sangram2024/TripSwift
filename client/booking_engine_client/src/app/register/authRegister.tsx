@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import InputFields from "@/components/ui/input/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -28,6 +29,7 @@ const Register: React.FC = () => {
     setLoading(true);
 
     if (!email || !password || !firstName || !lastName) {
+      toast.error("Please fill all the fields");
       setLoading(false);
       return;
     }
@@ -46,9 +48,12 @@ const Register: React.FC = () => {
 
       if (response.status === 201) {
         setLoading(false);
+        toast.success("Registartion successful");
         router.push("/login");
         console.log(response.data);
       } else {
+        toast.error("Something went wrong");
+
         setLoading(true);
         console.error(`Unexpected status code: ${response.status}`);
       }

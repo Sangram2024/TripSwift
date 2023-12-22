@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 
 import { Providers } from "./provider";
 import Footer from "../components/layout/Footer";
@@ -24,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </head>
       <body className={popins.className}>
         <Providers>
@@ -32,6 +33,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </Providers>
+        <Toaster position="top-right" />
       </body>
     </html>
   );

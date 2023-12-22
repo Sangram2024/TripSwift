@@ -59,11 +59,12 @@ const HotelDetailsCard = (data: {
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.authReducer.user);
 
-  const formUser = useSelector((state) => state.userFormReducer.formData)
+  const formUser = useSelector((state) => state.userFormReducer.formData);
+
+  console.log(formUser.firstName);
 
   console.log(authUser, "user data in hotel details card");
   console.log(formUser, "user data in hotel details card");
-
 
   const stars = [];
   for (let i = 0; i < 5; i++) {
