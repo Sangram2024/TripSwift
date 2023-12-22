@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "@/Redux/store";
 import Cookies from "js-cookie";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { message } from "antd";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -33,10 +35,12 @@ const Login: React.FC = () => {
 
     try {
       await dispatch(login({ email, password }));
+      toast.success("Login successful");
 
       setLoading(false);
       router.push("/");
-    } catch (error) {
+    } catch (error: any) {
+      toast.error("Please verify your email and password");
       setLoading(false);
       console.log(error);
     }
@@ -107,7 +111,7 @@ const Login: React.FC = () => {
             <div className="absolute px-5 bg-white">Or</div>
           </div>
           <p className="mt-4 text-sm text-center text-gray-700">
-            Don't have an account?{" "}
+            Don &#39; t have an account?{" "}
             <Link
               href="/register"
               className="font-medium text-[#FF745C] hover:underline"

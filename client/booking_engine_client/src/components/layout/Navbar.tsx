@@ -22,6 +22,7 @@ import {
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { logout, getUser } from "@/Redux/slices/auth.slice";
+import toast from "react-hot-toast";
 
 type Props = {};
 
@@ -37,6 +38,7 @@ const Navbar = React.memo((props: Props) => {
   const router = useRouter();
 
   const user = useSelector((state) => state.authReducer.user);
+  console.log(user);
 
   useEffect(() => {}, [user]);
 
@@ -49,6 +51,7 @@ const Navbar = React.memo((props: Props) => {
   };
 
   const handleLogout = () => {
+    toast.success("successfully logout");
     dispatch(logout());
   };
 

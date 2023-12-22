@@ -9,7 +9,7 @@ export default function Home() {
       {/* <BookingBox/> */}
       <HotelCard />
       <HotelPicture />
-      <PayNowFunction />
+      {/* <PayNowFunction /> */}
     </div>
   );
 }

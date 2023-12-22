@@ -3,18 +3,34 @@
 import React, { useState } from "react";
 import HotelDetailsCard from "../HotelBox/HotelDetailsCard";
 import { useDispatch } from "react-redux";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useSelector } from "@/Redux/store";
+
+
+
 
 export const UserForm = (data: any) => {
+
+  const router = useRouter()
+  
+
+  
+
+  const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.authReducer.user);
+
+  console.log("all usert value",authUser)
+
+
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    firstName: authUser?.firstName,
+    lastName: authUser?.lastName,
+    email: authUser?.email,
     countryCode: "",
     phoneNumber: "",
     country: "United States",
   });
 
-  const dispatch = useDispatch();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -23,10 +39,16 @@ export const UserForm = (data: any) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+
   const handleSubmit = () => {
+
+    localStorage.setItem("formData",JSON.stringify(formData))
     dispatch({ type: "SUBMIT_FORM", payload: formData });
+    // router.push(`${pathname}?formData=${JSON.stringify(formData)}`)
     console.log(formData, "form data");
   };
+
+ 
 
   return (
     <div className="grid grid-cols-2 gap-4 m-10">
@@ -142,7 +164,9 @@ export const UserForm = (data: any) => {
             </button>
             <button
               onClick={handleSubmit}
-              className="rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              disabled
+
+              className="rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-not-allowed"
             >
               Save
             </button>
@@ -150,7 +174,7 @@ export const UserForm = (data: any) => {
         </div>
       </div>
       <div className='col-span-1"'>
-        <HotelDetailsCard data={data} />
+       <HotelDetailsCard data={data} formData={formData}/> 
       </div>
     </div>
   );

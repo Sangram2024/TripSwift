@@ -1,43 +1,39 @@
-import React from "react";
+"use client"
+
+import React,{useState,useEffect} from "react";
 import { CalenderIcon } from "../ui/CalenderIcon";
 import { GuestIcon } from "../ui/GuestIcon";
 import { Star } from "../ui/Star";
 import Image from "next/image";
 import Img from "@/components/assets/doublebedroom.jpg";
 import { useDispatch, useSelector } from "@/Redux/store";
-import axios from "axios";
-import { useRouter } from "next/navigation"
+import {useSearchParams,useRouter} from 'next/navigation'
+import axios from 'axios'
 
-const HotelDetailsCard = (data: {
+const HotelDetailsCard = (data:any) => {
+
+  const [isClickable, setIsClickable] = useState("")
   
-  data: {
-    roomData: {
-      data: {
-        price: any;
-        name:
-          | string
-          | number
-          | boolean
-          | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-          | Iterable<React.ReactNode>
-          | React.ReactPortal
-          | React.PromiseLikeOfReactNode
-          | null
-          | undefined;
-        description:
-          | string
-          | number
-          | boolean
-          | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-          | Iterable<React.ReactNode>
-          | React.ReactPortal
-          | React.PromiseLikeOfReactNode
-          | null
-          | undefined;
-      };
-    };
-  };
-}) => {
+  const router = useRouter();
+  const [bookData, setBookData] = useState({
+    property: "",
+    room: "",
+    user:"",
+    booking_user_name:"",
+    booking_user_email:"",
+    booking_user_phone:"",
+    amount: "",
+    payment:"",
+    booking_dates: "",
+    status: "",
+    checkInDate: "",
+    checkOutDate: "",
+    reviews: ""
+    
+  })
+
+  const query = useSearchParams()
+
   const imageUrl =
     "https://www.google.com/uhttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpn6wvs8jjO-kh6Bpu53TdGrl5cKHmdERfPw&usqp=CAUrl?sa=i&url=https%3A%2F%2Fwww.businessinsider.in%2Fheres-why-hotel-room-rates-in-india-may-double-in-the-next-3-to-4-years%2Farticleshow%2F68664363.cms&psig=AOvVaw3vS1qmib69i8JDrURQt4ky&ust=1702532564318000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOipkKLai4MDFQAAAAAdAAAAABAE";
   const rating = 4.5;
@@ -56,22 +52,34 @@ const HotelDetailsCard = (data: {
   const instantDiscount = 50; // Replace with your actual instant discount
   const couponDiscount = 100; // Replace with your actual coupon discount
   const payableAmount = totalPrice - instantDiscount - couponDiscount;
-  const router = useRouter()
-  console.log("inside the hotel card", data);
+
+  console.log("inside the hotel card",bookData);
 
   const dispatch = useDispatch();
+
+ 
   const authUser = useSelector((state) => state.authReducer.user);
 
-  const formUser = useSelector((state) => state.userFormReducer.formData)
+  const formUser = useSelector((state) => state.userFormReducer.formData);
 
-  console.log(authUser, "user data in hotel details card");
+  console.log(formUser.firstName);
+
+  console.log(authUser?._id, "user data in hotel details card");
+
+
+
+
   console.log(formUser, "user data in hotel details card");
+    const propertyId = formUser?.firstName
+    console.log("-------------------------",propertyId)
+
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(<Star key={i} filled={rating > i ? true : false} />);
+    }
 
 
-  const stars = [];
-  for (let i = 0; i < 5; i++) {
-    stars.push(<Star key={i} filled={rating > i ? true : false} />);
-  }
+
 
   const handlePayNowClick = async (payableAmount:any) => {
     // console.log(">>>>>>>>>>>>>>>>>>>");
@@ -92,7 +100,7 @@ const HotelDetailsCard = (data: {
       key: "rzp_test_mBBfOCZrMx5wNc", // Enter the Key ID generated from the Dashboard
       amount: response.data.data.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
-      name: "Acme Corp", //your business name
+      name: "Trip Swift", //your business name
       description: "Test Transaction",
       image: "https://example.com/your_logo",
       order_id: response.data.data.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -146,7 +154,8 @@ const HotelDetailsCard = (data: {
         },
       }
     );
-
+      console.log(verify,"verify-<<<<<<<<<<,");
+      
     if(verify.data.status == 'success'){
       reserved_room('success');
     }
@@ -267,9 +276,13 @@ const HotelDetailsCard = (data: {
             </span>
           </div>
           <div className="flex justify-end mt-8 mb-4">
-            <button className="bg-red-500 text-white px-4 py-2 rounded shadow-md hover:bg-red-700" onClick={()=>handlePayNowClick(payableAmount)}>
-              {buttonText}
-            </button>
+        <button
+          className="bg-red-500 text-white px-4 py-2 rounded shadow-md hover:bg-red-700"
+          onClick={()=>handlePayNowClick(payableAmount)}
+        >
+          {buttonText}
+        </button>
+      
           </div>
         </div>
       </div>

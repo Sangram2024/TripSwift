@@ -49,6 +49,7 @@ export const hotelSearch = (data: any) => {
 
 
   export const roomsByProperty = (id:any) =>{
+    console.log("id",id)
     return new Promise((resolve, reject)=>{
       axios.get(`${Config.BaseUrl}/api/v1/room/rooms_by_propertyId/${id}`)
       .then((result:any)=>{
