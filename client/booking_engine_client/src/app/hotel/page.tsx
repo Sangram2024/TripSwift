@@ -22,7 +22,7 @@ const page = () => {
 
   const [rooms, setRooms] = useState(null)
 
-  console.log("all rooms data in rooms page",rooms)
+  console.log("all rooms data in rooms page",propertyId)
 
 
   useEffect(() => {
