@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "@/Redux/store";
+import { setGuestDetails } from "@/Redux/slices/hotelcard.slice";
 
-const GuestBox = () => {
+const GuestBox: React.FC = () => {
+  const dispatch = useDispatch();
+  const { guestDetails } = useSelector((state) => state.hotel);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [rooms, setRooms] = useState(1);
   const [guests, setGuests] = useState(1);
@@ -21,51 +26,16 @@ const GuestBox = () => {
     setModalOpen(false);
   };
 
-  const incRooms = () => {
-    if (rooms < 10) {
-      setRooms(Number(rooms) + 1);
-    }
-  };
-  const decRooms = () => {
-    if (rooms > 0) {
-      setRooms(rooms - 1);
-    }
+  const incDecHandler = (
+    setter: React.Dispatch<React.SetStateAction<number>>,
+    delta: number
+  ) => {
+    setter((prevValue) => Math.max(prevValue + delta, 1));
   };
 
-  const incNum = () => {
-    if (guests < 10) {
-      setGuests(Number(guests) + 1);
-    }
-  };
-  const decNum = () => {
-    if (guests > 0) {
-      setGuests(guests - 1);
-    }
-  };
-  const handleRoomChange = (
-    value: number | ((prevState: number) => number)
-  ) => {
-    setRooms((prevRooms) =>
-      Math.max(typeof value === "function" ? value(prevRooms) : value, 1)
-    );
-  };
-
-  const handleGuestChange = (
-    value: number | ((prevState: number) => number)
-  ) => {
-    setGuests((prevGuests) =>
-      Math.max(typeof value === "function" ? value(prevGuests) : value, 1)
-    );
-  };
-
-  const handleChildrenChange = (
-    value: number | ((prevState: number) => number)
-  ) => {
+  const handleChildrenChange = (value: number) => {
     setChildren((prevChildren) => {
-      const newValue = Math.max(
-        typeof value === "function" ? value(prevChildren) : value,
-        0
-      );
+      const newValue = Math.max(value, 0);
       setChildAges(Array.from({ length: newValue }, () => 1));
       return newValue;
     });
@@ -84,6 +54,14 @@ const GuestBox = () => {
   const handleApplyChanges = () => {
     if (isChildAgeValid()) {
       setDisplayText(` ${rooms} Rooms ${guests} Guests`);
+      dispatch(
+        setGuestDetails({
+          rooms,
+          guests,
+          children,
+          childAges,
+        })
+      );
       closeModal();
     } else {
       alert("Please provide valid ages for children (below 14).");
@@ -107,8 +85,8 @@ const GuestBox = () => {
           <label>Rooms</label>
           <div className="  flex gap-2 items-center">
             <button
-              className=" bg-[#D80032] w-9 h-9 text-white"
-              onClick={decRooms}
+              className="bg-[#D80032] w-9 h-9 text-white"
+              onClick={() => incDecHandler(setRooms, -1)}
             >
               -
             </button>
@@ -118,21 +96,21 @@ const GuestBox = () => {
               value={rooms}
               readOnly
               required
-              onChange={(e) => setNumOfRooms(parseInt(e.target.value))}
+              onChange={(e) => setRooms(parseInt(e.target.value))}
             />
             <button
-              className=" bg-[#D80032] w-9 h-9 mr-1 text-white"
-              onClick={incRooms}
+              className="bg-[#D80032] w-9 h-9 mr-1 text-white"
+              onClick={() => incDecHandler(setRooms, 1)}
             >
               +
             </button>
           </div>
 
           <label>Guests</label>
-          <div className=" flex gap-2 items-center">
+          <div className="flex gap-2 items-center">
             <button
-              className=" bg-[#D80032] w-9 h-9  text-white"
-              onClick={decNum}
+              className="bg-[#D80032] w-9 h-9 text-white"
+              onClick={() => incDecHandler(setGuests, -1)}
             >
               -
             </button>
@@ -145,8 +123,8 @@ const GuestBox = () => {
               onChange={(e) => setGuests(parseInt(e.target.value))}
             />
             <button
-              className=" bg-[#D80032] w-9 h-9 mr-1 text-white"
-              onClick={incNum}
+              className="bg-[#D80032] w-9 h-9 mr-1 text-white"
+              onClick={() => incDecHandler(setGuests, 1)}
             >
               +
             </button>
@@ -158,7 +136,7 @@ const GuestBox = () => {
             name="modalChildren"
             value={children}
             onChange={(e) => handleChildrenChange(parseInt(e.target.value))}
-            className=" p-2 border rounded-md bg-white w-[98px] "
+            className="p-2 border rounded-md bg-white w-[98px]"
           >
             {[0, 1, 2, 3, 4].map((option) => (
               <option key={option} value={option}>
@@ -211,6 +189,3 @@ const GuestBox = () => {
 };
 
 export default GuestBox;
-function setNumOfRooms(arg0: number) {
-  throw new Error("Function not implemented.");
-}

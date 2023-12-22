@@ -9,7 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import InputFields from "@/components/ui/input/input";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -113,8 +113,18 @@ const Register: React.FC = () => {
               </button>
             </div>
 
-            <button className="w-full px-4 py-2 tracking-wide text-white font-bold transition-colors duration-200 transform bg-[#FF745C] rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-              Sign In
+            <button
+              className="w-full flex justify-center items-center px-4 py-2 tracking-wide text-white font-bold transition-colors duration-200 transform bg-[#FF745C] rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="sr-only">Loading...</span>
+                  <Loader2 className="ml-4 w-6 h-6 animate-spin flex justify-center items-center" />
+                </>
+              ) : (
+                <>Register</>
+              )}
             </button>
           </form>
 
