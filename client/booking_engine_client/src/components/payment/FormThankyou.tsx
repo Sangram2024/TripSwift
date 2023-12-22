@@ -15,7 +15,7 @@ export default function FormThankYou() {
         className="mb-[35px]"
       />
       <h1 className="mb-4">THANK YOU!</h1>
-      <h2 className="mb-12">We've added your card details</h2>
+      <h2 className="mb-12">We have added your card details</h2>
       <button
         className="form--submit_btn bg-[#21092F] text-white w-[327px] h-[53px] rounded-lg lg:w-[381px]"
         aria-label="continue button"

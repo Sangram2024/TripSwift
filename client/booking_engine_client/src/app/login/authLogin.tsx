@@ -11,7 +11,9 @@ import LoginIcon from "@/components/assets/TRIP-1.png";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "@/Redux/store";
 import Cookies from "js-cookie";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { message } from "antd";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -33,10 +35,12 @@ const Login: React.FC = () => {
 
     try {
       await dispatch(login({ email, password }));
+      toast.success("Login successful");
 
       setLoading(false);
       router.push("/");
-    } catch (error) {
+    } catch (error: any) {
+      toast.error("Please verify your email and password");
       setLoading(false);
       console.log(error);
     }
@@ -88,8 +92,18 @@ const Login: React.FC = () => {
               </button>
             </div>
 
-            <button className="w-full px-4 py-2 tracking-wide text-white font-bold transition-colors duration-200 transform bg-[#FF745C] rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-              Sign In
+            <button
+              className="w-full flex justify-center items-center px-4 py-2 tracking-wide text-white font-bold transition-colors duration-200 transform bg-[#FF745C] rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="sr-only">Loading...</span>
+                  <Loader2 className="ml-4 w-6 h-6 animate-spin flex justify-center items-center" />
+                </>
+              ) : (
+                <>Login</>
+              )}
             </button>
           </form>
 
@@ -97,7 +111,7 @@ const Login: React.FC = () => {
             <div className="absolute px-5 bg-white">Or</div>
           </div>
           <p className="mt-4 text-sm text-center text-gray-700">
-            Don't have an account?{" "}
+            Don &#39; t have an account?{" "}
             <Link
               href="/register"
               className="font-medium text-[#FF745C] hover:underline"

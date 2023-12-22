@@ -1,25 +1,45 @@
 "use client";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "@/Redux/store";
+import { setHotelSearchDetails } from "@/Redux/slices/hotelcard.slice";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+
 import Image from "next/image";
 import HeroImage from "../assets/hotel-1.jpg";
 import DateRange from "./DateRange";
 import GuestBox from "./GuestBox";
-import Link from "next/link";
+import {} from "next/navigation";
 
 const HotelCard = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
   const router = useRouter();
+  const hotelSearchDetails = useSelector(
+    (state) => state.hotel.hotelSearchDetails
+  );
+  const dateRangeDetails = useSelector((state) => state.hotel.dateRangeDetails);
+  const guestDetails = useSelector((state) => state.hotel.guestDetails);
 
-  const handleSearch = (event: {
-    preventDefault: () => void;
-    target: { elements: { search: { value: any } } };
-  }) => {
+  const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
-    // setSearchQuery(newSearchQuery);
-    router.push(`/destination?location=${searchQuery}`);
+
+    const checkinDate = encodeURIComponent(dateRangeDetails.dates[0]);
+    const checkoutDate = encodeURIComponent(dateRangeDetails.dates[1]);
+
+    const dateRangeQueryString = `checkin=${checkinDate}&checkout=${checkoutDate}`;
+    const guestDetailsQueryString = `adults=${guestDetails.guests}&room$=${guestDetails.rooms}&children=${guestDetails.children}`;
+    const searchDetails = {
+      ...hotelSearchDetails,
+      ...dateRangeDetails,
+      ...guestDetails,
+      searchQuery,
+    };
+
+    console.log(searchDetails, "_______ details");
+
+    router.push(
+      `/destination?location=${searchQuery}&${dateRangeQueryString}&${guestDetailsQueryString}`
+    );
   };
 
   return (
@@ -51,15 +71,12 @@ const HotelCard = () => {
             <GuestBox />
           </div>
           <div>
-            {/* <Link   onClick={handleSearch} */}
-            {/* href={`/destination?location=${searchQuery}`} passHref> */}
             <button
               onClick={handleSearch}
               className="bg-[#D80032] text-xl text-white p-[6px] w-32 rounded-md"
             >
               Search
             </button>
-            {/* </Link> */}
           </div>
         </div>
       </section>

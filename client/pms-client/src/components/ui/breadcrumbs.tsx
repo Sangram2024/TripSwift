@@ -66,6 +66,7 @@ export default function Breadcrumbs({}: Props) {
       {filteredSegments.map((segment, index) => {
         return (
           <NextUIBreadcrumbsItem
+            key={`${JSON.stringify(segment) + index}`}
             href={SEGMENT_TYPES.find((type) => type.name === segment)?.link}
             startContent={
               SEGMENT_TYPES.find((type) => type.name === segment)?.icon

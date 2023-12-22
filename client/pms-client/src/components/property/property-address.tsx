@@ -90,7 +90,7 @@ export default function PropertyAddress({ onNext, onPrevious }: Props) {
       state: "",
       city: "",
       landmark: "",
-      zip_code: 0,
+      zip_code: "0",
     },
     resolver: zodResolver(createPropertyAddressSchema),
   });

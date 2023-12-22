@@ -38,8 +38,8 @@ const HotelDetailsCard = (data:any) => {
   const description =
     "Spacious and comfortable room with a king-size bed and balcony.";
   const type = "Dulex";
-  const bookingDateFrom = "2023-12-15";
-  const bookingDateTo = "2023-12-20";
+  const bookingDateFrom = "2023-12-24";
+  const bookingDateTo = "2023-12-27";
   const price = data?.data?.roomData?.data?.price;
   const discount = 0.1;
   const buttonText = "Book Now";
@@ -57,7 +57,9 @@ const HotelDetailsCard = (data:any) => {
  
   const authUser = useSelector((state) => state.authReducer.user);
 
-  const formUser = useSelector((state) => state.userFormReducer.formData)
+  const formUser = useSelector((state) => state.userFormReducer.formData);
+
+  console.log(formUser.firstName);
 
   console.log(authUser?._id, "user data in hotel details card");
 
@@ -76,6 +78,135 @@ const HotelDetailsCard = (data:any) => {
 
 
 
+  const handlePayNowClick = async (payableAmount:any) => {
+    // console.log(">>>>>>>>>>>>>>>>>>>");
+
+    const response = await axios.post(
+      "http://localhost:8010/payment/checkout",
+      { amount: payableAmount },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // console.log(response, ">>>>>>>>>>>>>>>>>>>.");
+
+    var options = {
+      key: "rzp_test_mBBfOCZrMx5wNc", // Enter the Key ID generated from the Dashboard
+      amount: response.data.data.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "Acme Corp", //your business name
+      description: "Test Transaction",
+      image: "https://example.com/your_logo",
+      order_id: response.data.data.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: function (response: any) {
+        // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>start>>>>>>.');
+        
+        verifyPayment(response);
+      },
+      prefill: {
+        //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+        name: "Gaurav Kumar", //your customer's name
+        email: "gaurav.kumar@example.com",
+        contact: "9437948060", //Provide the customer's phone number for better conversion rates
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+
+    rzp1.on("payment.failed", function (response: any) {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+    
+  };
+
+  async function verifyPayment(response: any) {
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>start2>>>>>>.');
+
+    const verify = await axios.post(
+      "http://localhost:8010/payment/verify",
+      {
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_signature: response.razorpay_signature,
+        roomData:data?.data?.roomData
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if(verify.data.status == 'success'){
+      reserved_room('success');
+    }
+    // console.log(verify, ">>>>>>>>>>>>>>>>>>>>>>>>>>.");
+  }
+
+  // console.log(data?.data,'>>>>>>>>>>>>>.ss');
+ 
+  
+  async function reserved_room(paymentStatus:string) {
+
+     if (paymentStatus === "success") {
+      let currentDate = new Date().toJSON().slice(0, 10);
+      try {
+        const requestData = {
+          room: data?.data?.roomData.data._id,
+          user: authUser._id,
+          property: data?.data?.roomData.data.propertyInfo_id,
+          amount: payableAmount,
+          booking_dates: currentDate,
+          payment: "65804086a9317c837f044290",
+          status: "pending",
+          checkInDate: bookingDateFrom,
+          checkOutDate: bookingDateTo,
+        };
+
+        const response = await axios.post(
+          "http://localhost:8080/api/v1/booking/createreservation",
+          requestData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.data.status) {
+          console.log(response.data,'>>>>>>>>>>>>>>>>.');
+          console.log(response.data.status);
+          console.log("Reservation created successfully");
+          router.push('/')
+          
+        } else {
+          console.error(
+            "Failed to create reservation:",
+            response.data.error || "Unknown error"
+          );
+        }
+      } catch (error: any) {
+        console.error("An error occurred:", error.message || "Unknown error");
+      }
+    } else {
+      console.error("Payment failed. Please try again.");
+    }
+    
+  }
 
   return (
     <div className="bg-white shadow-md rounded overflow-hidden max-w-2xl mx-auto border">

@@ -40,12 +40,15 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Settings, User } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { RootState, store, useSelector } from "../../redux/store";
 
 type Props = {};
 
 export default function Navbar({}: Props) {
   const pathname = usePathname();
   const [noNav, setNoNav] = useState(false);
+
+  const { user } = useSelector((state: RootState) => state.authReducer);
 
   useEffect(() => {
     const isLoginORregisterPath =
@@ -74,7 +77,11 @@ export default function Navbar({}: Props) {
               <NavigationMenuTrigger>Properties</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="p-1 space-y-2">
-                  <Link href={"/property"}>
+                  <Link
+                    href={`/property?token=${
+                      store.getState().authReducer.accessToken
+                    }`}
+                  >
                     <Button variant={"ghost"}>Manage Properties</Button>
                   </Link>
                 </div>
@@ -86,8 +93,11 @@ export default function Navbar({}: Props) {
           <MenubarMenu>
             <MenubarTrigger className="space-x-2">
               <Avatar className="h-6 w-6">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src="https://github.com/shadcnn.png" />
+                <AvatarFallback>
+                  {user?.firstName?.charAt(0).toUpperCase()}
+                  {user?.lastName.charAt(0).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <p>Ritesh</p>
             </MenubarTrigger>
