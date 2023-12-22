@@ -24,7 +24,7 @@ const PayNowFunction = (props: Props) => {
       key: "rzp_test_mBBfOCZrMx5wNc", // Enter the Key ID generated from the Dashboard
       amount: response.data.data.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
-      name: "Acme Corp", //your business name
+      name: "Tripswift", //your business name
       description: "Test Transaction",
       image: "https://example.com/your_logo",
       order_id: response.data.data.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
