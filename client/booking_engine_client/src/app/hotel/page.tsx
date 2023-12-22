@@ -155,6 +155,7 @@ const page = () => {
                                 4.0
                               </div>{" "}
                               <img
+                                title="image"
                                 loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/e0a44fce741041bdc50d45c261372d5c3d8837de546a7731cf0b6f3b762063d0?apiKey=06bef42c624743a9888f5d8e0d15a6ad&"
                                 className="aspect-square object-contain object-center w-5 overflow-hidden shrink-0 max-w-full"
@@ -166,7 +167,7 @@ const page = () => {
                         <Link   href={`/booking?id=${allRooms._id}`} passHref
                           className="bg-red-600  rounded px-4 py-2 text-white hover:bg-red-700 focus:outline-none focus:ring focus:border-blue-300"
                         >
-                          Book Now
+                          Pay Now
                         </Link>
                         </div>
                        
