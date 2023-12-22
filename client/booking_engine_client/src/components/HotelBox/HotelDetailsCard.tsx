@@ -7,11 +7,14 @@ import { Star } from "../ui/Star";
 import Image from "next/image";
 import Img from "@/components/assets/doublebedroom.jpg";
 import { useDispatch, useSelector } from "@/Redux/store";
-import {useSearchParams} from 'next/navigation'
+import {useSearchParams,useRouter} from 'next/navigation'
+import axios from 'axios'
 
 const HotelDetailsCard = (data:any) => {
 
   const [isClickable, setIsClickable] = useState("")
+  
+  const router = useRouter();
   const [bookData, setBookData] = useState({
     property: "",
     room: "",
@@ -97,7 +100,7 @@ const HotelDetailsCard = (data:any) => {
       key: "rzp_test_mBBfOCZrMx5wNc", // Enter the Key ID generated from the Dashboard
       amount: response.data.data.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
-      name: "Acme Corp", //your business name
+      name: "Trip Swift", //your business name
       description: "Test Transaction",
       image: "https://example.com/your_logo",
       order_id: response.data.data.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -151,7 +154,8 @@ const HotelDetailsCard = (data:any) => {
         },
       }
     );
-
+      console.log(verify,"verify-<<<<<<<<<<,");
+      
     if(verify.data.status == 'success'){
       reserved_room('success');
     }
@@ -274,7 +278,7 @@ const HotelDetailsCard = (data:any) => {
           <div className="flex justify-end mt-8 mb-4">
         <button
           className="bg-red-500 text-white px-4 py-2 rounded shadow-md hover:bg-red-700"
-          // onClick={handleClick}
+          onClick={()=>handlePayNowClick(payableAmount)}
         >
           {buttonText}
         </button>
