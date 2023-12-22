@@ -8,11 +8,13 @@ import {
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/auth.slice";
 import userFormReducer from "./slices/useForm.slice";
+import hotelReducer from "./slices/hotelcard.slice";
 
 export const store = configureStore({
   reducer: {
     authReducer,
     userFormReducer,
+    hotel: hotelReducer,
   },
 });
 

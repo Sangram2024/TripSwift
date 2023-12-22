@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Home from "@/components/assets/modern-house.png";
-import Trip from "@/components/assets/business-trip.png";
+import Globe from "@/components/assets/globe.png";
 import MTrip from "@/components/assets/traveling.png";
 import Image from "next/image";
 import Logo from "../assets/TRIP-1.png";
@@ -84,15 +84,16 @@ const Navbar = React.memo((props: Props) => {
             </div>
 
             <div
-              className={`fixed top-0 right-0 sm:h-screen lg:h-auto lg:w-auto sm:w-[80%] lg:bg-white sm:bg-gray-100 lg:z-0 sm:z-40 transition-all duration-300`}
+              className={`fixed top-0 right-0 sm:h-screen lg:h-auto lg:w-auto sm:w-[80%] pr-3 lg:bg-white sm:bg-gray-100 lg:z-0 sm:z-40 transition-all duration-300`}
               onClick={closeMenu}
             >
-              <ul className="lg:flex flex-col lg:flex-row items-center lg:mt-0 sm:mt-20  lg:p-3 sm:p-1  gap-4">
+              <ul className="lg:flex flex-col lg:flex-row items-center lg:mt-0 sm:mt-20  lg:p-3 sm:p-1  gap-4  ">
                 <li className="justify-end items-stretch border  cursor-not-allowed flex gap-2 pl-2 p-2 rounded-lg transition max-md:max-w-full max-md:flex-wrap max-md:pl-5">
-                  <img
+                  <Image
                     loading="lazy"
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/3e6875fa2cf4225b8651e5b60638488dbf76ca42a575a25b1180ad99cc07db86?apiKey=06bef42c624743a9888f5d8e0d15a6ad&"
-                    className="aspect-square object-contain object-center w-7  overflow-hidden self-center shrink-0 max-w-full my-auto"
+                    src={Globe}
+                    className="aspect-square object-contain object-center w-6  overflow-hidden self-center shrink-0 max-w-full my-auto"
+                    alt={"host iamge"}
                   />
                   <div className="text-black text-sm font-medium  leading-5 self-center grow whitespace-nowrap my-auto">
                     Become a Host
@@ -100,11 +101,12 @@ const Navbar = React.memo((props: Props) => {
                 </li>
 
                 <Link href={"/my-trip"}>
-                  <li className="justify-end items-stretch flex gap-4  p-2 border rounded-lg hover:border-gray-500 transition max-md:max-w-full max-md:flex-wrap max-md:pl-5">
-                    <img
+                  <li className="justify-end items-stretch flex gap-2 p-2 border rounded-lg hover:border-gray-500 transition max-md:max-w-full max-md:flex-wrap max-md:pl-5">
+                    <Image
                       loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/3e6875fa2cf4225b8651e5b60638488dbf76ca42a575a25b1180ad99cc07db86?apiKey=06bef42c624743a9888f5d8e0d15a6ad&"
+                      src={MTrip}
                       className="aspect-square object-contain object-center w-6 overflow-hidden self-center shrink-0 max-w-full my-auto"
+                      alt={""}
                     />
                     <div className="text-black text-sm font-medium leading-5 self-center grow whitespace-nowrap my-auto">
                       My Trip
