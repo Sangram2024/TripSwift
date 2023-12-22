@@ -18,11 +18,17 @@ type BookingType = {
   createdAt: Date;
   updatedAt: Date;
   };
-const createBooking = () =>{
+const createBooking = (data:BookingType) =>{
     
     return new Promise ((resolve, reject)=>{
         axios.post(`${Config.bookingUrl}/createreservation`,{
-
+            data
+        })
+        .then((result:any)=>{
+            resolve(result.data)
+        })
+        .catch((error:any)=>{
+            reject(error)
         })
     })
-}
+};
