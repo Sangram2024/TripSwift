@@ -75,9 +75,9 @@ export default function HomeSection() {
         ))}
       </div>
 
-      <div>
+      {/* <div>
         <Newsletter />
-      </div>
+      </div> */}
     </>
   );
 }
