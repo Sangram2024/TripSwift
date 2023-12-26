@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "../lib/utils";
 import { ThemeProvider } from "../components/theme-provider";
+import Navbar from "./../components/navbar/navbar";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
 
@@ -36,7 +37,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Providers>{children}</Providers>
+          <Providers>
+            <Navbar />
+            {children}
+          </Providers>
         </ThemeProvider>
         <Toaster position="top-right" />
       </body>

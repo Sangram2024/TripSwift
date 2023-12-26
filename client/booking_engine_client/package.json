@@ -1,0 +1,49 @@
+{
+  "name": "booking_engine_client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port=3001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@mantine/core": "^7.2.2",
+    "@mantine/hooks": "^7.2.2",
+    "@material-tailwind/react": "^2.1.7",
+    "@nextui-org/react": "^2.2.9",
+    "@reduxjs/toolkit": "^2.0.1",
+    "antd": "^5.12.2",
+    "axios": "^1.6.2",
+    "date-and-time": "^3.0.3",
+    "framer-motion": "^10.16.5",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
+    "lucide": "^0.292.0",
+    "lucide-react": "^0.293.0",
+    "moment": "^2.29.4",
+    "next": "14.0.3",
+    "prop-types": "^15.8.1",
+    "react": "^18",
+    "react-avatar": "^5.0.3",
+    "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
+    "react-redux": "^9.0.4",
+    "react-slick": "^0.29.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}

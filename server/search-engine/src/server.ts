@@ -5,11 +5,11 @@ import elasticClient from "./service/elasticsearch";
 import Hotel from "./model/hotel.model";
 import './model/property.info.model';
 import './model/property.aminites.model';
-import { createPropertyIndexAndDoc, createRoomIndexAndDoc } from "./sync_controllers/syncData";
+import { createPropertyIndexAndDoc} from "./sync_controllers/syncData";
+import { Room } from "./model/room.model";
+
+
 dotenv.config()
-
-
-
 
 async function checkElasticClient() {
     try {
@@ -32,5 +32,20 @@ connectDB()
     console.log("MONGO db connection failed !!! ", err);
 })
 checkElasticClient();
-createRoomIndexAndDoc();
 createPropertyIndexAndDoc();
+
+
+
+(async()=>{
+    const changeStream = Room.watch();
+    changeStream.on("change", next => {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>', 'change');
+        
+        createPropertyIndexAndDoc();
+        // close();
+    });
+
+    async function close() {
+        await changeStream.close();
+    }
+})()

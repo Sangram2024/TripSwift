@@ -1,15 +1,6 @@
 "use client";
 
-import { login } from "../../../actions/actions";
 import { Button } from "../../../components/ui/button";
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "../../../components/ui/card";
 import { Checkbox } from "../../../components/ui/checkbox";
 import {
   Dialog,
@@ -21,15 +12,7 @@ import {
 } from "../../../components/ui/dialog";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
-import { encodeStr } from "../../../lib/utils";
-import { Input as NextUIInput } from "@nextui-org/react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Button as NextUIButton,
-} from "@nextui-org/react";
+import { Button as NextUIButton } from "@nextui-org/react";
 import Link from "next/link";
 import { ReloadIcon } from "@radix-ui/react-icons/";
 import { redirect, useRouter } from "next/navigation";
@@ -42,6 +25,9 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosResponse } from "axios";
+import { RootState, useDispatch, useSelector } from "./../../../redux/store";
+import { login, getUser } from "./../../../redux/slices/authSlice";
+import { getProperties } from "./../../../redux/slices/propertySlice";
 
 type Props = {};
 
@@ -65,9 +51,15 @@ type Inputs = {
 };
 
 export default function LoginForm({}: Props) {
-  const [state, formAction] = useFormState(login, null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [isVisible, setIsVisible] = React.useState(false);
+  const dispatch = useDispatch();
+
+  const { accessToken } = useSelector((state: RootState) => state.authReducer);
+
+  const { properties, draftProperties } = useSelector(
+    (state: RootState) => state.propertyReducer
+  );
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -93,63 +85,26 @@ export default function LoginForm({}: Props) {
     passwordError && toast.error(passwordError.message!);
   }, [emailError, passwordError]);
 
+  useEffect(() => {
+    if (accessToken && (properties.length || draftProperties.length)) {
+      router.push(`/property?token=${accessToken}`);
+    }
+  }, [accessToken, properties, draftProperties]);
+
+  useEffect(() => {
+    if (accessToken && !properties.length && !draftProperties.length) {
+      router.push("/property/create");
+    }
+  }, [accessToken, properties, draftProperties]);
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
 
-    console.log(data);
-
     try {
-      const res = await axios.post("http://localhost:8020/api/v1/auth/login", {
-        ...data,
-      });
+      await dispatch(login(data));
+      await dispatch(getUser());
+      await dispatch(getProperties());
 
-      // const {
-      //   data: {
-      //     data: { properties, draftProperties },
-      //   },
-      // } = await axios.get("http://localhost:8040/api/v1/property/me", {
-      //   headers: {
-      //     Authorization: "Bearer " + res.data.data.accessToken,
-      //   },
-      // });
-
-      // await axios.get("http://localhost:8020/api/v1/user/me", {
-      //   headers: {
-      //     Authorization: "Bearer " + res.data.data.accessToken,
-      //   },
-      // });
-
-      const results: PromiseSettledResult<AxiosResponse<any, any>>[] =
-        await Promise.allSettled([
-          axios.get("http://localhost:8040/api/v1/property/me", {
-            headers: {
-              Authorization: "Bearer " + res.data.data.accessToken,
-            },
-          }),
-          axios.get("http://localhost:8020/api/v1/user/me", {
-            headers: {
-              Authorization: "Bearer " + res.data.data.accessToken,
-            },
-          }),
-        ]);
-
-      const {
-        fulfilledResults: [propertyResponse, getMeResponse],
-        rejectedResults: [propertyError, getMeError],
-      } = handleResults(results);
-
-      const {
-        data: { draftProperties, properties },
-      } = propertyResponse;
-      const {
-        data: { user },
-      } = getMeResponse;
-
-      if (!properties.length && !draftProperties.length) {
-        router.push(
-          `/property/create?auth=${res.data.data.accessToken}&userId=${user?._id}`
-        );
-      }
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -160,22 +115,8 @@ export default function LoginForm({}: Props) {
     }
   };
 
-  function handleResults(
-    results: PromiseSettledResult<AxiosResponse<any, any>>[]
-  ) {
-    const fulfilledResults: AxiosResponse<any, any>[] = [];
-    const rejectedResults: AxiosResponse<any, any>[] = [];
-
-    results.forEach((result, index) => {
-      if (result.status === "fulfilled") {
-        fulfilledResults.push(result.value!.data);
-      }
-      if (result.status === "rejected") {
-        rejectedResults.push(result.reason.response.data);
-      }
-    });
-
-    return { fulfilledResults, rejectedResults };
+  function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   return (
@@ -276,7 +217,7 @@ export default function LoginForm({}: Props) {
         </div>
         <div className="flex flex-col items-center">
           <span>
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Button
               type="button"
               className="px-0"
@@ -293,7 +234,7 @@ export default function LoginForm({}: Props) {
   );
 }
 
-function SubmitButton({ loading }) {
+function SubmitButton({ loading }: { loading: any }) {
   return (
     <NextUIButton
       size="lg"

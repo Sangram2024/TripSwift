@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: ENOMEM: not enough memory, scandir '/app'
+  Error: ENOMEM: not enough memory, fstat
 
 npm manifest: 
   {
