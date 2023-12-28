@@ -70,7 +70,7 @@ function Navitem({
   };
 }) {
   return (
-    <Link aria-disabled={disabled} href={link}>
+    <Link href={link}>
       <Button
         disabled={disabled}
         variant={activePath.title === title ? "secondary" : "ghost"}

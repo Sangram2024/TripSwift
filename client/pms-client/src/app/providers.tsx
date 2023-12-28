@@ -19,6 +19,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     router.push(`${pathname}?token=${accessToken}`);
   }, [pathname]);
 
+  console.log({ accessToken });
+
   return (
     <NextUIProvider>
       <ReduxProvider>{children}</ReduxProvider>
