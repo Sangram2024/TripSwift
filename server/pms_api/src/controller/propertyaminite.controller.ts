@@ -54,6 +54,10 @@ const createPropertyAminite = catchAsync(
       property_aminite: newPropertyAminite._id,
     });
 
+    await PropertyInfo.findByIdAndUpdate(propertyInfo, {
+      isDraft: false,
+    });
+
     res.status(201).json({
       status: "success",
       error: false,

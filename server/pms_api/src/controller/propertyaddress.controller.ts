@@ -39,6 +39,8 @@ const createPropertyAddress = catchAsync(
     await PropertyInfo.findByIdAndUpdate(propertyInfo, {
       property_address: newPropertyAddress._id,
     });
+
+    
     const address = await PropertyAddress.find({ propertyInfo: propertyInfo });
 
     res.status(201).json({
