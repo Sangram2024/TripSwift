@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { AppError } from "../utils/appError";
 import { Request, catchAsync } from "../utils/catchAsync";
-import { PropertyAminite } from "../model/property.aminites.model";
+import { PropertyAminite } from "../model/property.aminites.category.model";
 import { PropertyInfo } from "../model/property.info.model";
 
 const createPropertyAminite = catchAsync(
