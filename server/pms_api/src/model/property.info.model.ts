@@ -4,9 +4,9 @@ import {
   PropertyAddressType,
 } from "../model/property.address.model";
 import {
-  PropertyAminite,
-  PropertyAnimiteType,
-} from "../model/property.aminites.model";
+  PropertyAmeniteCategory,
+  PropertyAmeniteCategoryType
+} from "../model/property.amenites.category.model";
 
 import {
   Room,
@@ -22,7 +22,7 @@ interface PropertyInfoType extends Document {
   star_rating: mongoose.Types.Decimal128;
   property_code: string;
   property_address: Types.ObjectId | PropertyAddressType;
-  property_aminite: Types.ObjectId | PropertyAnimiteType;
+  property_amenite_category: Types.ObjectId | PropertyAmeniteCategoryType;
   property_room: Types.ObjectId | RoomType;
   image: string[];
   description: string;
@@ -37,7 +37,7 @@ const propertyInfoSchema = new Schema<PropertyInfoType>({
   star_rating: { type: String, required: true },
   property_code: { type: String, required: true },
   property_address: { type: Schema.Types.ObjectId, ref: "PropertyAddress" },
-  property_aminite: { type: Schema.Types.ObjectId, ref: "PropertyAminite" },
+  property_amenite_category: { type: Schema.Types.ObjectId, ref: "PropertyAmeniteCategory" },
   property_room: { type: Schema.Types.ObjectId, ref: "Room" },
 
   image: [{ type: String }],

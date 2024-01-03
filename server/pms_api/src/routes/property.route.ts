@@ -14,12 +14,14 @@ import {
   deletePropertyAddress,
   getPropertyAddressById,
 } from "../controller/propertyaddress.controller";
-import {
-  createPropertyAminite,
-  getPropertyAminiteById,
-  getPropertyAminites,
-  getDestinationType
-} from "../controller/propertyaminite.controller";
+
+
+import { createPropertyAmeniteCategory,
+          getPropertyAmeniteCategory,
+          getPropertyAminitesategories,
+          getDestinationType
+
+} from "../controller/property/property.amenite.category";
 
 import { createPaymentMethod } from "../controller/property/paymentmethod.controller";
 // import { protect } from "@quotus_packages/auth_middleware";
@@ -43,9 +45,9 @@ router
   .delete(protect as any, deletePropertyAddress as any);
 
 // property aminites router
-router.route("/amenities").post(protect as any, createPropertyAminite as any);
-router.route("/amenities/:id").get(getPropertyAminiteById as any);
-router.route("/allamenities").get(getPropertyAminites as any);
+router.route("/amenities").post(protect as any, createPropertyAmeniteCategory as any);
+router.route("/amenities/:id").get(getPropertyAmeniteCategory as any);
+router.route("/allamenities").get(getPropertyAminitesategories as any);
 router.route("/destination").get(getDestinationType as any);
 
 
