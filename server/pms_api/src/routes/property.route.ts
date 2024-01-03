@@ -6,7 +6,7 @@ import {
   updatePropertyInfo,
   deleteProperty,
   getMyProperties,
-  getProperties
+  getProperties,
 } from "../controller/propertyInfo.controller";
 import {
   createPropertyAddress,
@@ -18,16 +18,31 @@ import {
   createPropertyAminite,
   getPropertyAminiteById,
   getPropertyAminites,
-  getDestinationType
+  getDestinationType,
 } from "../controller/propertyaminite.controller";
 
 import { createPaymentMethod } from "../controller/property/paymentmethod.controller";
 // import { protect } from "@quotus_packages/auth_middleware";
 import { protect } from "../middlewares/auth.middleware";
+import {
+  createPropertyCategory,
+  getAllPropertyCategories,
+  getPropertyCategory,
+} from "../controller/propertycategory.controller";
+import { createPropertyType } from "../controller/propertytype.controller";
 
 const router = Router();
 
 router.route("/me").get(protect as any, getMyProperties as any);
+
+router
+  .route("/category")
+  .get(getAllPropertyCategories as any)
+  .post(protect as any, createPropertyCategory as any);
+
+router.route("/category/:propertyCategoryID").get(getPropertyCategory as any);
+
+router.route("/type").post(protect as any, createPropertyType as any);
 
 // property payment router
 router
@@ -47,8 +62,6 @@ router.route("/amenities").post(protect as any, createPropertyAminite as any);
 router.route("/amenities/:id").get(getPropertyAminiteById as any);
 router.route("/allamenities").get(getPropertyAminites as any);
 router.route("/destination").get(getDestinationType as any);
-
-
 
 // property router
 router.route("/properties").get(getProperties as any);

@@ -1,11 +1,9 @@
-import mongoose, {  Model  } from "mongoose";
+import mongoose, { Model } from "mongoose";
 
 export interface UserType {
   userId: string;
   role: string;
 }
-
-
 
 type UserModelType = Model<UserType>;
 
@@ -26,11 +24,6 @@ const userSchema = new mongoose.Schema<UserType, {}, {}>(
   }
 );
 
-
-
-
-
 const User = mongoose.model<UserType, UserModelType>("User", userSchema);
 
 export default User;
-

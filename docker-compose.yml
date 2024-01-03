@@ -42,7 +42,6 @@ services:
     logging:
       driver: none
   payment:
-    container_name: "tripswift-payment"
     build:
       context: .
       dockerfile: ./server/payment/Dockerfile
@@ -66,7 +65,6 @@ services:
       - ./server/payment:/app/
       - /app/node_modules
   authentication:
-    container_name: "tripswift-auth"
     build:
       context: .
       dockerfile: ./server/authentication/Dockerfile
@@ -94,7 +92,6 @@ services:
       - ./server/authentication:/app/
       - /app/node_modules
   search:
-    container_name: "tripswift-search-engine"
     build:
       context: ./server/search-engine
       dockerfile: ./Dockerfile
@@ -120,9 +117,7 @@ services:
       - /app/node_modules
     logging:
       driver: none
-
-  pms_api:
-    container_name: "tripswift-pms_api"
+  extranet:
     build:
       context: .
       dockerfile: ./server/pms_api/Dockerfile
@@ -152,7 +147,6 @@ services:
     logging:
       driver: none
   user:
-    container_name: "tripswift-user"
     build:
       context: .
       dockerfile: ./server/user/Dockerfile
@@ -176,7 +170,7 @@ services:
       - ./server/user:/app/
       - /app/node_modules
   pms_client:
-    container_name: "tripswift-pms_client"
+    container_name: "extranet-client"
     build:
       context: .
       dockerfile: ./client/pms-client/Dockerfile
@@ -194,9 +188,7 @@ services:
     volumes:
       - ./client/pms-client:/app/
       - /app/node_modules
-
   booking_engine:
-    container_name: "tripswift-booking_engine"
     build:
       context: .
       dockerfile: ./server/booking_engine/Dockerfile
@@ -225,29 +217,28 @@ services:
       - /app/node_modules
     logging:
       driver: none
-
-  booking_engine_client:
-    container_name: "tripswift-booking_engine_client"
-    build:
-      context: .
-      dockerfile: ./client/booking_engine_client/Dockerfile
-    restart: always
-    ports:
-      - 3001:3001
-    depends_on:
-      - kafka
-      - mongo
-      - search
-      # - authentication
-      # - payment
-      - pms_api
-    networks:
-      - tripswift-network
-    volumes:
-      - ./client/booking_engine_client:/app/
-      - /app/node_modules
-    logging:
-      driver: none
+  # booking_engine_client:
+  # container_name: "tripswift-booking_engine_client"
+  # build:
+  #   context: .
+  #   dockerfile: ./client/booking_engine_client/Dockerfile
+  # restart: always
+  # ports:
+  #   - 3001:3001
+  # depends_on:
+  #   - kafka
+  #   - mongo
+  #   - search
+  #   # - authentication
+  #   # - payment
+  #   - pms_api
+  # networks:
+  #   - tripswift-network
+  # volumes:
+  #   - ./client/booking_engine_client:/app/
+  #   - /app/node_modules
+  # logging:
+  #   driver: none
 
 networks:
   tripswift-network:
