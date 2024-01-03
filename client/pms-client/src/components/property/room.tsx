@@ -192,7 +192,7 @@ export default function Rooms({ onNext, onPrevious }: Props) {
       name: "",
       type: "",
       price: "0",
-      available: false,
+      available: true,
       capacity: "0",
       bed: "single",
       bathroom: false,

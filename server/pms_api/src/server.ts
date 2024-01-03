@@ -1,5 +1,4 @@
 import express, { NextFunction, Request, Response } from "express";
-import hotelRouter from "./routes/hotel.route";
 import propertyRouter from "./routes/property.route";
 import uploadRouter from "./routes/upload.route";
 import roomRouter from "./routes/room.route";
@@ -21,7 +20,6 @@ const DB = process.env.MONGO_URI;
 app.use("/api/v1/property", propertyRouter);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/v1/room", roomRouter);
-app.use("/api/v1", hotelRouter);
 
 app.all("*", (req: Request, _res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} path on the server`, 404));

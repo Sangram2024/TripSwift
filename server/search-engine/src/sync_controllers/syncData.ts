@@ -17,7 +17,7 @@ export async function createPropertyIndexAndDoc() {
       model: 'PropertyAminite'
     }
   }).lean();
-  // console.log(location);
+  console.log(location);
   
   const client = elasticClient();
   try {

@@ -91,16 +91,16 @@ const Navbar = React.memo((props: Props) => {
               onClick={closeMenu}
             >
               <ul className="lg:flex flex-col lg:flex-row items-center lg:mt-0 sm:mt-20  lg:p-3 sm:p-1  gap-4  ">
-                <li className="justify-end items-stretch border  cursor-not-allowed flex gap-2 pl-2 p-2 rounded-lg transition max-md:max-w-full max-md:flex-wrap max-md:pl-5">
+                <li className="justify-end items-stretch border hover:border-gray-500   flex gap-2 pl-2 p-2 rounded-lg transition max-md:max-w-full max-md:flex-wrap max-md:pl-5">
                   <Image
                     loading="lazy"
                     src={Globe}
                     className="aspect-square object-contain object-center w-6  overflow-hidden self-center shrink-0 max-w-full my-auto"
                     alt={"host iamge"}
                   />
-                  <div className="text-black text-sm font-medium  leading-5 self-center grow whitespace-nowrap my-auto">
+                  <Link href={"http://localhost:3000/login"} target="_blank"  className="text-black text-sm font-medium  leading-5 self-center grow whitespace-nowrap my-auto">
                     Become a Host
-                  </div>
+                  </Link>
                 </li>
 
                 <Link href={"/my-trip"}>
