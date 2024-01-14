@@ -5,14 +5,13 @@ import mongoose, {
   Types,
 } from "mongoose";
 
-enum Category {
+export enum Category {
   HOTEL = "HOTEL",
   HOMESTAY = "HOMESTAY",
 }
 
 export type PropertyCategory = {
   category: Category;
-  propertyTypes: Types.ObjectId[];
 };
 
 type PropertyCategoryModelType = Model<PropertyCategory>;
@@ -25,12 +24,6 @@ const propertyCategorySchema = new mongoose.Schema<PropertyCategory>(
       default: Category.HOTEL,
       required: true,
     },
-    propertyTypes: [
-      {
-        type: Types.ObjectId,
-        ref: "PropertyType",
-      },
-    ],
   },
   {
     timestamps: true,

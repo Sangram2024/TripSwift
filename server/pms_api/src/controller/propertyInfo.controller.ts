@@ -3,6 +3,8 @@ import { AppError } from "../utils/appError";
 import { Request, catchAsync } from "../utils/catchAsync";
 import { PropertyInfo } from "../model/property.info.model";
 import { decodeToken } from "../utils/jwtHelper";
+import { UserType } from "../model/user.model";
+import { Category, PropertyCategory } from "../model/propertycategory.model";
 
 const getMyProperties = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -31,8 +33,22 @@ const getMyProperties = catchAsync(
 );
 
 const createpropertyInfo = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as any;
+  async (
+    req: Request<UserType["userId"]>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (req.role === "user") {
+      return next(
+        new AppError("You are not allowed to perform this  action", 401)
+      );
+    }
+
+    const user = req.user;
+
+    let isHotelFlow = false;
+    let isHomestayFlow = false;
+
     const {
       property_name,
       property_email,
@@ -41,7 +57,14 @@ const createpropertyInfo = catchAsync(
       property_code,
       image,
       description,
+      property_category,
+      property_type,
     } = req.body;
+
+    const propertyCategory = property_category as Category;
+
+    if (propertyCategory === Category.HOTEL) isHotelFlow = true;
+    if (propertyCategory === Category.HOMESTAY) isHomestayFlow = true;
 
     if (!req.body) {
       next(new AppError("Please fill all the required fields", 400));
@@ -55,13 +78,7 @@ const createpropertyInfo = catchAsync(
       next(new AppError("A property is already exits with this email", 400));
     }
 
-    if (req.role === "user") {
-      return next(
-        new AppError("You do not allowed to perform this  action", 400)
-      );
-    }
-
-    const newPropertyInfo = await PropertyInfo.create({
+    const newProperty = new PropertyInfo({
       user_id: user,
       property_name,
       property_email,
@@ -69,14 +86,22 @@ const createpropertyInfo = catchAsync(
       star_rating,
       property_code,
       image,
+      property_category,
+      property_type,
       description,
     });
+
+    await newProperty.save();
 
     res.status(201).json({
       status: "success",
       error: false,
       message: "Property registered successfully",
-      data: newPropertyInfo,
+      data: {
+        isHomestayFlow,
+        isHotelFlow,
+        property: newProperty,
+      },
     });
   }
 );

@@ -19,12 +19,12 @@ export const instance = new Razorpay({
 connect(DB as string)
   .then((connection) => {
     console.log(
-      `Database successfully running on ${connection.connection.host}`
+      `💵 Pms database successfully running on ${connection.connection.host}`
     );
     consumeEvent();
 
     app.listen(PORT, () => {
-      console.log(`Pms server is running on port ${PORT}`);
+      console.log(`💵 Pms server is running on port ${PORT}`);
     });
   })
   .catch((err) => console.log(`Error: ${err}`));

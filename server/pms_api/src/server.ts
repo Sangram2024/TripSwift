@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import propertyRouter from "./routes/property.route";
 import uploadRouter from "./routes/upload.route";
 import roomRouter from "./routes/room.route";
+import ameniteRouter from "./routes/amenite.route";
 import cors from "cors";
 import morgan from "morgan";
 import { AppError } from "./utils/appError";
@@ -17,6 +18,7 @@ app.use(morgan("dev"));
 const PORT = process.env.PORT;
 const DB = process.env.MONGO_URI;
 
+app.use("/api/v1/amenite", ameniteRouter);
 app.use("/api/v1/property", propertyRouter);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/v1/room", roomRouter);
