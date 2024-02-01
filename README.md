@@ -1,5 +1,6 @@
 # TripSwift
 
+
 Vision: To revolutionize travel planning by eliminating tedious searching and replacing it with effortless, personalized hotel recommendations.
 
 Our Solution: Introducing a cutting-edge hotel management system and online travel agency powered by Natural Language Processing (NLP). Users simply describe their ideal travel experience in natural language, and our system uses its NLP engine to understand their preferences and curate a perfect hotel match.
