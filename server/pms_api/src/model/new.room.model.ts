@@ -10,7 +10,7 @@ interface IRoom extends Document {
   available: Schema.Types.ObjectId;
   baseprice: Schema.Types.ObjectId;
   roomView: string;
-  // user: Types.ObjectId;
+   user: Types.ObjectId;
 }
 
 
@@ -27,11 +27,11 @@ const RoomSchema: Schema<IRoom> = new Schema({
     enum: ["sea", "mountain", "city", "none"],
     default: "none",
   },
-  // user: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "User",
-  //   required: true,
-  // },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    // required: true,
+  },
 },{timestamps:true});
 
 

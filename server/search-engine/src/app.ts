@@ -15,7 +15,9 @@ app.use(
 );
 
 app.use(express.json());
-
+app.get("/hello",(req,res)=>{
+  res.send({msg:"Hello world"})
+})
 app.use(express.urlencoded());
 // app.use(express.static("public"))
 app.use("/api", router);

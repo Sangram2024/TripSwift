@@ -1,9 +1,10 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document ,Types} from "mongoose";
 
 
 interface IRoomType extends Document {
   bedType: "Single" | "Double" | "classic";
   roomSize: string;
+  user: Types.ObjectId;
 }
 
 
@@ -18,11 +19,16 @@ const RoomTypeSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   }
 );
 
 
 const RoomType = mongoose.model<IRoomType>("RoomType", RoomTypeSchema);
-export default RoomType;
+export { RoomType};
 
 

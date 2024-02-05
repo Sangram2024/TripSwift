@@ -1,8 +1,8 @@
 import mongoose, {
-  HydratedDocument,
+  // HydratedDocument,
   Model,
-  QueryWithHelpers,
-  Types,
+  // QueryWithHelpers,
+  // Types,
 } from "mongoose";
 
 export enum Category {

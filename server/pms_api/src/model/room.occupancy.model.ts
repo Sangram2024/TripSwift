@@ -5,7 +5,7 @@ interface RoomOccupancy extends Document {
     MaximumAdult: number;
     MaximumChildren: number;
     MaximumOccupancy: number;
-    // user: Types.ObjectId;
+    user: Types.ObjectId;
 }
 
 const RoomOccupancySchema: Schema = new Schema({
@@ -30,13 +30,13 @@ const RoomOccupancySchema: Schema = new Schema({
         type: Number,
         required: true,
     },
-    // user: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
 });
 
 
 const RoomOccupancy = mongoose.model<RoomOccupancy>('RoomOccupancy', RoomOccupancySchema);
-export default RoomOccupancy;
+export  {RoomOccupancy};
