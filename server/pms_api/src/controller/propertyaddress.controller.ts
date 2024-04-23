@@ -7,7 +7,7 @@ import { PropertyInfo } from "../model/property.info.model";
 const createPropertyAddress = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const {
-      propertyInfo,
+      property_id,
       address_line_1,
       address_line_2,
       country,
@@ -24,7 +24,7 @@ const createPropertyAddress = catchAsync(
     }
 
     const newPropertyAddress = await PropertyAddress.create({
-      propertyInfo,
+      property_id,
       address_line_1,
       address_line_2,
       country,
@@ -36,12 +36,11 @@ const createPropertyAddress = catchAsync(
       zip_code: parseInt(zip_code),
     });
 
-    await PropertyInfo.findByIdAndUpdate(propertyInfo, {
+    await PropertyInfo.findByIdAndUpdate(property_id, {
       property_address: newPropertyAddress._id,
     });
 
-    
-    const address = await PropertyAddress.find({ propertyInfo: propertyInfo });
+    const address = await PropertyAddress.find({ propertyInfo: property_id });
 
     res.status(201).json({
       status: "success",

@@ -9,7 +9,7 @@ import PropertyCategory from "./propertycategory.model";
 export type PropertyType = {
   propertyCategory: any;
   name: string;
-  key: string;
+  code: string;
 };
 
 type PropertyTypeModelType = Model<PropertyType>;
@@ -25,7 +25,7 @@ const propertyTypeSchema = new mongoose.Schema<PropertyType>(
       type: String,
       required: [true, "Property type name is required"],
     },
-    key: {
+    code: {
       type: String,
       required: [true, "Property type key is required"],
     },
@@ -40,7 +40,7 @@ propertyTypeSchema.pre("save", async function (next) {
     this.propertyCategory
   );
 
-  this.key = propertyCategory?.category + `-${this.key}`;
+  this.code = propertyCategory?.category + `-${this.code}`;
 
   next();
 });

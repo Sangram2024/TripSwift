@@ -11,7 +11,7 @@ import Auth from "../model/auth.model";
 import { produceEvent } from "../utils/kafkaHandler";
 
 const register = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => { 
     const { firstName, lastName, email, password, role } = req.body;
 
     if (!req.body) {

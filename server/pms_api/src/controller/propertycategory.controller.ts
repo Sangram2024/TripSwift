@@ -8,7 +8,34 @@ import mongoose from "mongoose";
 
 const getAllPropertyCategories = catchAsync(
   async (req: Request<{}, Role>, res: Response, next: NextFunction) => {
-    const categories = await PropertyCategory.find({});
+    const categories = await PropertyCategory.aggregate([
+      {
+        $lookup: {
+          from: "propertytypes",
+          localField: "_id",
+          foreignField: "propertyCategory",
+          as: "types",
+          pipeline: [
+            {
+              $project: {
+                name: 1,
+                _id: 1,
+                key: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          category: 1,
+          types: 1,
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
+    ]);
 
     res.status(200).json({
       status: "success",
@@ -26,16 +53,46 @@ const getPropertyCategory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const propertyCategoryID = req.params.propertyCategoryID;
 
-    const propertyCategory = await PropertyCategory.findById(
-      propertyCategoryID
-    ).populate("propertyTypes", "_id name key");
+    const propertyCategory = await PropertyCategory.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(propertyCategoryID),
+        },
+      },
+      {
+        $lookup: {
+          from: "propertytypes",
+          localField: "_id",
+          foreignField: "propertyCategory",
+          as: "types",
+          pipeline: [
+            {
+              $project: {
+                name: 1,
+                _id: 1,
+                key: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          category: 1,
+          types: 1,
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
+    ]);
 
     return res.status(200).json({
       status: "success",
       error: false,
       message: "Property category fetched successfully",
       data: {
-        propertyCategory,
+        propertyCategory: propertyCategory[0],
       },
     });
   }
